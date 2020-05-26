@@ -1,6 +1,6 @@
 using System;
 
-namespace RCA.Models
+namespace RCA.Models.ViewModels
 {
     public class ErrorViewModel
     {
