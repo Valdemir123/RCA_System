@@ -113,6 +113,10 @@ namespace RCA.Migrations
                         .IsRequired()
                         .HasMaxLength(10);
 
+                    b.Property<string>("Site")
+                        .IsRequired()
+                        .HasMaxLength(100);
+
                     b.Property<string>("State")
                         .IsRequired()
                         .HasMaxLength(50);

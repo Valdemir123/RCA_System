@@ -38,14 +38,19 @@ namespace RCA
 
             services.AddDbContext<RCAContext>(options =>
                     options.UseMySql(Configuration.GetConnectionString("RCAConection"), builder => builder.MigrationsAssembly("RCA")));
+
+            services.AddScoped<RCAService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, RCAService _Service)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+
+                //Check Populate Database
+                _Service.Populated();
             }
             else
             {

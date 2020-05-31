@@ -1,0 +1,134 @@
+﻿@model RCA.Models.Class_Company
+
+@{
+    ViewData["Title"] = "Hotel-Pousada: NOVO CADASTRO";
+}
+<h2>@ViewData["Title"]</h2>
+
+<p>|| <a asp-action="Index" class="btn btn-info">Voltar para LISTAGEM</a></p>
+<hr />
+
+<div class="row">
+    <form asp-action="Create" method="post" autocomplete="off">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div hidden>
+            @Html.TextBoxFor(m => m.Id);
+            @Html.TextBoxFor(m => m.StatusId);
+        </div>
+
+        <div class="col-md-4" style="background-color:lightgrey; border-radius: 3px 4px;">
+            <fieldset>
+                <legend>-: EMPRESA</legend>
+
+                <div class="form-group">
+                    <label asp-for="CNPJ" class="control-label"></label>
+                    <input asp-for="CNPJ" class="form-control" placeholder="ex. 000.000.000/0000-00"/>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control" autocomplete="off"/>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Site" class="control-label"></label>
+                    <input asp-for="Site" class="form-control" placeholder="ex. http://www.site.com.br"/>
+                </div>
+            </fieldset>
+
+            <div class="form-group">
+                <p><span asp-validation-for="CNPJ" class="text-danger"></span></p>
+                <p><span asp-validation-for="Name" class="text-danger"></span></p>
+                <p><span asp-validation-for="Site" class="text-danger"></span></p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <fieldset>
+                <legend>-: CONTATO</legend>
+
+                <div class="form-group">
+                    <label asp-for="ContactName" class="control-label"></label>
+                    <input asp-for="ContactName" class="form-control" />
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Phone1" class="control-label"></label>
+                    <input asp-for="Phone1" class="form-control" placeholder="ex. (00) 00000-0000" />
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Phone2" class="control-label"></label>
+                    <input asp-for="Phone2" class="form-control" placeholder="ex. (00) 0000-0000" />
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Email" class="control-label"></label>
+                    <input asp-for="Email" class="form-control" placeholder="ex. user@provedor.com.br"/>
+                </div>
+            </fieldset>
+
+            <div class="form-group">
+                <p><span asp-validation-for="ContactName" class="text-danger"></span></p>
+                <p><span asp-validation-for="Phone1" class="text-danger"></span></p>
+                <p><span asp-validation-for="Phone2" class="text-danger"></span></p>
+                <p><span asp-validation-for="Email" class="text-danger"></span></p>
+            </div>
+        </div>
+
+        <div class="col-md-4" style="background-color:lightgrey; border-radius: 3px 4px;">
+            <fieldset>
+                <legend>-: ENDEREÇO</legend>
+
+                <div class="form-group">
+                    <label asp-for="PostalCode" class="control-label"></label>
+                    <input asp-for="PostalCode" class="form-control" placeholder="ex. 00000-000" />
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Address" class="control-label"></label>
+                    <input asp-for="Address" class="form-control" />
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Complement" class="control-label"></label>
+                    <input asp-for="Complement" class="form-control" />
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="City" class="control-label"></label>
+                    <input asp-for="City" class="form-control" />
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="State" class="control-label"></label>
+                    <input asp-for="State" class="form-control" />
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Country" class="control-label"></label>
+                    @Html.DropDownListFor(m => m.Country, (SelectList)@ViewBag.Country_LIST, new { @class = "form-control" })
+                </div>
+            </fieldset>
+
+            <div class="form-group">
+                <p><span asp-validation-for="PostalCode" class="text-danger"></span></p>
+                <p><span asp-validation-for="Address" class="text-danger"></span></p>
+                <p><span asp-validation-for="Complement" class="text-danger"></span></p>
+                <p><span asp-validation-for="City" class="text-danger"></span></p>
+                <p><span asp-validation-for="State" class="text-danger"></span></p>
+                <p><span asp-validation-for="Country" class="text-danger"></span></p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            || <input type="submit" value=" Gravar ! " class="btn btn-success" />
+        </div>
+    </form>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

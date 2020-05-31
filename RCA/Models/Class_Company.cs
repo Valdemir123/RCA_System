@@ -17,6 +17,11 @@ namespace RCA.Models
         Suspenso = 3
     }
 
+    public enum CompanyCountry : short
+    {
+        Brasil
+    }
+
     [Table("Company")]
     public class Class_Company
     {
@@ -29,29 +34,35 @@ namespace RCA.Models
 
         [Required]
         [StringLength(100)]
-        [DisplayName("Nome Completo")]
+        [DisplayName("Nome")]
         public string Name { get; set; }
 
         [Required]
         [StringLength(20)]
-        [DisplayName("CNPJ")]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "###.###.###/####-##")]
+        [DisplayName("No. CNPJ")]
         public string CNPJ { get; set; }
 
         [Required]
+        [StringLength(100)]
+        [DisplayName("Site (www)")]
+        [DataType(DataType.Url)]
+        public string Site { get; set; }
+
+        [Required]
         [StringLength(50)]
-        [DisplayName("Nome do Contato")]
+        [DisplayName("Nome Contato")]
         public string ContactName { get; set; }
 
         [Required]
         [StringLength(20)]
-        [DisplayName("1o. Tel.")]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "0:(##) #####-####")]
+        [DisplayName("Celular.")]
+        [DataType(DataType.PhoneNumber)]
+
         public string Phone1 { get; set; }
 
         [StringLength(20)]
-        [DisplayName("2o. Tel.")]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "0:(##) #####-####")]
+        [DisplayName("Telefone")]
+        [DataType(DataType.PhoneNumber)]
         public string Phone2 { get; set; }
 
         [Required]
@@ -63,7 +74,8 @@ namespace RCA.Models
         [Required]
         [StringLength(10)]
         [DisplayName("CEP")]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "0:#####-###")]
+        [DataType(DataType.PostalCode)]
+
         public string PostalCode { get; set; }
 
         [Required]
@@ -73,7 +85,7 @@ namespace RCA.Models
 
         [Required]
         [StringLength(50)]
-        [DisplayName("No - Complemento - Bairro")]
+        [DisplayName("No - Compl. - Bairro")]
         public string Complement { get; set; }
 
         [Required]
@@ -92,19 +104,24 @@ namespace RCA.Models
         public string Country { get; set; }
 
 
+
         //Constructors
         public Class_Company() { }
-        public Class_Company(int _Id, CompanyStatus _StatusId, string _Name, string _CNPJ, string _ContactName, string _Phone1, string _Phone2, string _Email, 
+        public Class_Company(int _Id, CompanyStatus _StatusId, string _Name, string _CNPJ, string _Site,
+                            string _ContactName, string _Phone1, string _Phone2, string _Email, 
                             string _PostalCode, string _Address, string _Complement, string _City, string _State, string _Country)
         {
             Id = _Id;
             StatusId = _StatusId;
             Name = _Name;
             CNPJ = _CNPJ;
+            Site = _Site;
+
             ContactName = _ContactName;
             Phone1 = _Phone1;
             Phone2 = _Phone2;
             Email = _Email;
+
             PostalCode = _PostalCode;
             Address = _Address;
             Complement = _Complement;

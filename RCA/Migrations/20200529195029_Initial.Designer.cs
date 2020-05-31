@@ -9,7 +9,7 @@ using RCA.Data;
 namespace RCA.Migrations
 {
     [DbContext(typeof(RCAContext))]
-    [Migration("20200529181313_Initial")]
+    [Migration("20200529195029_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -114,6 +114,10 @@ namespace RCA.Migrations
                     b.Property<string>("PostalCode")
                         .IsRequired()
                         .HasMaxLength(10);
+
+                    b.Property<string>("Site")
+                        .IsRequired()
+                        .HasMaxLength(100);
 
                     b.Property<string>("State")
                         .IsRequired()

@@ -47,6 +47,7 @@ namespace RCA.Migrations
                     StatusId = table.Column<int>(nullable: false),
                     Name = table.Column<string>(maxLength: 100, nullable: false),
                     CNPJ = table.Column<string>(maxLength: 20, nullable: false),
+                    Site = table.Column<string>(maxLength: 100, nullable: false),
                     ContactName = table.Column<string>(maxLength: 50, nullable: false),
                     Phone1 = table.Column<string>(maxLength: 20, nullable: false),
                     Phone2 = table.Column<string>(maxLength: 20, nullable: true),

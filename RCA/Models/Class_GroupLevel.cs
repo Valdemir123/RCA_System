@@ -15,7 +15,7 @@ namespace RCA.Models
         Suspenso = 3
     }
 
-    public enum Group : int
+    public enum GroupItem : int
     {
         HOSPEDAGEM = 1,
         CANAL = 2,
@@ -37,7 +37,7 @@ namespace RCA.Models
         public int CompanyId { get; set; }
 
         [DisplayName("Grupo")]
-        public Group GroupId { get; set; }
+        public GroupItem GroupId { get; set; }
 
         [Required]
         [StringLength(50)]
@@ -49,7 +49,7 @@ namespace RCA.Models
 
         //Constructors
         public Class_GroupLevel() { }
-        public Class_GroupLevel(int _Id, GroupLevelStatus _StatusId, int _CompanyId, Group _GroupId, string _Name)
+        public Class_GroupLevel(int _Id, GroupLevelStatus _StatusId, int _CompanyId, GroupItem _GroupId, string _Name)
         {
             Id = _Id;
             StatusId = _StatusId;
