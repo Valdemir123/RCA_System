@@ -16,7 +16,6 @@ namespace RCA.Models
         public int Id { get; set; }
 
         [ForeignKey("GroupLevelItem")]
-        [DisplayName("Item Grupo")]
         public int GroupLevelItemId { get; set; }
 
         [Required]
@@ -28,20 +27,16 @@ namespace RCA.Models
         [DisplayName("Valor")]
         public double Tax { get; set; }
 
-        [Required]
-        [DisplayName("(%)")]
-        public int Percent { get; set; }
 
 
         //Constructors
         public Class_GroupLevelItemTax() { }
-        public Class_GroupLevelItemTax(int _Id, int _GroupLevelItemId, string _Name, double _Tax, int _Percent)
+        public Class_GroupLevelItemTax(int _Id, int _GroupLevelItemId, string _Name, double _Tax)
         {
             Id = _Id;
             GroupLevelItemId = _GroupLevelItemId;
             Name = _Name;
             Tax = _Tax;
-            Percent = _Percent;
         }
     }
 }

@@ -13,10 +13,8 @@ namespace RCA.Models
     public enum CompanyStatus : int
     {
         Ativo = 1,
-        Inativo = 2,
-        Suspenso = 3
+        Suspenso = 2
     }
-
     public enum CompanyCountry : short
     {
         Brasil

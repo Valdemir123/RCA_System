@@ -11,9 +11,8 @@ namespace RCA.Models
     public enum GroupLevelItemStatus : int
     {
         Ativo = 1,
-        Inativo = 2,
-        Suspenso = 3,
-        EmManutencao = 4
+        Suspenso = 2,
+        EmManutencao = 3
     }
 
     [Table("GroupLevelItem")]
@@ -27,7 +26,6 @@ namespace RCA.Models
         public GroupLevelItemStatus StatusId { get; set; }
 
         [ForeignKey("GroupLevel")]
-        [DisplayName("Grupo")]
         public int GroupLevelId { get; set; }
 
         [Required]
@@ -43,7 +41,7 @@ namespace RCA.Models
         [DisplayName("PCD?")]
         public bool PCD { get; set; }
 
-        public ICollection<Class_GroupLevelItemTax> GroupLevelItemTax_LIST { get; set; } = new List<Class_GroupLevelItemTax>();
+
 
         //Constructors
         public Class_GroupLevelItem() { }
@@ -55,17 +53,6 @@ namespace RCA.Models
             Name = _Name;
             OccupantsNum = _OccupantsNum;
             PCD = _PCD;
-        }
-
-        //Methods
-        public void GroupLevelItemTax_Add(Class_GroupLevelItemTax _Item)
-        {
-            GroupLevelItemTax_LIST.Add(_Item);
-        }
-
-        public void GroupLevelItemTax_Remove(Class_GroupLevelItemTax _Item)
-        {
-            GroupLevelItemTax_LIST.Remove(_Item);
         }
     }
 }

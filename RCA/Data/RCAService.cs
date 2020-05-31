@@ -48,6 +48,81 @@ namespace RCA.Data
             }
 
 
+
+            //Channel
+            if (!_RCAContext.Class_Channel.Any())
+            {
+                //BALCAO
+                var _Level = new Class_Channel
+                {
+                    StatusId = ChannelStatus.Ativo,
+                    CompanyId = 1,
+                    TypeId = ChannelType.BALCAO,
+
+                    Name = "BALCÃO",
+                    Tax =0,
+                    Percent=0
+                };
+                _RCAContext.Class_Channel.Add(_Level);
+
+                //SITE
+                _Level = new Class_Channel
+                {
+                    StatusId = ChannelStatus.Ativo,
+                    CompanyId = 1,
+                    TypeId = ChannelType.SITE,
+
+                    Name = "SITE PRÓPRIO",
+                    Tax = 0,
+                    Percent = 0
+                };
+                _RCAContext.Class_Channel.Add(_Level);
+
+                //RESERVA
+                _Level = new Class_Channel
+                {
+                    StatusId = ChannelStatus.Ativo,
+                    CompanyId = 1,
+                    TypeId = ChannelType.RESERVA,
+
+                    Name = "Booking.com",
+                    Tax = 0,
+                    Percent = 3
+                };
+                _RCAContext.Class_Channel.Add(_Level);
+
+                //RESERVA
+                _Level = new Class_Channel
+                {
+                    StatusId = ChannelStatus.Ativo,
+                    CompanyId = 1,
+                    TypeId = ChannelType.RESERVA,
+
+                    Name = "Expedia.com",
+                    Tax = 0,
+                    Percent = 4
+                };
+                _RCAContext.Class_Channel.Add(_Level);
+
+                //RESERVA
+                _Level = new Class_Channel
+                {
+                    StatusId = ChannelStatus.Ativo,
+                    CompanyId = 1,
+                    TypeId = ChannelType.RESERVA,
+
+                    Name = "Trivago.com",
+                    Tax = 2.5,
+                    Percent = 0
+                };
+                _RCAContext.Class_Channel.Add(_Level);
+
+                //Save
+                _RCAContext.SaveChanges();
+            }
+
+
+
             //GroupLevel
             if (!_RCAContext.Class_GroupLevel.Any())
             {
@@ -56,7 +131,7 @@ namespace RCA.Data
                 {
                     StatusId = GroupLevelStatus.Ativo,
                     CompanyId = 1,
-                    GroupId = GroupItem.HOSPEDAGEM,
+                    GroupId = GroupType.HOSPEDAGEM,
 
                     Name = "MASTER"
                 };
@@ -66,41 +141,9 @@ namespace RCA.Data
                 {
                     StatusId = GroupLevelStatus.Ativo,
                     CompanyId = 1,
-                    GroupId = GroupItem.HOSPEDAGEM,
+                    GroupId = GroupType.HOSPEDAGEM,
 
                     Name = "PADRÃO"
-                };
-                _RCAContext.Class_GroupLevel.Add(_Level);
-
-
-                //CANAL
-                _Level = new Class_GroupLevel
-                {
-                    StatusId = GroupLevelStatus.Ativo,
-                    CompanyId = 1,
-                    GroupId = GroupItem.CANAL,
-
-                    Name = "BALCÃO"
-                };
-                _RCAContext.Class_GroupLevel.Add(_Level);
-                //
-                _Level = new Class_GroupLevel
-                {
-                    StatusId = GroupLevelStatus.Ativo,
-                    CompanyId = 1,
-                    GroupId = GroupItem.CANAL,
-
-                    Name = "SITE PRÓPRIO"
-                };
-                _RCAContext.Class_GroupLevel.Add(_Level);
-                //
-                _Level = new Class_GroupLevel
-                {
-                    StatusId = GroupLevelStatus.Ativo,
-                    CompanyId = 1,
-                    GroupId = GroupItem.CANAL,
-
-                    Name = "SITE DE VIAGEM"
                 };
                 _RCAContext.Class_GroupLevel.Add(_Level);
 
@@ -110,7 +153,7 @@ namespace RCA.Data
                 {
                     StatusId = GroupLevelStatus.Ativo,
                     CompanyId = 1,
-                    GroupId = GroupItem.ENTRETENIMENTO,
+                    GroupId = GroupType.ENTRETENIMENTO,
 
                     Name = "PASSEIO JEEP"
                 };
@@ -120,7 +163,7 @@ namespace RCA.Data
                 {
                     StatusId = GroupLevelStatus.Ativo,
                     CompanyId = 1,
-                    GroupId = GroupItem.ENTRETENIMENTO,
+                    GroupId = GroupType.ENTRETENIMENTO,
 
                     Name = "PASSEIO LANCHA"
                 };
@@ -130,7 +173,7 @@ namespace RCA.Data
                 {
                     StatusId = GroupLevelStatus.Ativo,
                     CompanyId = 1,
-                    GroupId = GroupItem.ENTRETENIMENTO,
+                    GroupId = GroupType.ENTRETENIMENTO,
 
                     Name = "SPA"
                 };
@@ -140,7 +183,7 @@ namespace RCA.Data
                 {
                     StatusId = GroupLevelStatus.Ativo,
                     CompanyId = 1,
-                    GroupId = GroupItem.ENTRETENIMENTO,
+                    GroupId = GroupType.ENTRETENIMENTO,
 
                     Name = "ACESSÓRIO"
                 };
@@ -152,7 +195,7 @@ namespace RCA.Data
                 {
                     StatusId = GroupLevelStatus.Ativo,
                     CompanyId = 1,
-                    GroupId = GroupItem.CONSUMO,
+                    GroupId = GroupType.CONSUMO,
 
                     Name = "BEBIDA"
                 };
@@ -162,7 +205,7 @@ namespace RCA.Data
                 {
                     StatusId = GroupLevelStatus.Ativo,
                     CompanyId = 1,
-                    GroupId = GroupItem.CONSUMO,
+                    GroupId = GroupType.CONSUMO,
 
                     Name = "PORÇÃO"
                 };
@@ -172,7 +215,7 @@ namespace RCA.Data
                 {
                     StatusId = GroupLevelStatus.Ativo,
                     CompanyId = 1,
-                    GroupId = GroupItem.CONSUMO,
+                    GroupId = GroupType.CONSUMO,
 
                     Name = "REFEIÇÃO"
                 };

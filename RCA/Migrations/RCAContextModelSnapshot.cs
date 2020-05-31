@@ -65,6 +65,30 @@ namespace RCA.Migrations
                     b.ToTable("Book");
                 });
 
+            modelBuilder.Entity("RCA.Models.Class_Channel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("CompanyId");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
+                    b.Property<double>("Percent");
+
+                    b.Property<int>("StatusId");
+
+                    b.Property<double>("Tax");
+
+                    b.Property<int>("TypeId");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Channel");
+                });
+
             modelBuilder.Entity("RCA.Models.Class_Company", b =>
                 {
                     b.Property<int>("Id")
@@ -153,8 +177,6 @@ namespace RCA.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("Class_GroupLevelId");
-
                     b.Property<int>("GroupLevelId");
 
                     b.Property<string>("Name")
@@ -169,8 +191,6 @@ namespace RCA.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Class_GroupLevelId");
-
                     b.ToTable("GroupLevelItem");
                 });
 
@@ -179,21 +199,15 @@ namespace RCA.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("Class_GroupLevelItemId");
-
                     b.Property<int>("GroupLevelItemId");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(20);
 
-                    b.Property<int>("Percent");
-
                     b.Property<double>("Tax");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Class_GroupLevelItemId");
 
                     b.ToTable("GroupLevelItemTax");
                 });
@@ -245,20 +259,6 @@ namespace RCA.Migrations
                     b.HasKey("CPF");
 
                     b.ToTable("Guest");
-                });
-
-            modelBuilder.Entity("RCA.Models.Class_GroupLevelItem", b =>
-                {
-                    b.HasOne("RCA.Models.Class_GroupLevel")
-                        .WithMany("GroupLevelItem_LIST")
-                        .HasForeignKey("Class_GroupLevelId");
-                });
-
-            modelBuilder.Entity("RCA.Models.Class_GroupLevelItemTax", b =>
-                {
-                    b.HasOne("RCA.Models.Class_GroupLevelItem")
-                        .WithMany("GroupLevelItemTax_LIST")
-                        .HasForeignKey("Class_GroupLevelItemId");
                 });
 #pragma warning restore 612, 618
         }
