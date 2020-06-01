@@ -56,10 +56,9 @@ namespace RCA.Controllers
 
             _Company.Id = 0;
             _Company.StatusId = CompanyStatus.Ativo;
-
             _Company.Country = CompanyCountry.Brasil.ToString();
-            ViewBag.Country_LIST = new SelectList(Enum.GetValues(typeof(CompanyCountry)).Cast<CompanyCountry>().ToList());
 
+            ViewBag.Country_LIST = new SelectList(Enum.GetValues(typeof(CompanyCountry)).Cast<CompanyCountry>().ToList());
             return View(_Company);
         }
         // POST: Company/Create
@@ -74,6 +73,8 @@ namespace RCA.Controllers
 
                 return RedirectToAction(nameof(Index));
             }
+
+            ViewBag.Country_LIST = new SelectList(Enum.GetValues(typeof(CompanyCountry)).Cast<CompanyCountry>().ToList());
             return View(_Company);
         }
 
@@ -92,8 +93,8 @@ namespace RCA.Controllers
                 return RedirectToAction(nameof(Error), new { _Message = "Id não encontrado!" });
             }
             _Company.StatusId = CompanyStatus.Ativo;
-            ViewBag.Country_LIST = new SelectList(Enum.GetValues(typeof(CompanyCountry)).Cast<CompanyCountry>().ToList());
 
+            ViewBag.Country_LIST = new SelectList(Enum.GetValues(typeof(CompanyCountry)).Cast<CompanyCountry>().ToList());
             return View(_Company);
         }
         // POST: Company/Edit
@@ -119,6 +120,8 @@ namespace RCA.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
+            ViewBag.Country_LIST = new SelectList(Enum.GetValues(typeof(CompanyCountry)).Cast<CompanyCountry>().ToList());
             return View(_Company);
         }
 

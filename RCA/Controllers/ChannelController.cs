@@ -60,10 +60,9 @@ namespace RCA.Controllers
             _Channel.Id = 0;
             _Channel.CompanyId = _CompanyId;
             _Channel.StatusId = ChannelStatus.Ativo;
-
             _Channel.TypeId = ChannelType.RESERVA;
-            ViewBag.ChannelType_LIST = new SelectList(Enum.GetValues(typeof(ChannelType)).Cast<ChannelType>().ToList());
 
+            ViewBag.ChannelType_LIST = new SelectList(Enum.GetValues(typeof(ChannelType)).Cast<ChannelType>().ToList());
             return View(_Channel);
         }
         // POST: Channel/Create
@@ -78,6 +77,8 @@ namespace RCA.Controllers
 
                 return RedirectToAction(nameof(Index));
             }
+
+            ViewBag.ChannelType_LIST = new SelectList(Enum.GetValues(typeof(ChannelType)).Cast<ChannelType>().ToList());
             return View(_Channel);
         }
 
@@ -96,8 +97,8 @@ namespace RCA.Controllers
                 return RedirectToAction(nameof(Error), new { _Message = "Id não encontrado!" });
             }
             _Channel.StatusId = ChannelStatus.Ativo;
-            ViewBag.ChannelType_LIST = new SelectList(Enum.GetValues(typeof(ChannelType)).Cast<ChannelType>().ToList());
 
+            ViewBag.ChannelType_LIST = new SelectList(Enum.GetValues(typeof(ChannelType)).Cast<ChannelType>().ToList());
             return View(_Channel);
         }
         // POST: Channel/Edit
@@ -109,7 +110,6 @@ namespace RCA.Controllers
             {
                 return RedirectToAction(nameof(Error), new { _Message = "Id não é o mesmo!" });
             }
-
             if (ModelState.IsValid)
             {
                 try
@@ -123,6 +123,8 @@ namespace RCA.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
+            ViewBag.ChannelType_LIST = new SelectList(Enum.GetValues(typeof(ChannelType)).Cast<ChannelType>().ToList());
             return View(_Channel);
         }
 
