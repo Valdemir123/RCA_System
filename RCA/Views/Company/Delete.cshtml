@@ -13,8 +13,6 @@
     <br />
     <br />
     <dl class="dl-horizontal">
-        <input type="hidden" asp-for="Id" />
-
         <dt>
             @Html.DisplayNameFor(model => model.Name)
         </dt>
@@ -96,7 +94,7 @@
     </dl>
 
     <form asp-action="Delete">
-        
-        <t style="color:brown; font-size:20px;">Você tem certeza que deseja SUSPENDER ?</t> || <input type="submit" value="Sim !" class="btn btn-warning" /> 
+        <input type="hidden" asp-for="Id" />
+        <t style="color:brown; font-size:20px;">Você tem certeza que deseja SUSPENDER ?</t> || <input type="submit" value="Sim !" class="btn btn-warning" />
     </form>
 </div>

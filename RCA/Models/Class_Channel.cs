@@ -49,7 +49,5 @@ namespace RCA.Models
         [Required]
         [DisplayName("Taxa em (%)")]
         public double Percent { get; set; }
-
-
     }
 }

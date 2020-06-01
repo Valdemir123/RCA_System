@@ -1,0 +1,59 @@
+﻿@model RCA.Models.Class_Channel
+
+@{
+    ViewData["Title"] = "Canal: NOVO CADASTRO";
+}
+<h2>@ViewData["Title"]</h2>
+
+<p>|| <a asp-action="Index" class="btn btn-info">Voltar para LISTAGEM</a></p>
+<hr />
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div hidden>
+                @Html.TextBoxFor(m => m.Id);
+                @Html.TextBoxFor(m => m.StatusId);
+                @Html.TextBoxFor(m => m.CompanyId);
+            </div>
+
+
+            <div class="form-group">
+                <label asp-for="TypeId" class="control-label"></label>
+                @Html.DropDownListFor(m => m.TypeId, (SelectList)@ViewBag.ChannelType_LIST, new { @class = "form-control" })
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Tax" class="control-label"></label>
+                <input asp-for="Tax" class="form-control" style="width:200px" />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Percent" class="control-label"></label>
+                <input asp-for="Percent" class="form-control" style="width:200px" />
+            </div>
+
+            <div class="form-group">
+                <p><span asp-validation-for="TypeId" class="text-danger"></span></p>
+                <p><span asp-validation-for="Name" class="text-danger"></span></p>
+                <p><span asp-validation-for="Tax" class="text-danger"></span></p>
+                <p><span asp-validation-for="Percent" class="text-danger"></span></p>
+            </div>
+
+            <div class="form-group">
+                || <input type="submit" value=" Gravar ! " class="btn btn-success" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

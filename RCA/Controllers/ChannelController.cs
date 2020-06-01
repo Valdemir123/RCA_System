@@ -7,101 +7,104 @@ using RCA.Models.ViewModels;
 using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Channels;
 using System.Threading.Tasks;
 
 namespace RCA.Controllers
 {
-    public class CompanyController : Controller
+    public class ChannelController : Controller
     {
         private readonly RCAContext _context;
-        public CompanyController(RCAContext context)
+        public ChannelController(RCAContext context)
         {
             _context = context;
         }
 
+        //warning
+        public int _CompanyId = 1;
 
-
-        // GET: Company
+        // GET: Channel
         public async Task<IActionResult> Index()
         {
-            var _Company = from s in _context.Class_Company orderby s.StatusId, s.Name select s;
+            var _Channel = from s in _context.Class_Channel where s.CompanyId == _CompanyId orderby s.StatusId, s.TypeId, s.Name select s;
 
-            return View(await _Company.AsNoTracking().ToListAsync());
+            return View(await _Channel.AsNoTracking().ToListAsync());
         }
 
 
 
-        // GET: Company/Details/5
+        // GET: Channel/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
-            var _Company = await _context.Class_Company.FirstOrDefaultAsync(m => m.Id == id);
-            if (_Company == null)
+            var _Channel = await _context.Class_Channel.FirstOrDefaultAsync(m => m.Id == id);
+            if (_Channel == null)
             {
                 return NotFound();
             }
 
-            return View(_Company);
+            return View(_Channel);
         }
 
 
 
-        // GET: Company/Create
+        // GET: Channel/Create
         public IActionResult Create()
         {
-            Class_Company _Company = new Class_Company();
+            Class_Channel _Channel = new Class_Channel();
 
-            _Company.Id = 0;
-            _Company.StatusId = CompanyStatus.Ativo;
+            _Channel.Id = 0;
+            _Channel.CompanyId = _CompanyId;
+            _Channel.StatusId = ChannelStatus.Ativo;
 
-            _Company.Country = CompanyCountry.Brasil.ToString();
-            ViewBag.Country_LIST = new SelectList(Enum.GetValues(typeof(CompanyCountry)).Cast<CompanyCountry>().ToList());
+            _Channel.TypeId = ChannelType.RESERVA;
+            ViewBag.ChannelType_LIST = new SelectList(Enum.GetValues(typeof(ChannelType)).Cast<ChannelType>().ToList());
 
-            return View(_Company);
+            return View(_Channel);
         }
-        // POST: Company/Create
+        // POST: Channel/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,StatusId,Name,CNPJ,Site,ContactName,Phone1,Phone2,Email,PostalCode,Address,Complement,City,State,Country")] Class_Company _Company)
+        public async Task<IActionResult> Create([Bind("Id,StatusId,CompanyId,TypeId,Name,Tax,Percent")] Class_Channel _Channel)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(_Company);
+                _context.Add(_Channel);
                 await _context.SaveChangesAsync();
 
                 return RedirectToAction(nameof(Index));
             }
-            return View(_Company);
+            return View(_Channel);
         }
 
 
 
-        // GET: Company/Edit
+        // GET: Channel/Edit
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
-            var _Company = await _context.Class_Company.FindAsync(id);
-            if (_Company == null)
+            var _Channel = await _context.Class_Channel.FindAsync(id);
+            if (_Channel == null)
             {
                 return NotFound();
             }
-            _Company.StatusId = CompanyStatus.Ativo;
-            ViewBag.Country_LIST = new SelectList(Enum.GetValues(typeof(CompanyCountry)).Cast<CompanyCountry>().ToList());
+            _Channel.StatusId = ChannelStatus.Ativo;
+            ViewBag.ChannelType_LIST = new SelectList(Enum.GetValues(typeof(ChannelType)).Cast<ChannelType>().ToList());
 
-            return View(_Company);
+            return View(_Channel);
         }
-        // POST: Company/Edit
+        // POST: Channel/Edit
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,StatusId,Name,CNPJ,Site,ContactName,Phone1,Phone2,Email,PostalCode,Address,Complement,City,State,Country")] Class_Company _Company)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,StatusId,CompanyId,TypeId,Name,Tax,Percent")] Class_Channel _Channel)
         {
-            if (id != _Company.Id)
+            if (id != _Channel.Id)
             {
                 return NotFound();
             }
@@ -110,12 +113,12 @@ namespace RCA.Controllers
             {
                 try
                 {
-                    _context.Update(_Company);
+                    _context.Update(_Channel);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!Class_CompanyExists(_Company.Id))
+                    if (!Class_ChannelExists(_Channel.Id))
                     {
                         return NotFound();
                     }
@@ -126,43 +129,43 @@ namespace RCA.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(_Company);
+            return View(_Channel);
         }
 
 
 
-        // GET: Company/Delete
+        // GET: Channel/Delete
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
-            var _Company = await _context.Class_Company.FirstOrDefaultAsync(m => m.Id == id);
-            if (_Company == null)
+            var _Channel = await _context.Class_Channel.FirstOrDefaultAsync(m => m.Id == id);
+            if (_Channel == null)
             {
                 return NotFound();
             }
 
-            return View(_Company);
+            return View(_Channel);
         }
-        // POST: Company/Delete
+        // POST: Channel/Delete
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var _Company = await _context.Class_Company.FindAsync(id);
-            _Company.StatusId = CompanyStatus.Suspenso;
+            var _Channel = await _context.Class_Channel.FindAsync(id);
+            _Channel.StatusId = ChannelStatus.Suspenso;
 
-            _context.Class_Company.Update(_Company);
+            _context.Class_Channel.Update(_Channel);
             await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));
         }
 
-        private bool Class_CompanyExists(int id)
+        private bool Class_ChannelExists(int id)
         {
-            return _context.Class_Company.Any(e => e.Id == id);
+            return _context.Class_Channel.Any(e => e.Id == id);
         }
 
 

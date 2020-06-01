@@ -1,0 +1,44 @@
+﻿@model RCA.Models.Class_Channel
+
+@{
+    ViewData["Title"] = "Canal: DETALHE";
+}
+<h2>@ViewData["Title"]</h2>
+
+<p>|| <a asp-action="Index" class="btn btn-info">Voltar para LISTAGEM</a></p>
+<hr />
+
+<div>
+    <strong style="font-size:25px">Item:&nbsp;&nbsp;<t style="font-style:italic">@Html.DisplayFor(model => model.StatusId)</t></strong>
+    <br />
+    <br />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.TypeId)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.TypeId)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Tax)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Tax)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Percent)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Percent)
+        </dd>
+    </dl>
+</div>
+<div>
+    || <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-success ">Modificar !</a>
+</div>
