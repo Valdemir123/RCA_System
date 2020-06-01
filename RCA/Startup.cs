@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using RCA.Data;
+using System.Collections.Generic;
+using System.Globalization;
 
 namespace RCA
 {
@@ -45,11 +43,22 @@ namespace RCA
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, RCAService _Service)
         {
+            //globalization
+            var _enUS = new CultureInfo("en-US");
+            //
+            var _locOPTs = new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture(_enUS),
+                SupportedCultures = new List<CultureInfo> { _enUS },
+                SupportedUICultures = new List<CultureInfo> { _enUS }
+            };
+            //
+            app.UseRequestLocalization(_locOPTs);
+
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-
-                //Check Populate Database
                 _Service.Populated();
             }
             else

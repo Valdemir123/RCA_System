@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity.UI.Pages.Internal.Account.Manage;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RCA.Data;
@@ -38,12 +39,12 @@ namespace RCA.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { _Message = "Id não informado!" });
             }
             var _Channel = await _context.Class_Channel.FirstOrDefaultAsync(m => m.Id == id);
             if (_Channel == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { _Message = "Id não encontrado!" });
             }
 
             return View(_Channel);
@@ -87,12 +88,12 @@ namespace RCA.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { _Message = "Id não informado!" });
             }
             var _Channel = await _context.Class_Channel.FindAsync(id);
             if (_Channel == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { _Message = "Id não encontrado!" });
             }
             _Channel.StatusId = ChannelStatus.Ativo;
             ViewBag.ChannelType_LIST = new SelectList(Enum.GetValues(typeof(ChannelType)).Cast<ChannelType>().ToList());
@@ -106,7 +107,7 @@ namespace RCA.Controllers
         {
             if (id != _Channel.Id)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { _Message = "Id não é o mesmo!" });
             }
 
             if (ModelState.IsValid)
@@ -116,16 +117,9 @@ namespace RCA.Controllers
                     _context.Update(_Channel);
                     await _context.SaveChangesAsync();
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (ApplicationException e)
                 {
-                    if (!Class_ChannelExists(_Channel.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    return RedirectToAction(nameof(Error), new { _Message = e.Message });
                 }
                 return RedirectToAction(nameof(Index));
             }
@@ -139,12 +133,12 @@ namespace RCA.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { _Message = "Id não informado!" });
             }
             var _Channel = await _context.Class_Channel.FirstOrDefaultAsync(m => m.Id == id);
             if (_Channel == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { _Message = "Id não encontrado!" });
             }
 
             return View(_Channel);

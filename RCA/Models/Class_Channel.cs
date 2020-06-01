@@ -44,10 +44,13 @@ namespace RCA.Models
 
         [Required]
         [DisplayName("Taxa em (R$)")]
+        [DisplayFormat(DataFormatString ="{0:C2}")]
+        [DataType(DataType.Currency)]
         public double Tax { get; set; }
 
         [Required]
         [DisplayName("Taxa em (%)")]
+        [DisplayFormat(DataFormatString = "{0:F1}")]
         public double Percent { get; set; }
     }
 }

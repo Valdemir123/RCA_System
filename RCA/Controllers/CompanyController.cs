@@ -36,12 +36,12 @@ namespace RCA.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { _Message = "Id não informado!" });
             }
             var _Company = await _context.Class_Company.FirstOrDefaultAsync(m => m.Id == id);
             if (_Company == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { _Message = "Id não encontrado!" });
             }
 
             return View(_Company);
@@ -84,12 +84,12 @@ namespace RCA.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { _Message = "Id não informado!" });
             }
             var _Company = await _context.Class_Company.FindAsync(id);
             if (_Company == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { _Message = "Id não encontrado!" });
             }
             _Company.StatusId = CompanyStatus.Ativo;
             ViewBag.Country_LIST = new SelectList(Enum.GetValues(typeof(CompanyCountry)).Cast<CompanyCountry>().ToList());
@@ -103,7 +103,7 @@ namespace RCA.Controllers
         {
             if (id != _Company.Id)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { _Message = "Id não é o mesmo!" });
             }
 
             if (ModelState.IsValid)
@@ -113,16 +113,9 @@ namespace RCA.Controllers
                     _context.Update(_Company);
                     await _context.SaveChangesAsync();
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (ApplicationException e)
                 {
-                    if (!Class_CompanyExists(_Company.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    return RedirectToAction(nameof(Error), new { _Message = e.Message });
                 }
                 return RedirectToAction(nameof(Index));
             }
@@ -136,12 +129,12 @@ namespace RCA.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { _Message = "Id não informado!" });
             }
             var _Company = await _context.Class_Company.FirstOrDefaultAsync(m => m.Id == id);
             if (_Company == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { _Message = "Id não encontrado!" });
             }
 
             return View(_Company);

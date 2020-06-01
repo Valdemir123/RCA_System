@@ -43,9 +43,11 @@ namespace RCA.Models
         public string Channel_Code { get; set; }
 
         [DisplayName("Taxa (R$)")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:C2}")]
         public double Channel_Tax { get; set; }
 
         [DisplayName("Taxa (%)")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:F1}")]
         public double Channel_Percent { get; set; }
 
 
@@ -63,13 +65,13 @@ namespace RCA.Models
         [Required]
         [DisplayName("Início")]
         [DataType(DataType.Date)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "0:dd/MM/yy")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime Book_DateIn { get; set; }
 
         [Required]
         [DisplayName("Término")]
         [DataType(DataType.Date)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "0:dd/MM/yy")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime Book_DateOut { get; set; }
 
         [Required]
@@ -90,17 +92,19 @@ namespace RCA.Models
 
         [Required]
         [DisplayName("Valor Diária")]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "0:C")]
+        [DataType(DataType.Currency)]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:C2}")]
         public double Book_DayValue { get; set; }
 
         [Required]
         [DisplayName("(%) Desconto")]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "0:###")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:F1}")]
         public int Book_DiscountPercent { get; set; }
 
         [Required]
         [DisplayName("Adiantamento")]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "0:C")]
+        [DataType(DataType.Currency)]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:C2}")]
         public double Book_InputValue { get; set; }
 
 

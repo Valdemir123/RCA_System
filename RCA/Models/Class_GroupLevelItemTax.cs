@@ -25,6 +25,8 @@ namespace RCA.Models
 
         [Required]
         [DisplayName("Valor")]
+        [DataType(DataType.Currency)]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:C2}")]
         public double Tax { get; set; }
 
 

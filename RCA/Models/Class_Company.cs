@@ -53,7 +53,7 @@ namespace RCA.Models
 
         [Required]
         [StringLength(20)]
-        [DisplayName("Celular.")]
+        [DisplayName("Celular")]
         [DataType(DataType.PhoneNumber)]
 
         public string Phone1 { get; set; }
@@ -73,7 +73,6 @@ namespace RCA.Models
         [StringLength(10)]
         [DisplayName("CEP")]
         [DataType(DataType.PostalCode)]
-
         public string PostalCode { get; set; }
 
         [Required]

@@ -1,13 +1,22 @@
 ﻿@model RCA.Models.ViewModels.ErrorViewModel
+
 @{
     ViewData["Title"] = "Error Control";
 }
+<h2 class="text-danger">@ViewData["Title"]</h2>
 
-<h1 class="text-danger">@ViewData["Title"]</h1>
+<p>|| <a asp-action="Index" class="btn btn-info">Voltar para LISTAGEM</a></p>
+<hr />
+
+<br />
+<br />
+<br />
 <h2 class="text-danger">@Model.Message</h2>
 
 @if (Model.ShowRequestId)
 {
+    <br />
+    <br />
     <p>
         <strong>Request ID:</strong> <code>@Model.RequestId</code>
     </p>

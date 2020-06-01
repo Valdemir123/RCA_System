@@ -17,7 +17,6 @@ namespace RCA.Models
         [Required]
         [StringLength(20)]
         [DisplayName("CPF")]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "0:###.###.###-##")]
         public string CPF { get; set; }
 
         [Required]
@@ -28,12 +27,12 @@ namespace RCA.Models
         [Required]
         [StringLength(20)]
         [DisplayName("Celular")]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "0:(##) #####-####")]
+        [DataType(DataType.PhoneNumber)]
         public string Phone1 { get; set; }
 
         [StringLength(20)]
         [DisplayName("Telefone")]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "0:(##) ####-####")]
+        [DataType(DataType.PhoneNumber)]
         public string Phone2 { get; set; }
 
         [StringLength(50)]
@@ -44,13 +43,12 @@ namespace RCA.Models
         [Required]
         [StringLength(10)]
         [DisplayName("CEP")]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "0:#####-###")]
+        [DataType(DataType.PostalCode)]
         public string PostalCode { get; set; }
 
         [Required]
         [StringLength(50)]
         [DisplayName("Endereço")]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "0:#####-###")]
         public string Address { get; set; }
 
         [Required]
