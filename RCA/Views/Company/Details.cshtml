@@ -14,16 +14,16 @@
     <br />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt>
             @Html.DisplayNameFor(model => model.CNPJ)
         </dt>
         <dd>
             @Html.DisplayFor(model => model.CNPJ)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Site)
@@ -31,11 +31,20 @@
         <dd>
             @Html.DisplayFor(model => model.Site)
         </dd>
+    </dl>
+    <br />
+    <dl class="dl-horizontal">
         <dt>
             @Html.DisplayNameFor(model => model.ContactName)
         </dt>
         <dd>
             @Html.DisplayFor(model => model.ContactName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Email)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Phone1)
@@ -49,12 +58,9 @@
         <dd>
             @Html.DisplayFor(model => model.Phone2)
         </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Email)
-        </dd>
+    </dl>
+    <br />
+    <dl class="dl-horizontal">
         <dt>
             @Html.DisplayNameFor(model => model.PostalCode)
         </dt>

@@ -33,6 +33,8 @@ namespace RCA.Models
         [ForeignKey("Company")]
         public int CompanyId { get; set; }
 
+
+
         [Required]
         [DisplayName("Tipo")]
         public ChannelType TypeId { get; set; }

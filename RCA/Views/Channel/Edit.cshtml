@@ -56,4 +56,12 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            //mask fields
+            $("#Tax").mask("#,##0.00", { reverse: true });
+            $("#Percent").mask("##0.0", { reverse: true });
+        });
+    </script>
 }

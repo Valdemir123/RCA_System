@@ -55,7 +55,6 @@ namespace RCA.Models
         [StringLength(20)]
         [DisplayName("Celular")]
         [DataType(DataType.PhoneNumber)]
-
         public string Phone1 { get; set; }
 
         [StringLength(20)]
