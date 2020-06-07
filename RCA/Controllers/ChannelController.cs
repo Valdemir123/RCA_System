@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity.UI.Pages.Internal.Account.Manage;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RCA.Data;
@@ -8,7 +7,6 @@ using RCA.Models.ViewModels;
 using System;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading.Channels;
 using System.Threading.Tasks;
 
 namespace RCA.Controllers
@@ -21,8 +19,11 @@ namespace RCA.Controllers
             _context = context;
         }
 
+
         //warning
         public int _CompanyId = 1;
+
+
 
         // GET: Channel
         public async Task<IActionResult> Index()
@@ -78,7 +79,6 @@ namespace RCA.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.ChannelType_LIST = new SelectList(Enum.GetValues(typeof(ChannelType)).Cast<ChannelType>().ToList());
             return View(_Channel);
         }
 
@@ -124,7 +124,6 @@ namespace RCA.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.ChannelType_LIST = new SelectList(Enum.GetValues(typeof(ChannelType)).Cast<ChannelType>().ToList());
             return View(_Channel);
         }
 

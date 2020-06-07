@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace RCA.Migrations
 {
-    public partial class Initial : Migration
+    public partial class Initial20200607 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -63,13 +63,13 @@ namespace RCA.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     StatusId = table.Column<int>(nullable: false),
-                    Name = table.Column<string>(maxLength: 100, nullable: false),
                     CNPJ = table.Column<string>(maxLength: 20, nullable: false),
+                    Name = table.Column<string>(maxLength: 100, nullable: false),
                     Site = table.Column<string>(maxLength: 100, nullable: false),
                     ContactName = table.Column<string>(maxLength: 50, nullable: false),
+                    Email = table.Column<string>(maxLength: 50, nullable: false),
                     Phone1 = table.Column<string>(maxLength: 20, nullable: false),
                     Phone2 = table.Column<string>(maxLength: 20, nullable: true),
-                    Email = table.Column<string>(maxLength: 50, nullable: false),
                     PostalCode = table.Column<string>(maxLength: 10, nullable: false),
                     Address = table.Column<string>(maxLength: 50, nullable: false),
                     Complement = table.Column<string>(maxLength: 50, nullable: false),

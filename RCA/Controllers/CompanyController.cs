@@ -74,7 +74,6 @@ namespace RCA.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.Country_LIST = new SelectList(Enum.GetValues(typeof(CompanyCountry)).Cast<CompanyCountry>().ToList());
             return View(_Company);
         }
 

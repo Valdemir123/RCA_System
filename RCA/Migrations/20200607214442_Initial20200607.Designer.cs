@@ -9,8 +9,8 @@ using RCA.Data;
 namespace RCA.Migrations
 {
     [DbContext(typeof(RCAContext))]
-    [Migration("20200531184757_Initial")]
-    partial class Initial
+    [Migration("20200607214442_Initial20200607")]
+    partial class Initial20200607
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
