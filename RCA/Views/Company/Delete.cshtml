@@ -100,7 +100,10 @@
     </dl>
 
     <form asp-action="Delete">
-        <input type="hidden" asp-for="Id" />
+        <div hidden>
+            @Html.TextBoxFor(m => m.Id);
+            @Html.TextBoxFor(m => m.StatusId);
+        </div>
         <t style="color:brown; font-size:20px;">Você tem certeza que deseja SUSPENDER ?</t> || <input type="submit" value="Sim !" class="btn btn-warning" />
     </form>
 </div>

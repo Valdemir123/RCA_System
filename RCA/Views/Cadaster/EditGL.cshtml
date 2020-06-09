@@ -1,17 +1,17 @@
 ﻿@model RCA.Models.Class_GroupLevel
 @{
-    ViewData["Title"] = "Grupo de " + ViewBag.GroupName + ": NOVO CADASTRO";
+    ViewData["Title"] = "Grupo de " + ViewBag.GroupName + ": MODIFICAR CADASTRO";
 }
 <h2>@ViewData["Title"]</h2>
 
-<p>|| <a asp-action="Index" asp-route-_GroupId="@Model.GroupId" class="btn btn-info">Voltar para LISTAGEM</a></p>
+<p>|| <a asp-action="Index" class="btn btn-info" asp-route-_GroupId="@Model.GroupId">Voltar para LISTAGEM</a></p>
 <hr />
 
 <br />
 <br />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="CreateGL">
+        <form asp-action="EditGL">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div hidden>
@@ -27,7 +27,7 @@
             </div>
 
             <div class="form-group">
-                <span asp-validation-for="Name" class="text-danger"></span>
+                <p><span asp-validation-for="Name" class="text-danger"></span></p>
             </div>
 
             <div class="form-group">

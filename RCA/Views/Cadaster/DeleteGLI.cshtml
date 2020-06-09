@@ -1,0 +1,52 @@
+﻿@model RCA.Models.Class_GroupLevelItem
+@{
+    ViewData["Title"] = "Item " + ViewBag.GroupLevelName + ": SUSPENDER CADASTRO";
+}
+<h2>@ViewData["Title"]</h2>
+
+<p>|| <a asp-action="Index" class="btn btn-info" asp-route-_GroupId="@ViewBag.GroupId">Voltar para LISTAGEM</a></p>
+<hr />
+
+<br />
+<br />
+<div>
+    <strong style="font-size:25px">Item:&nbsp;&nbsp;<t style="font-style:italic">@Html.DisplayFor(m => m.StatusId)</t></strong>
+    <br />
+    <br />
+
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(m => m.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(m => m.Name)
+        </dd>
+        @if (ViewBag.GroupId == 1)
+        {
+            <dt>
+                @Html.DisplayNameFor(m => m.OccupantsNum)
+            </dt>
+            <dd>
+                @Html.DisplayFor(m => m.OccupantsNum)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(m => m.PCD)
+            </dt>
+            <dd>
+                @Html.DisplayFor(m => m.PCD)
+            </dd>
+        }
+    </dl>
+
+    <form asp-action="DeleteGLI">
+        <div hidden>
+            @Html.TextBoxFor(m => m.Id);
+            @Html.TextBoxFor(m => m.StatusId);
+            @Html.TextBoxFor(m => m.GroupLevelId);
+        </div>
+        <br />
+        <br />
+
+        <t style="color:brown; font-size:20px;">Você tem certeza que deseja SUSPENDER ?</t> || <input type="submit" value="Sim !" class="btn btn-warning" />
+    </form>
+</div>

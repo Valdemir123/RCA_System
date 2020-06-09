@@ -1,6 +1,6 @@
 ﻿@model RCA.Models.Class_GroupLevelItem
 @{
-    ViewData["Title"] = "Item " + ViewBag.GroupLevelName + ": NOVO CADASTRO";
+    ViewData["Title"] = "Item " + ViewBag.GroupLevelName + ": MODIFICAR CADASTRO";
 }
 <h2>@ViewData["Title"]</h2>
 
@@ -11,7 +11,7 @@
 <br />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="CreateGLI">
+        <form asp-action="EditGLI">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div hidden>

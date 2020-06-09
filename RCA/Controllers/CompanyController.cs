@@ -53,7 +53,6 @@ namespace RCA.Controllers
         public IActionResult Create()
         {
             Class_Company _Company = new Class_Company();
-
             _Company.Id = 0;
             _Company.StatusId = CompanyStatus.Ativo;
             _Company.Country = CompanyCountry.Brasil.ToString();
@@ -61,7 +60,6 @@ namespace RCA.Controllers
             ViewBag.Country_LIST = new SelectList(Enum.GetValues(typeof(CompanyCountry)).Cast<CompanyCountry>().ToList());
             return View(_Company);
         }
-        // POST: Company/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,StatusId,Name,CNPJ,Site,ContactName,Phone1,Phone2,Email,PostalCode,Address,Complement,City,State,Country")] Class_Company _Company)
@@ -96,7 +94,6 @@ namespace RCA.Controllers
             ViewBag.Country_LIST = new SelectList(Enum.GetValues(typeof(CompanyCountry)).Cast<CompanyCountry>().ToList());
             return View(_Company);
         }
-        // POST: Company/Edit
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,StatusId,Name,CNPJ,Site,ContactName,Phone1,Phone2,Email,PostalCode,Address,Complement,City,State,Country")] Class_Company _Company)
@@ -141,7 +138,6 @@ namespace RCA.Controllers
 
             return View(_Company);
         }
-        // POST: Company/Delete
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -154,6 +150,7 @@ namespace RCA.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
 
         private bool Class_CompanyExists(int id)
         {

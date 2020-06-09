@@ -28,14 +28,18 @@ namespace RCA.Controllers
         // GET: Channel
         public async Task<IActionResult> Index()
         {
-            var _Channel = from s in _context.Class_Channel where s.CompanyId == _CompanyId orderby s.StatusId, s.TypeId, s.Name select s;
+            var _Channel = from s 
+                           in _context.Class_Channel 
+                           where s.CompanyId == _CompanyId 
+                           orderby s.StatusId, s.TypeId, s.Name 
+                           select s;
 
             return View(await _Channel.AsNoTracking().ToListAsync());
         }
 
 
 
-        // GET: Channel/Details/5
+        // GET: Channel/Details
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -56,17 +60,17 @@ namespace RCA.Controllers
         // GET: Channel/Create
         public IActionResult Create()
         {
-            Class_Channel _Channel = new Class_Channel();
-
-            _Channel.Id = 0;
-            _Channel.CompanyId = _CompanyId;
-            _Channel.StatusId = ChannelStatus.Ativo;
-            _Channel.TypeId = ChannelType.RESERVA;
+            Class_Channel _Channel = new Class_Channel
+            {
+                Id = 0,
+                CompanyId = _CompanyId,
+                StatusId = ChannelStatus.Ativo,
+                TypeId = ChannelType.RESERVA
+            };
 
             ViewBag.ChannelType_LIST = new SelectList(Enum.GetValues(typeof(ChannelType)).Cast<ChannelType>().ToList());
             return View(_Channel);
         }
-        // POST: Channel/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,StatusId,CompanyId,TypeId,Name,Tax,Percent")] Class_Channel _Channel)
@@ -101,7 +105,6 @@ namespace RCA.Controllers
             ViewBag.ChannelType_LIST = new SelectList(Enum.GetValues(typeof(ChannelType)).Cast<ChannelType>().ToList());
             return View(_Channel);
         }
-        // POST: Channel/Edit
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,StatusId,CompanyId,TypeId,Name,Tax,Percent")] Class_Channel _Channel)
@@ -144,7 +147,6 @@ namespace RCA.Controllers
 
             return View(_Channel);
         }
-        // POST: Channel/Delete
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -157,6 +159,7 @@ namespace RCA.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
 
         private bool Class_ChannelExists(int id)
         {
