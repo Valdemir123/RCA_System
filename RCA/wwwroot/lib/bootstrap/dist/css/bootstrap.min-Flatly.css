@@ -1815,8 +1815,8 @@ pre {
 }
 
 .container {
-    padding-right: 15px;
-    padding-left: 15px;
+    padding-right: 5px;
+    padding-left: 5px;
     margin-right: auto;
     margin-left: auto
 }
@@ -1840,15 +1840,15 @@ pre {
 }
 
 .container-fluid {
-    padding-right: 15px;
-    padding-left: 15px;
+    padding-right: 5px;
+    padding-left: 5px;
     margin-right: auto;
     margin-left: auto
 }
 
 .row {
-    margin-right: -15px;
-    margin-left: -15px
+    margin-right: -5px;
+    margin-left: -5px
 }
 
 .row-no-gutters {
@@ -4542,8 +4542,8 @@ textarea.input-group-sm > .form-control, textarea.input-group-sm > .input-group-
 }
 
 .container > .navbar-header, .container-fluid > .navbar-header, .container > .navbar-collapse, .container-fluid > .navbar-collapse {
-    margin-right: -15px;
-    margin-left: -15px
+    margin-right: -5px;
+    margin-left: -5px
 }
 
 @media (min-width:768px) {
@@ -4582,7 +4582,7 @@ textarea.input-group-sm > .form-control, textarea.input-group-sm > .input-group-
 
 @media (min-width:768px) {
     .navbar > .container .navbar-brand, .navbar > .container-fluid .navbar-brand {
-        margin-left: -15px
+        margin-left: -5px
     }
 }
 
@@ -5321,8 +5321,8 @@ a.badge:hover, a.badge:focus {
     }
 
 .container .jumbotron, .container-fluid .jumbotron {
-    padding-right: 15px;
-    padding-left: 15px;
+    padding-right: 5px;
+    padding-left: 5px;
     border-radius: 6px
 }
 
