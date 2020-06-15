@@ -21,7 +21,7 @@
 
             <div class="form-group">
                 <label asp-for="TypeId" class="control-label"></label>
-                @Html.DropDownListFor(m => m.TypeId, (SelectList)@ViewBag.ChannelType_LIST, new { @class = "form-control" })
+                @Html.DropDownListFor(m => m.TypeId, (SelectList)@ViewBag.ChannelType_LIST, new { @class = "form-control", @autofocus = "autofocus" })
             </div>
 
             <div class="form-group">

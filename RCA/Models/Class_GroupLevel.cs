@@ -15,7 +15,7 @@ namespace RCA.Models
         ENTRETENIMENTO = 2,
         CONSUMO = 3
     }
-
+    
     [Table("GroupLevel")]
     public class Class_GroupLevel
     {

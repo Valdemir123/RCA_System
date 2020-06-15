@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace RCA.Controllers
@@ -202,7 +203,8 @@ namespace RCA.Controllers
                 _context.Add(_GroupLevel);
                 await _context.SaveChangesAsync();
 
-                return RedirectToAction(nameof(Index), _GroupLevel.GroupId);
+                //retorno Listagem
+                return RedirectToAction(nameof(Index), new { _GroupId = _GroupLevel.GroupId });
             }
 
             ViewBag.GroupName = _GroupLevel.GroupId.ToString();
@@ -238,7 +240,9 @@ namespace RCA.Controllers
                 {
                     return RedirectToAction(nameof(Error), new { _Message = e.Message });
                 }
-                return RedirectToAction(nameof(Index), _GroupLevel.GroupId);
+
+                //retorno Listagem
+                return RedirectToAction(nameof(Index), new { _GroupId = _GroupLevel.GroupId });
             }
 
             ViewBag.GroupName = _GroupLevel.GroupId.ToString();
@@ -266,7 +270,8 @@ namespace RCA.Controllers
             _context.Class_GroupLevel.Update(_GroupLevel);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction(nameof(Index), _GroupLevel.GroupId);
+            //retorno Listagem
+            return RedirectToAction(nameof(Index), new { _GroupId = _GroupLevel.GroupId });
         }
 
 
@@ -304,7 +309,8 @@ namespace RCA.Controllers
                 _context.Add(_GroupLevelItem);
                 await _context.SaveChangesAsync();
 
-                return RedirectToAction(nameof(Index), _GroupLevel.GroupId);
+                //retorno Listagem
+                return RedirectToAction(nameof(Index), new { _GroupId = _GroupLevel.GroupId });
             }
 
             ViewBag.GroupId = Convert.ToInt32(_GroupLevel.GroupId);
@@ -347,7 +353,9 @@ namespace RCA.Controllers
                 {
                     return RedirectToAction(nameof(Error), new { _Message = e.Message });
                 }
-                return RedirectToAction(nameof(Index), _GroupLevel.GroupId);
+
+                //retorno Listagem
+                return RedirectToAction(nameof(Index), new { _GroupId = _GroupLevel.GroupId });
             }
 
             ViewBag.GroupId = Convert.ToInt32(_GroupLevel.GroupId);
@@ -381,7 +389,7 @@ namespace RCA.Controllers
 
             var _GroupLevel = _context.Class_GroupLevel.Find(_GroupLevelItem.GroupLevelId);
 
-            return RedirectToAction(nameof(Index), _GroupLevel.GroupId);
+            return RedirectToAction(nameof(Index), new { _GroupId = _GroupLevel.GroupId });
         }
 
 
