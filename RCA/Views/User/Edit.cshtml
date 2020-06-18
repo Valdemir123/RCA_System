@@ -1,0 +1,86 @@
+﻿@model RCA.Models.Class_User
+
+@{
+    ViewData["Title"] = "Usuário: MODIFICAR CADASTRO";
+}
+<h2>@ViewData["Title"]</h2>
+
+<p>|| <a asp-action="Index" asp-route-_CompanyId="@Model.CompanyId" class="btn btn-info">Voltar para LISTAGEM</a></p>
+<hr />
+
+<div class="row">
+    <form asp-action="Edit" method="post" autocomplete="off">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div hidden>
+            @Html.TextBoxFor(m => m.Id);
+            @Html.TextBoxFor(m => m.StatusId);
+            @Html.TextBoxFor(m => m.Password);
+        </div>
+
+        <div class="col-md-4" style="background-color:lightgrey; border-radius: 3px 4px;">
+            <fieldset>
+                <div class="form-group">
+                    <label asp-for="CompanyId" class="control-label"></label>
+                    @Html.DropDownListFor(m => m.CompanyId, (SelectList)@ViewBag.UserCompany_LIST, new { @class = "form-control" })
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="TypeAccessId" class="control-label"></label>
+                    @Html.DropDownListFor(m => m.TypeAccessId, (SelectList)@ViewBag.UserTypeAcess_LIST, new { @class = "form-control" })
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control" autocomplete="off" />
+                </div>
+            </fieldset>
+
+            <div class="form-group">
+                <p><span asp-validation-for="CompanyId" class="text-danger"></span></p>
+                <p><span asp-validation-for="TypeAccessId" class="text-danger"></span></p>
+                <p><span asp-validation-for="Name" class="text-danger"></span></p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <fieldset>
+                <div class="form-group">
+                    <label asp-for="Email" class="control-label"></label>
+                    <input asp-for="Email" class="form-control" placeholder="ex. user@provedor.com.br" />
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Phone" class="control-label"></label>
+                    <input asp-for="Phone" class="form-control" style="width:200px" placeholder="ex. (00) 00000-0000" />
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="UserName" class="control-label"></label>
+                    <input asp-for="UserName" class="form-control" autofocus="autofocus"/>
+                </div>
+            </fieldset>
+
+            <div class="form-group">
+                <p><span asp-validation-for="Email" class="text-danger"></span></p>
+                <p><span asp-validation-for="Phone" class="text-danger"></span></p>
+                <p><span asp-validation-for="UserName" class="text-danger"></span></p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            || <input type="submit" value=" Gravar ! " class="btn btn-success" />
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            //mask fields
+            $("#Phone").mask('(00) 00000-0000');
+        });
+    </script>
+}

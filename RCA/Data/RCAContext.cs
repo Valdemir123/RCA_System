@@ -7,6 +7,8 @@ namespace RCA.Data
     {
         public RCAContext(DbContextOptions<RCAContext> options) : base(options) { }
 
+
+        public DbSet<Class_User>                Class_User { get; set; }
         public DbSet<Class_Book>                Class_Book { get; set; }
         public DbSet<Class_Channel>             Class_Channel { get; set; }
         public DbSet<Class_Company>             Class_Company { get; set; }

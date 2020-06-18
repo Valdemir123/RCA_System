@@ -24,7 +24,11 @@ namespace RCA.Controllers
         // GET: Company
         public async Task<IActionResult> Index()
         {
-            var _Company = from s in _context.Class_Company orderby s.StatusId, s.Name select s;
+            var _Company = from s
+                           in _context.Class_Company
+                           where s.Id != -1
+                           orderby s.StatusId, s.Name
+                           select s;
 
             return View(await _Company.AsNoTracking().ToListAsync());
         }
@@ -66,6 +70,12 @@ namespace RCA.Controllers
         {
             if (ModelState.IsValid)
             {
+                var _Find = _context.Class_Company.FirstOrDefaultAsync(m => m.Name == _Company.Name && m.Id != _Company.Id);
+                if (_Find != null)
+                {
+                    return RedirectToAction(nameof(Error), new { _Message = "Nome já esta cadastrado!" });
+                }
+
                 _context.Add(_Company);
                 await _context.SaveChangesAsync();
 
@@ -84,12 +94,15 @@ namespace RCA.Controllers
             {
                 return RedirectToAction(nameof(Error), new { _Message = "Id não informado!" });
             }
+            if (id == -1)
+            {
+                return RedirectToAction(nameof(Error), new { _Message = "Não é permitido Edição!" });
+            }
             var _Company = await _context.Class_Company.FindAsync(id);
             if (_Company == null)
             {
                 return RedirectToAction(nameof(Error), new { _Message = "Id não encontrado!" });
             }
-            _Company.StatusId = CompanyStatus.Ativo;
 
             ViewBag.Country_LIST = new SelectList(Enum.GetValues(typeof(CompanyCountry)).Cast<CompanyCountry>().ToList());
             return View(_Company);
@@ -107,6 +120,14 @@ namespace RCA.Controllers
             {
                 try
                 {
+                    _Company.StatusId = CompanyStatus.Ativo;
+
+                    var _Find = _context.Class_Company.FirstOrDefaultAsync(m => m.Name == _Company.Name && m.Id != _Company.Id);
+                    if (_Find != null)
+                    {
+                        return RedirectToAction(nameof(Error), new { _Message = "Nome já esta cadastrado!" });
+                    }
+
                     _context.Update(_Company);
                     await _context.SaveChangesAsync();
                 }

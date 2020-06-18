@@ -36,18 +36,5 @@ namespace RCA.Models
         [StringLength(50)]
         [DisplayName("Nome")]
         public string Name { get; set; }
-
-
-
-        //Constructors
-        public Class_GroupLevel() { }
-        public Class_GroupLevel(int _Id, GroupLevelStatus _StatusId, int _CompanyId, GroupType _GroupId, string _Name)
-        {
-            Id = _Id;
-            StatusId = _StatusId;
-            CompanyId = _CompanyId;
-            GroupId = _GroupId;
-            Name = _Name;
-        }
     }
 }

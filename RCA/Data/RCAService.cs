@@ -19,6 +19,29 @@ namespace RCA.Data
             {
                 Class_Company _Company = new Class_Company
                 {
+                    Id = -1,
+                    StatusId = CompanyStatus.Ativo,
+
+                    Name = "Acesso GERAL",
+                    CNPJ = "000.000.000/0000-00",
+                    Site = "www.Pousada.com.br",
+
+                    ContactName = "Leonardo Paraiso",
+                    Phone1 = "(031) 97129-2686",
+                    Phone2 = "",
+                    Email = "reservas@ranchocoracaoaberto.com.br",
+
+                    PostalCode = "00000-000",
+                    Address = "Endereço",
+                    Complement = ", Complemento",
+                    City = "Cidade",
+                    State = "UF",
+                    Country = CompanyCountry.Brasil.ToString()
+                };
+                _RCAContext.Class_Company.Add(_Company);
+
+                _Company = new Class_Company
+                {
                     Id = 1,
                     StatusId = CompanyStatus.Ativo,
 
@@ -46,6 +69,30 @@ namespace RCA.Data
 
 
 
+            //User
+            if (!_RCAContext.Class_User.Any())
+            {
+                Class_User _User = new Class_User
+                {
+                    StatusId = UserStatus.Ativo,
+                    CompanyId = -1,
+                    TypeAccessId = UserTypeAccess.Master,
+
+                    Name = "Valdemir P. Silva",
+                    Email="valpersil@gmail.com",
+                    Phone="(11) 98278-3044",
+
+                    UserName="Valdemir",
+                    Password="Inicial"
+                };
+                _RCAContext.Class_User.Add(_User);
+
+                //Save
+                _RCAContext.SaveChanges();
+            }
+            
+            
+            
             //Channel
             if (!_RCAContext.Class_Channel.Any())
             {

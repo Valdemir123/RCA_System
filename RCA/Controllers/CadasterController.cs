@@ -200,6 +200,12 @@ namespace RCA.Controllers
             {
                 _GroupLevel.Name = _GroupLevel.Name.ToUpper();
 
+                var _Find = _context.Class_GroupLevel.FirstOrDefaultAsync(m => m.Name == _GroupLevel.Name && m.CompanyId == _GroupLevel.CompanyId && m.Id != _GroupLevel.Id);
+                if (_Find != null)
+                {
+                    return RedirectToAction(nameof(Error), new { _Message = "Nome já esta cadastrado!" });
+                }
+
                 _context.Add(_GroupLevel);
                 await _context.SaveChangesAsync();
 
@@ -218,7 +224,6 @@ namespace RCA.Controllers
             {
                 return RedirectToAction(nameof(Error), new { _Message = "Id não encontrado!" });
             }
-            _GroupLevel.StatusId = GroupLevelStatus.Ativo;
 
             ViewBag.GroupName = _GroupLevel.GroupId.ToString();
             return View(_GroupLevel);
@@ -231,7 +236,14 @@ namespace RCA.Controllers
             {
                 try
                 {
+                    _GroupLevel.StatusId = GroupLevelStatus.Ativo;
                     _GroupLevel.Name = _GroupLevel.Name.ToUpper();
+
+                    var _Find = _context.Class_GroupLevel.FirstOrDefaultAsync(m => m.Name == _GroupLevel.Name && m.CompanyId == _GroupLevel.CompanyId && m.Id != _GroupLevel.Id);
+                    if (_Find != null)
+                    {
+                        return RedirectToAction(nameof(Error), new { _Message = "Nome já esta cadastrado!" });
+                    }
 
                     _context.Update(_GroupLevel);
                     await _context.SaveChangesAsync();
@@ -304,7 +316,11 @@ namespace RCA.Controllers
 
             if (ModelState.IsValid)
             {
-                _GroupLevelItem.Name = _GroupLevelItem.Name.ToUpper();
+                var _Find = _context.Class_GroupLevelItem.FirstOrDefaultAsync(m => m.Name == _GroupLevelItem.Name && m.GroupLevelId == _GroupLevelItem.GroupLevelId && m.Id != _GroupLevelItem.Id);
+                if (_Find != null)
+                {
+                    return RedirectToAction(nameof(Error), new { _Message = "Nome já esta cadastrado!" });
+                }
 
                 _context.Add(_GroupLevelItem);
                 await _context.SaveChangesAsync();
@@ -326,7 +342,6 @@ namespace RCA.Controllers
             {
                 return RedirectToAction(nameof(Error), new { _Message = "Id não encontrado!" });
             }
-            _GroupLevelItem.StatusId = GroupLevelItemStatus.Ativo;
 
             var _GroupLevel = _context.Class_GroupLevel.Find(_GroupLevelItem.GroupLevelId);
             ViewBag.GroupId = Convert.ToInt32(_GroupLevel.GroupId);
@@ -344,7 +359,13 @@ namespace RCA.Controllers
             {
                 try
                 {
-                    _GroupLevelItem.Name = _GroupLevelItem.Name.ToUpper();
+                    _GroupLevelItem.StatusId = GroupLevelItemStatus.Ativo;
+
+                    var _Find = _context.Class_GroupLevelItem.FirstOrDefaultAsync(m => m.Name == _GroupLevelItem.Name && m.GroupLevelId == _GroupLevelItem.GroupLevelId && m.Id != _GroupLevelItem.Id);
+                    if (_Find != null)
+                    {
+                        return RedirectToAction(nameof(Error), new { _Message = "Nome já esta cadastrado!" });
+                    }
 
                     _context.Update(_GroupLevelItem);
                     await _context.SaveChangesAsync();

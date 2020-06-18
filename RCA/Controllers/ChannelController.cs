@@ -77,6 +77,12 @@ namespace RCA.Controllers
         {
             if (ModelState.IsValid)
             {
+                var _Find = _context.Class_Channel.FirstOrDefaultAsync(m => m.Name == _Channel.Name && m.CompanyId == _Channel.CompanyId && m.Id != _Channel.Id);
+                if (_Find != null)
+                {
+                    return RedirectToAction(nameof(Error), new { _Message = "Nome já esta cadastrado!" });
+                }
+
                 _context.Add(_Channel);
                 await _context.SaveChangesAsync();
 
@@ -100,7 +106,6 @@ namespace RCA.Controllers
             {
                 return RedirectToAction(nameof(Error), new { _Message = "Id não encontrado!" });
             }
-            _Channel.StatusId = ChannelStatus.Ativo;
 
             ViewBag.ChannelType_LIST = new SelectList(Enum.GetValues(typeof(ChannelType)).Cast<ChannelType>().ToList());
             return View(_Channel);
@@ -117,6 +122,14 @@ namespace RCA.Controllers
             {
                 try
                 {
+                    _Channel.StatusId = ChannelStatus.Ativo;
+
+                    var _Find = _context.Class_Channel.FirstOrDefaultAsync(m => m.Name == _Channel.Name && m.CompanyId == _Channel.CompanyId && m.Id != _Channel.Id);
+                    if (_Find != null)
+                    {
+                        return RedirectToAction(nameof(Error), new { _Message = "Nome já esta cadastrado!" });
+                    }
+
                     _context.Update(_Channel);
                     await _context.SaveChangesAsync();
                 }

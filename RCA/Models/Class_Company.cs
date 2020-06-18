@@ -1,13 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System;
-using System.Collections.Generic;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Reflection.Metadata.Ecma335;
-using System.Threading.Tasks;
 
 namespace RCA.Models
 {
@@ -100,37 +94,5 @@ namespace RCA.Models
         [StringLength(50)]
         [DisplayName("País")]
         public string Country { get; set; }
-
-
-
-        //Constructors
-        public Class_Company() { }
-        public Class_Company(int _Id, CompanyStatus _StatusId, string _Name, string _CNPJ, string _Site,
-                            string _ContactName, string _Phone1, string _Phone2, string _Email, 
-                            string _PostalCode, string _Address, string _Complement, string _City, string _State, string _Country)
-        {
-            Id = _Id;
-            StatusId = _StatusId;
-            Name = _Name;
-            CNPJ = _CNPJ;
-            Site = _Site;
-
-            ContactName = _ContactName;
-            Phone1 = _Phone1;
-            Phone2 = _Phone2;
-            Email = _Email;
-
-            PostalCode = _PostalCode;
-            Address = _Address;
-            Complement = _Complement;
-            City = _City;
-            State = _State;
-            Country = _Country;
-        }
     }
-
-    
-
-
-
 }

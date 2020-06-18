@@ -1,0 +1,63 @@
+﻿@model RCA.Models.Class_User
+
+@{
+    ViewData["Title"] = "Usuário: DETALHE";
+}
+<h2>@ViewData["Title"]</h2>
+
+<p>|| <a asp-action="Index" asp-route-_CompanyId="@Model.CompanyId" class="btn btn-info">Voltar para LISTAGEM</a></p>
+<hr />
+
+<div>
+    <strong style="font-size:25px">Item:&nbsp;&nbsp;<t style="font-style:italic">@Html.DisplayFor(m => m.StatusId)</t></strong>
+    <br />
+    <br />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(m => m.CompanyId)
+        </dt>
+        <dd>
+            @ViewBag.CompanyName
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(m => m.TypeAccessId)
+        </dt>
+        <dd>
+            @Html.DisplayFor(m => m.TypeAccessId)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(m => m.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(m => m.Name)
+        </dd>
+    </dl>
+    <br />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(m => m.Email)
+        </dt>
+        <dd>
+            @Html.DisplayFor(m => m.Email)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(m => m.Phone)
+        </dt>
+        <dd>
+            @Html.DisplayFor(m => m.Phone)
+        </dd>
+    </dl>
+    <br />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(m => m.UserName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(m => m.UserName)
+        </dd>
+    </dl>
+</div>
+<div>
+    <br />
+    || <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-success ">Modificar !</a>
+</div>

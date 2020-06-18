@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace RCA.Models
 {
@@ -113,34 +110,5 @@ namespace RCA.Models
         [Required]
         [DisplayName("Hóspede responsável")]
         public string GuestCPF { get; set; }
-
-
-        public Class_Book() { }
-
-        public Class_Book(BookStatus _StatusId, 
-                        int _Channel_GroupLevelId, int _Channel_GroupLevelItemId, string _Channel_Code, double _Channel_Tax, double _Channel_Percent,
-                        int _Book_GroupLevelItemId, int _Book_GroupLevelItemTaxId, DateTime _Book_DateIn, DateTime _Book_DateOut, int _Book_AdultsNum,
-                        int _Book_KidsNum, bool _Book_PCD, bool _Book_PET, double _Book_DayValue, int _Book_DiscountPercent, double _Book_InputValue,
-                        string _GuestCPF)
-        {
-            StatusId = _StatusId;
-            Channel_GroupLevelId = _Channel_GroupLevelId;
-            Channel_GroupLevelItemId = _Channel_GroupLevelItemId;
-            Channel_Code = _Channel_Code;
-            Channel_Tax = _Channel_Tax;
-            Channel_Percent = _Channel_Percent;
-            Book_GroupLevelItemId = _Book_GroupLevelItemId;
-            Book_GroupLevelItemTaxId = _Book_GroupLevelItemTaxId;
-            Book_DateIn = _Book_DateIn;
-            Book_DateOut = _Book_DateOut;
-            Book_AdultsNum = _Book_AdultsNum;
-            Book_KidsNum = _Book_KidsNum;
-            Book_PCD = _Book_PCD;
-            Book_PET = _Book_PET;
-            Book_DayValue = _Book_DayValue;
-            Book_DiscountPercent = _Book_DiscountPercent;
-            Book_InputValue = _Book_InputValue;
-            GuestCPF = _GuestCPF;
-        }
     }
 }

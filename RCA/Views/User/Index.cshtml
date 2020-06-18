@@ -1,0 +1,70 @@
+﻿@model IEnumerable<RCA.Models.Class_UserLIST>
+@{
+    ViewData["Title"] = "Usuário: LISTAGEM";
+}
+<h2>@ViewData["Title"]</h2>
+<hr />
+<div>
+    @using (Html.BeginForm())
+    {
+        <dl class="dl-horizontal">
+            <dt>
+                Filtro por Companhia:
+            </dt>
+            <dd>
+                <div class="col-md-5">
+                    @Html.DropDownList("_CompanyId", (SelectList)@ViewBag.Company_LIST, new { @class = "form-control" })
+                </div>
+                <div class="col-md-2">
+                    ||&nbsp; <input type="submit" value="Filtrar" class="btn btn-default" />
+                </div>
+                <div class="col-md-3">
+                    Observação:
+                    <p>Cadastros na Companhia ()</p>
+                </div>
+            </dd>
+        </dl>
+    }
+</div>
+<br />
+<br />
+
+<table class="table table-striped table-hover">
+    <thead>
+        <tr class="success">
+            <th>|&nbsp;Companhia</th>
+            <th>|&nbsp;Status</th>
+            <th>|&nbsp;UserName</th>
+            <th>|&nbsp;Nome</th>
+            <th>||&nbsp;Ações</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var _Company in Model)
+        {
+            <tr>
+                <td>|&nbsp;@Html.DisplayFor(m => _Company.CompanyName)</td>
+                <td>||&nbsp;<a asp-action="Create" asp-route-_CompanyId="@_Company.CompanyId" class="btn btn-success">Adicionar Novo</a></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            @foreach (var _Item in _Company.UserLIST)
+            {
+                <tr>
+                    <td></td>
+                    <td>|&nbsp;@Html.DisplayFor(m => _Item.StatusId)</td>
+                    <td>|&nbsp;@Html.DisplayFor(m => _Item.UserName) (@Html.DisplayFor(m => _Item.TypeAccessId))</td>
+                    <td>|&nbsp;@Html.DisplayFor(m => _Item.Name)</td>
+                    <td>
+                        ||&nbsp;<a asp-action="Details" asp-route-id="@_Item.Id" class="btn btn-default">Detalhe</a>
+                        ||&nbsp;<a asp-action="Edit" asp-route-id="@_Item.Id" class="btn btn-success">Modificar</a>
+                        ||&nbsp;<a asp-action="Delete" asp-route-id="@_Item.Id" class="btn btn-warning">Suspender</a>
+                    </td>
+                </tr>
+            }
+        }
+
+    </tbody>
+</table>

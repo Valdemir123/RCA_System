@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -51,19 +50,5 @@ namespace RCA.Models
         [Required]
         [DisplayName("Preparado para PCD?")]
         public GroupLevelItemPCD PCD { get; set; }
-
-
-
-        //Constructors
-        public Class_GroupLevelItem() { }
-        public Class_GroupLevelItem(int _Id, GroupLevelItemStatus _StatusId, int _GroupLevelId, string _Name, int _OccupantsNum, GroupLevelItemPCD _PCD)
-        {
-            Id = _Id;
-            StatusId = _StatusId;
-            GroupLevelId = _GroupLevelId;
-            Name = _Name;
-            OccupantsNum = _OccupantsNum;
-            PCD = _PCD;
-        }
     }
 }
