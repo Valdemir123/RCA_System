@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
@@ -18,8 +19,9 @@ namespace RCA
         {
             Configuration = configuration;
         }
-
         public IConfiguration Configuration { get; }
+
+
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -31,28 +33,29 @@ namespace RCA
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            //adicionando o serviço de cookies na aplicação
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options => options.LoginPath = "/Hone/Login");
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            services.AddDbContext<RCAContext>(options =>
-                    options.UseMySql(Configuration.GetConnectionString("RCAConection"), builder => builder.MigrationsAssembly("RCA")));
+            services.AddDbContext<RCAContext>(options => options.UseMySql(Configuration.GetConnectionString("RCAConection"), builder => builder.MigrationsAssembly("RCA")));
 
             services.AddScoped<RCAService>();
         }
+
+
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, RCAService _Service)
         {
             //globalization
             var _enUS = new CultureInfo("en-US");
-            //
             var _locOPTs = new RequestLocalizationOptions
             {
                 DefaultRequestCulture = new RequestCulture(_enUS),
                 SupportedCultures = new List<CultureInfo> { _enUS },
                 SupportedUICultures = new List<CultureInfo> { _enUS }
             };
-            //
             app.UseRequestLocalization(_locOPTs);
 
 
@@ -67,6 +70,7 @@ namespace RCA
                 app.UseHsts();
             }
 
+            app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();

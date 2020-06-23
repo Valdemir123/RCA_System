@@ -1,0 +1,95 @@
+﻿@model RCA.Models.Class_UserLogin
+
+<div class="container">
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4>LOGIN</h4>
+                </div>
+
+                <div class="modal-body">
+                    <form asp-action="Login">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                        <div hidden>
+                            @Html.TextBoxFor(m => m.Id);
+                        </div>
+
+                        <fieldset>
+                            <div class="form-group">
+                                <label asp-for="UserName" class="control-label"></label>
+                                <input asp-for="UserName" class="form-control" autocomplete="off" autofocus="autofocus" />
+                                <p><span asp-validation-for="UserName" class="text-danger"></span></p>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="Password" class="control-label"></label>
+                                <input asp-for="Password" class="form-control" autocomplete="off" />
+                                <p><span asp-validation-for="Password" class="text-danger"></span></p>
+                            </div>
+
+                            <div class="form-group" id="Pass2" hidden>
+                                <label asp-for="NewPassword" class="control-label"></label>
+                                <input asp-for="NewPassword" class="form-control" autocomplete="off" />
+                            </div>
+
+                            <div class="form-group">
+                                || <input type="submit" value=" Login ! " class="btn btn-success" />
+                                || <a asp-action="Index" class="btn btn-info">Voltar para HOME</a>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+
+                <div class="modal-footer" id="MessageError">
+                    <h6 class="text-danger">@ViewBag.Message</h6>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+<script type="text/javascript">
+        // page modal
+        $(window).on('load', function () {
+            $('#myModal').modal('show');
+        });
+
+        // page fields
+        $(document).ready(function () {
+            $('#UserName').focusout(function () {
+                if ($("#UserName").val() != '') {
+
+                    $.ajax({
+                        url: '@Url.Action("FIND_USER", "Home")',
+                        type: 'GET',
+                        contentType: 'application/Json',
+                        data: { _UserName: $('#UserName').val() },
+                        success: function (_ret) {
+
+                            var $wrapper = document.querySelector('#MessageError');
+                            var _Extrato = '';
+
+                            $('#Pass2').hide('slow');
+                            if (_ret == "") {
+                                _Extrato = '<h6 class="text-danger">(UserName) não encontrado!</h6>';
+                            }
+                            else {
+                                if (_ret == "Inicial") {
+                                    $('#Pass2').show('slow');
+                                }
+                            }
+
+                            $wrapper.innerHTML = _Extrato;
+                        }
+                    });
+                }
+
+            });
+        });
+</script>
+}

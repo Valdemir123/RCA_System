@@ -56,10 +56,12 @@ namespace RCA.Controllers
         // GET: Company/Create
         public IActionResult Create()
         {
-            Class_Company _Company = new Class_Company();
-            _Company.Id = 0;
-            _Company.StatusId = CompanyStatus.Ativo;
-            _Company.Country = CompanyCountry.Brasil.ToString();
+            Class_Company _Company = new Class_Company
+            {
+                Id = 0,
+                StatusId = CompanyStatus.Ativo,
+                Country = CompanyCountry.Brasil.ToString()
+            };
 
             ViewBag.Country_LIST = new SelectList(Enum.GetValues(typeof(CompanyCountry)).Cast<CompanyCountry>().ToList());
             return View(_Company);

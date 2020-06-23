@@ -54,7 +54,7 @@ namespace RCA.Models
 
         [Required(ErrorMessage = "{0} Preenchimento Obrigatório")]
         [StringLength(20)]
-        [DisplayName("UserLogin")]
+        [DisplayName("Nome UserLogin")]
         public string UserName { get; set; }
 
         [StringLength(100)]
@@ -86,5 +86,26 @@ namespace RCA.Models
         [DisplayName("Perfil Acesso")]
         public UserTypeAccess TypeAccessId { get; set; }
 
+    }
+
+    public class Class_UserLogin
+    {
+        public int Id { get; set; }
+
+        [Required(ErrorMessage = "{0} Preenchimento Obrigatório")]
+        [StringLength(20)]
+        [DisplayName("Nome UserLogin")]
+        public string UserName { get; set; }
+
+        [Required(ErrorMessage = "{0} Preenchimento Obrigatório")]
+        [StringLength(100)]
+        [DisplayName("Password")]
+        [DataType(DataType.Password)]
+        public string Password { get; set; }
+
+        [StringLength(100)]
+        [DisplayName("Password Verificação")]
+        [DataType(DataType.Password)]
+        public string NewPassword { get; set; }
     }
 }

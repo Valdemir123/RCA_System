@@ -26,20 +26,31 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="CheckIn" asp-action="Index">Hospedagem</a></li>
-                    <li><a asp-area="" asp-controller="Cadaster" asp-action="Index">Cadastros</a></li>
-                    <li><a asp-area="" asp-controller="Channel" asp-action="Index">Cad.Canal</a></li>
-                    <li><a asp-area="" asp-controller="Company" asp-action="Index">Cad.Company</a></li>
-                    <li><a asp-area="" asp-controller="User" asp-action="Index">Cad.User</a></li>
+
+                    @if (@User.Identity.Name != null)
+                    {
+                        <li><a asp-area="" asp-controller="CheckIn" asp-action="Index">Hospedagem</a></li>
+                        <li><a asp-area="" asp-controller="Cadaster" asp-action="Index">Cadastros</a></li>
+                        <li><a asp-area="" asp-controller="Channel" asp-action="Index">Cad.Canal</a></li>
+                        <li><a asp-area="" asp-controller="Company" asp-action="Index">Cad.Company</a></li>
+                        <li><a asp-area="" asp-controller="User" asp-action="Index">Cad.User</a></li>
+                    }
                 </ul>
             </div>
         </div>
         <div class="col-lg-3">
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Login">LogIn</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Login">LogOut</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contato</a></li>
+                    @if (@User.Identity.Name != null)
+                    {
+                        <li>@User.Identity.Name</li>
+                        <li><a asp-area="" asp-controller="Home" asp-action="LogOut">LogOut</a></li>
+                    }
+                    else
+                    {
+                        <li><a asp-area="" asp-controller="Home" asp-action="LogIn">LogIn</a></li>
+                        <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contato</a></li>
+                    }
                 </ul>
             </div>
         </div>
@@ -63,7 +74,6 @@
     <environment exclude="Development">
         <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"
                 asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
-                asp-fallback-src="~/lib/jquery-mask/jquery.mask.min.js"
                 asp-fallback-test="window.jQuery"
                 crossorigin="anonymous"
                 integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT">

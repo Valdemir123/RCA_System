@@ -8,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 namespace RCA.Controllers
@@ -101,12 +100,14 @@ namespace RCA.Controllers
         {
             if(_CompanyId == null) { _CompanyId = -1; }
 
-            Class_User _User = new Class_User();
-            _User.Id = 0;
-            _User.StatusId = UserStatus.Ativo;
-            _User.CompanyId = (int) _CompanyId;
-            _User.TypeAccessId = UserTypeAccess.User;
-            _User.Password = "Inicial";
+            Class_User _User = new Class_User
+            {
+                Id = 0,
+                StatusId = UserStatus.Ativo,
+                CompanyId = (int)_CompanyId,
+                TypeAccessId = UserTypeAccess.User,
+                Password = "Inicial"
+            };
 
             var _CompanyLIST = from s in _context.Class_Company
                                where s.StatusId == CompanyStatus.Ativo
@@ -132,7 +133,6 @@ namespace RCA.Controllers
                 {
                     _User.TypeAccessId = UserTypeAccess.Master;
                 }
-
                 var _Find = await _context.Class_User.FirstOrDefaultAsync(m => m.UserName == _User.UserName && m.Id != _User.Id);
                 if (_Find != null)
                 {

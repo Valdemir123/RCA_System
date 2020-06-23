@@ -5,7 +5,7 @@ namespace RCA.Data
 {
     public class RCAService
     {
-        private RCAContext _RCAContext;
+        private readonly RCAContext _RCAContext;
 
         public RCAService(RCAContext _Context)
         {
