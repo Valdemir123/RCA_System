@@ -1,15 +1,12 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using RCA.Data;
 using RCA.Models;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using System.Collections.Generic;
-using System;
-using Microsoft.AspNetCore.Identity.UI.Pages.Internal.Account;
 
 namespace RCA.Controllers
 {
@@ -45,19 +42,14 @@ namespace RCA.Controllers
                 return RedirectToAction("Index");
             }
 
-            var _UserLogin = new Class_UserLogin
-            {
-                Id = 0,
-                UserName = "",
-                Password = ""
-            };
+            var _UserLogin = new Class_UserLogin();
 
             ViewBag.Message = "";
             return View(_UserLogin);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Login([Bind("Id,StatusId,CompanyId,TypeAccessId,Name,Email,Phone,UserName,Password")]  Class_UserLogin _UserLogin)
+        public IActionResult Login([Bind("Id,StatusId,CompanyId,TypeAccessId,Name,Email,Phone,UserName,Password")] Class_UserLogin _UserLogin)
         {
             _UserLogin.UserName = _UserLogin.UserName.ToUpper();
 
@@ -66,7 +58,7 @@ namespace RCA.Controllers
             {
                 if (_UserFound.Password == "Inicial")
                 {
-                    if(_UserLogin.Password != _UserLogin.NewPassword)
+                    if(_UserLogin.Password != _UserLogin.PassCheck)
                     {
                         ViewBag.Message = "(Passwords) inconsistente!";
                         return View(_UserLogin);

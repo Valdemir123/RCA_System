@@ -103,9 +103,10 @@ namespace RCA.Models
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
-        [StringLength(100)]
-        [DisplayName("Password Verificação")]
+        [DisplayName("Repita Password")]
         [DataType(DataType.Password)]
-        public string NewPassword { get; set; }
+        public string ReEnter { get; set; }
+
+        public string PassCheck { get; set; }
     }
 }
