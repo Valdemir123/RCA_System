@@ -5,7 +5,25 @@
 }
 <h2 class="text-danger">@ViewData["Title"]</h2>
 
-<p>|| <a asp-action="Index" asp-route-_GroupId="@Model.GroupId" class="btn btn-info">Voltar para LISTAGEM</a></p>
+
+@if (@Model.GroupId != 0)
+{
+    <p>
+        || <a asp-action="Index" asp-route-_GroupId="@Model.GroupId" class="btn btn-info">Voltar para LISTAGEM</a>
+    </p>
+}
+else if (@Model.CompanyId != 0)
+{
+    <p>
+        || <a asp-action="Index" asp-route-_CompanyId="@Model.CompanyId" class="btn btn-info">Voltar para LISTAGEM</a>
+    </p>
+}
+else
+{
+    <p>
+        || <a asp-action="Index" class="btn btn-info">Voltar para LISTAGEM</a>
+    </p>
+}
 <hr />
 
 <br />

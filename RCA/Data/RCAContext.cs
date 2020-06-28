@@ -9,7 +9,7 @@ namespace RCA.Data
 
 
         public DbSet<Class_User>                Class_User { get; set; }
-        public DbSet<Class_Book>                Class_Book { get; set; }
+        public DbSet<Class_Reception>                Class_Book { get; set; }
         public DbSet<Class_Channel>             Class_Channel { get; set; }
         public DbSet<Class_Company>             Class_Company { get; set; }
         public DbSet<Class_GroupLevel>          Class_GroupLevel { get; set; }

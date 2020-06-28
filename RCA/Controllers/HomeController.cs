@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RCA.Data;
 using RCA.Models;
@@ -77,7 +78,8 @@ namespace RCA.Controllers
                 var claims = new List<Claim>()
                 {
                     new Claim(ClaimTypes.Name, _UserFound.UserName),
-                    new Claim(ClaimTypes.Role, _UserFound.TypeAccessId.ToString())
+                    new Claim(ClaimTypes.Role, _UserFound.TypeAccessId.ToString()),
+                    new Claim("CompanyId", _UserFound.CompanyId.ToString())
                 };
 
                 var identidadeDeUsuario = new ClaimsIdentity(claims, "Index");
@@ -87,7 +89,7 @@ namespace RCA.Controllers
                 {
                     AllowRefresh = true,
                     ExpiresUtc = DateTime.Now.ToLocalTime().AddHours(1),
-                    IsPersistent = true
+                    IsPersistent = true,
                 };
 
                 HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimPrincipal, propriedadesDeAutenticacao);

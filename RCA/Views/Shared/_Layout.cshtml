@@ -31,12 +31,12 @@
                     {
                         @if (User.IsInRole(UserTypeAccess.Master.ToString()))
                         {
-                            <li><a asp-area="" asp-controller="Company" asp-action="Index">Cad.Company</a></li>
-                            <li><a asp-area="" asp-controller="User" asp-action="Index">Cad.User</a></li>
+                            <li>@Html.ActionLink("Cad. Companhia", "Index", "Company")</li>
+                            <li>@Html.ActionLink("Cad. Usuário", "Index", "User")</li>
                         }
                         else
                         {
-                            <li><a asp-area="" asp-controller="CheckIn" asp-action="Index">Hospedagem</a></li>
+                            <li>@Html.ActionLink("Recepção", "Index", "Reception")</li>
                         }
                     }
                 </ul>
@@ -45,11 +45,11 @@
                     {
                         <li class=" dropdown">
                             <a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                Manutenção <span class="caret"></span>
+                                Manutenção.. <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu">
-                                <li>@Html.ActionLink("Cad. Temporada", "Index", "Epoca")</li>
-                                <li>@Html.ActionLink("Cad. Canal", "Index", "Channel")</li>
+                                <li>@Html.ActionLink("(FALTA) Cad. Temporada", "Index", "Season")</li>
+                                <li>@Html.ActionLink("Cad. Canal", "Index", "Channel", new {_CompanyId = @User.FindFirst("CompanyId").Value })</li>
                                 <li>@Html.ActionLink("Cad. Acomodação", "Index", "Group", new {_GroupId = GroupType.ACOMODACAO })</li>
                                 <li>@Html.ActionLink("Cad. Entretenimento", "Index", "Group", new { _GroupId = GroupType.ENTRETENIMENTO })</li>
                                 <li>@Html.ActionLink("Cad. Consumo", "Index", "Group", new { _GroupId = GroupType.CONSUMO })</li>
@@ -57,11 +57,11 @@
                         </li>
                         <li class=" dropdown">
                             <a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                Gerencial <span class="caret"></span>
+                                Gerencial.. <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu">
-                                <li>@Html.ActionLink("Estoque", "Gerencial_Estoque", "Gerencial")</li>
-                                <li>@Html.ActionLink("Compras", "Gerencial_Compras", "Gerencial")</li>
+                                <li>@Html.ActionLink("(FALTA) Controle Estoque", "Index", "Inventory")</li>
+                                <li>@Html.ActionLink("(FALTA) Controle Compras", "Index", "Purchasing")</li>
                             </ul>
                         </li>
                     }

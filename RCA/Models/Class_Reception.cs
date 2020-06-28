@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RCA.Models
 {
-    public enum BookStatus : int
+    public enum ReceptionStatus : int
     {
         Reservado = 1,
         EmUso = 2,
@@ -14,14 +14,14 @@ namespace RCA.Models
     }
 
     [Table("Book")]
-    public class Class_Book
+    public class Class_Reception
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
         [DisplayName("Status")]
-        public BookStatus StatusId { get; set; }
+        public ReceptionStatus StatusId { get; set; }
 
 
 

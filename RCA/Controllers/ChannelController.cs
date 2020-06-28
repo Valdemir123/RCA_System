@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RCA.Data;
@@ -20,20 +21,16 @@ namespace RCA.Controllers
         }
 
 
-        //warning
-        public int _CompanyId = 1;
-
-
-
         // GET: Channel
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? _CompanyId)
         {
-            var _Channel = from s 
-                           in _context.Class_Channel 
-                           where s.CompanyId == _CompanyId 
-                           orderby s.StatusId, s.TypeId, s.Name 
+            var _Channel = from s
+                           in _context.Class_Channel
+                           where s.CompanyId == _CompanyId
+                           orderby s.StatusId, s.TypeId, s.Name
                            select s;
 
+            ViewBag.CompanyId = _CompanyId;
             return View(await _Channel.AsNoTracking().ToListAsync());
         }
 
@@ -52,13 +49,14 @@ namespace RCA.Controllers
                 return RedirectToAction(nameof(Error), new { _Message = "Id não encontrado!" });
             }
 
+            ViewBag.CompanyId = _Channel.CompanyId;
             return View(_Channel);
         }
 
 
 
         // GET: Channel/Create
-        public IActionResult Create()
+        public IActionResult Create(int _CompanyId)
         {
             Class_Channel _Channel = new Class_Channel
             {
@@ -68,6 +66,7 @@ namespace RCA.Controllers
                 TypeId = ChannelType.RESERVA
             };
 
+            ViewBag.CompanyId = _CompanyId;
             ViewBag.ChannelType_LIST = new SelectList(Enum.GetValues(typeof(ChannelType)).Cast<ChannelType>().ToList());
             return View(_Channel);
         }
@@ -80,33 +79,32 @@ namespace RCA.Controllers
                 var _Find = _context.Class_Channel.FirstOrDefaultAsync(m => m.Name == _Channel.Name && m.CompanyId == _Channel.CompanyId && m.Id != _Channel.Id);
                 if (_Find.Result != null)
                 {
-                    return RedirectToAction(nameof(Error), new { _Message = "Nome já esta cadastrado!" });
+                    return RedirectToAction(nameof(Error), new { _Message = "Nome já esta cadastrado!", _CompanyId = _Channel.CompanyId });
                 }
 
                 _context.Add(_Channel);
                 await _context.SaveChangesAsync();
 
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), new { _CompanyId = _Channel.CompanyId });
             }
 
+            ViewBag.CompanyId = _Channel.CompanyId;
+            ViewBag.ChannelType_LIST = new SelectList(Enum.GetValues(typeof(ChannelType)).Cast<ChannelType>().ToList());
             return View(_Channel);
         }
 
 
 
         // GET: Channel/Edit
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int id)
         {
-            if (id == null)
-            {
-                return RedirectToAction(nameof(Error), new { _Message = "Id não informado!" });
-            }
             var _Channel = await _context.Class_Channel.FindAsync(id);
             if (_Channel == null)
             {
-                return RedirectToAction(nameof(Error), new { _Message = "Id não encontrado!" });
+                return RedirectToAction(nameof(Error), new { _Message = "Id não encontrado!", _CompanyId = _Channel.CompanyId });
             }
 
+            ViewBag.CompanyId = _Channel.CompanyId;
             ViewBag.ChannelType_LIST = new SelectList(Enum.GetValues(typeof(ChannelType)).Cast<ChannelType>().ToList());
             return View(_Channel);
         }
@@ -114,11 +112,7 @@ namespace RCA.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,StatusId,CompanyId,TypeId,Name,Tax,Percent")] Class_Channel _Channel)
         {
-            if (id != _Channel.Id)
-            {
-                return RedirectToAction(nameof(Error), new { _Message = "Id não é o mesmo!" });
-            }
-            if (ModelState.IsValid)
+           if (ModelState.IsValid)
             {
                 try
                 {
@@ -127,7 +121,7 @@ namespace RCA.Controllers
                     var _Find = _context.Class_Channel.FirstOrDefaultAsync(m => m.Name == _Channel.Name && m.CompanyId == _Channel.CompanyId && m.Id != _Channel.Id);
                     if (_Find.Result != null)
                     {
-                        return RedirectToAction(nameof(Error), new { _Message = "Nome já esta cadastrado!" });
+                        return RedirectToAction(nameof(Error), new { _Message = "Nome já esta cadastrado!", _CompanyId = _Channel.CompanyId });
                     }
 
                     _context.Update(_Channel);
@@ -135,29 +129,28 @@ namespace RCA.Controllers
                 }
                 catch (ApplicationException e)
                 {
-                    return RedirectToAction(nameof(Error), new { _Message = e.Message });
+                    return RedirectToAction(nameof(Error), new { _Message = e.Message, _CompanyId = _Channel.CompanyId });
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), new { _CompanyId = _Channel.CompanyId });
             }
 
+            ViewBag.CompanyId = _Channel.CompanyId;
+            ViewBag.ChannelType_LIST = new SelectList(Enum.GetValues(typeof(ChannelType)).Cast<ChannelType>().ToList());
             return View(_Channel);
         }
 
 
 
         // GET: Channel/Delete
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int id)
         {
-            if (id == null)
-            {
-                return RedirectToAction(nameof(Error), new { _Message = "Id não informado!" });
-            }
             var _Channel = await _context.Class_Channel.FirstOrDefaultAsync(m => m.Id == id);
             if (_Channel == null)
             {
-                return RedirectToAction(nameof(Error), new { _Message = "Id não encontrado!" });
+                return RedirectToAction(nameof(Error), new { _Message = "Id não encontrado!", _CompanyId = _Channel.CompanyId });
             }
 
+            ViewBag.CompanyId = _Channel.CompanyId;
             return View(_Channel);
         }
         [HttpPost, ActionName("Delete")]
@@ -170,25 +163,20 @@ namespace RCA.Controllers
             _context.Class_Channel.Update(_Channel);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction(nameof(Index));
-        }
-
-
-        private bool Class_ChannelExists(int id)
-        {
-            return _context.Class_Channel.Any(e => e.Id == id);
+            return RedirectToAction(nameof(Index), new { _CompanyId = _Channel.CompanyId });
         }
 
 
 
         // POST: Error Message
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error(string _Message)
+        public IActionResult Error(string _Message, int _CompanyId)
         {
             var _vm = new ErrorViewModel
             {
                 Message = _Message,
-                RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
+                RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier,
+                CompanyId = _CompanyId
             };
 
             return View(_vm);
