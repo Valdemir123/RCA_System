@@ -175,7 +175,7 @@ namespace RCA.Data
                 {
                     StatusId = GroupLevelStatus.Ativo,
                     CompanyId = 1,
-                    GroupId = GroupType.HOSPEDAGEM,
+                    GroupId = GroupType.ACOMODACAO,
 
                     Name = "MASTER"
                 };
@@ -185,7 +185,7 @@ namespace RCA.Data
                 {
                     StatusId = GroupLevelStatus.Ativo,
                     CompanyId = 1,
-                    GroupId = GroupType.HOSPEDAGEM,
+                    GroupId = GroupType.ACOMODACAO,
 
                     Name = "PADRÃO"
                 };

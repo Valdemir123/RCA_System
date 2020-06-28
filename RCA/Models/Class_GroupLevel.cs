@@ -9,9 +9,11 @@ namespace RCA.Models
         Ativo = 1,
         Suspenso = 2
     }
+    [DefaultValue(1)]
     public enum GroupType : int
     {
-        HOSPEDAGEM = 1,
+        [Display(Name = "ACOMODAÇÃO")]
+        ACOMODACAO = 1,
         ENTRETENIMENTO = 2,
         CONSUMO = 3
     }

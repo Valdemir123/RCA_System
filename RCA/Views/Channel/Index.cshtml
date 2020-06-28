@@ -1,17 +1,16 @@
 ﻿@model IEnumerable<RCA.Models.Class_Channel>
 @{
-    ViewData["Title"] = "Canal: LISTAGEM";
+    ViewData["Title"] = "CANAL: Listagem";
 }
-<h2>@ViewData["Title"]</h2>
-<hr />
-
 <div>
+    <h2>@ViewData["Title"]</h2>
     || <a asp-action="Create" class="btn btn-success">Adicionar Novo</a>
 </div>
+<hr />
 <br />
 <table class="table table-striped table-hover">
     <thead>
-        <tr class="success"> 
+        <tr class="success">
             <th>
                 | @Html.DisplayNameFor(m => m.StatusId)
             </th>
@@ -27,22 +26,29 @@
     <tbody>
         @foreach (var _Item in Model)
         {
-        <tr>
-            <td>
-                | @Html.DisplayFor(m => _Item.StatusId)
-            </td>
-            <td>
-                | @Html.DisplayFor(m => _Item.TypeId)
-            </td>
-            <td>
-                | @Html.DisplayFor(m => _Item.Name)
-            </td>
-            <td>
-                || <a asp-action="Details" asp-route-id="@_Item.Id" class="btn btn-default">Detalhe</a>
-                || <a asp-action="Edit" asp-route-id="@_Item.Id" class="btn btn-success">Modificar</a>
-                || <a asp-action="Delete" asp-route-id="@_Item.Id" class="btn btn-warning">Suspender</a>
-            </td>
-        </tr>
+            <tr>
+                @if (_Item.StatusId != ChannelStatus.Ativo)
+                {
+                    <td>
+                        | @Html.DisplayFor(m => _Item.StatusId)
+                    </td>
+                }
+                else
+                {
+                    <td></td>
+                }
+                <td>
+                    | @Html.DisplayFor(m => _Item.TypeId)
+                </td>
+                <td>
+                    | @Html.DisplayFor(m => _Item.Name)
+                </td>
+                <td>
+                    || <a asp-action="Details" asp-route-id="@_Item.Id" class="btn btn-default">Detalhe</a>
+                    || <a asp-action="Edit" asp-route-id="@_Item.Id" class="btn btn-success">Modificar</a>
+                    || <a asp-action="Delete" asp-route-id="@_Item.Id" class="btn btn-warning">Suspender</a>
+                </td>
+            </tr>
         }
     </tbody>
 </table>

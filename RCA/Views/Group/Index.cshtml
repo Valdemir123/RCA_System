@@ -1,21 +1,12 @@
 ﻿@model RCA.Models.Class_Cadaster
 @{
-    ViewData["Title"] = "Cadastro: LISTAGEM";
+    ViewData["Title"] = @Model.GroupName + ": Listagem";
 }
-
 <div>
-    <h2>
-        @ViewData["Title"]
-        ||&nbsp;&nbsp;<a asp-action="Index" class="btn btn-info" asp-route-_GroupId="@Model.HOSPEDAGEMid">HOSPEDAGEM</a>
-        ||&nbsp;&nbsp;<a asp-action="Index" class="btn btn-info" asp-route-_GroupId="@Model.ENTRETENIMENTOid">ENTRETENIMENTO</a>
-        ||&nbsp;&nbsp;<a asp-action="Index" class="btn btn-info" asp-route-_GroupId="@Model.CONSUMOid">CONSUMO</a>
-    </h2>
+    <h2>@ViewData["Title"]</h2>
+    ||&nbsp;<a asp-action="CreateGL" class="btn btn-success" asp-route-_GroupId="@Model.GroupId">Adicionar Novo</a>
 </div>
 <hr />
-
-<div>
-    <strong> @Model.GroupName </strong>||&nbsp;<a asp-action="CreateGL" class="btn btn-success" asp-route-_GroupId="@Model.GroupId">Adicionar Novo</a>
-</div>
 <br />
 <table class="table table-striped table-hover">
     <tbody>

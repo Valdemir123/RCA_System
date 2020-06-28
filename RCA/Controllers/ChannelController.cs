@@ -78,7 +78,7 @@ namespace RCA.Controllers
             if (ModelState.IsValid)
             {
                 var _Find = _context.Class_Channel.FirstOrDefaultAsync(m => m.Name == _Channel.Name && m.CompanyId == _Channel.CompanyId && m.Id != _Channel.Id);
-                if (_Find != null)
+                if (_Find.Result != null)
                 {
                     return RedirectToAction(nameof(Error), new { _Message = "Nome já esta cadastrado!" });
                 }
@@ -125,7 +125,7 @@ namespace RCA.Controllers
                     _Channel.StatusId = ChannelStatus.Ativo;
 
                     var _Find = _context.Class_Channel.FirstOrDefaultAsync(m => m.Name == _Channel.Name && m.CompanyId == _Channel.CompanyId && m.Id != _Channel.Id);
-                    if (_Find != null)
+                    if (_Find.Result != null)
                     {
                         return RedirectToAction(nameof(Error), new { _Message = "Nome já esta cadastrado!" });
                     }

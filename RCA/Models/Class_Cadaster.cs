@@ -5,7 +5,7 @@ namespace RCA.Models
 {
     public class Class_Cadaster
     {
-        public GroupType HOSPEDAGEMid { get; set; } = GroupType.HOSPEDAGEM;
+        public GroupType ACOMODACAOid { get; set; } = GroupType.ACOMODACAO;
         public GroupType ENTRETENIMENTOid { get; set; } = GroupType.ENTRETENIMENTO;
         public GroupType CONSUMOid { get; set; } = GroupType.CONSUMO;
 

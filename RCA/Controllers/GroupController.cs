@@ -1,24 +1,20 @@
-﻿using Microsoft.AspNetCore.Identity.UI.Pages.Internal.Account.Manage;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using RCA.Data;
 using RCA.Models;
 using RCA.Models.ViewModels;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace RCA.Controllers
 {
-    public class CadasterController : Controller
+    public class GroupController : Controller
     {
         private readonly RCAContext _context;
-        public CadasterController(RCAContext context)
+        public GroupController(RCAContext context)
         {
             _context = context;
         }
@@ -28,18 +24,13 @@ namespace RCA.Controllers
 
         //********************
         // Index
-        public ActionResult Index(GroupType? _GroupId)
+        public ActionResult Index(GroupType _GroupId)
         {
-            if (_GroupId == null)
-            {
-                _GroupId = GroupType.HOSPEDAGEM;
-            }
-
             //
             Class_Cadaster _Cadaster = new Class_Cadaster
             {
                 CompanyId = _CompanyId,
-                GroupId = _GroupId.Value,
+                GroupId = _GroupId,
                 GroupName = _GroupId.ToString()
             };
 
@@ -72,8 +63,12 @@ namespace RCA.Controllers
                     GroupLevelItemId = 0,
                     GroupLevelItemTaxId = 0,
 
-                    ItemDesc = string.Format("{0} - {1}", _Lgl.StatusId.ToString(), _Lgl.Name),
+                    ItemDesc = "| "+_Lgl.Name
                 };
+                if (_Lgl.StatusId != GroupLevelStatus.Ativo)
+                {
+                    _Igl.ItemDesc = "| " + _Lgl.StatusId.ToString() + "  " + _Igl.ItemDesc;
+                }
                 _Cadaster.CadasterLIST.Add(_Igl);
 
                 if (_Lgl.StatusId != GroupLevelStatus.Suspenso)
@@ -109,11 +104,15 @@ namespace RCA.Controllers
                             GroupLevelItemName = _Lgli.Name,
                             GroupLevelItemTaxId = 0,
 
-                            ItemDesc = string.Format("{0} - {1}", _Lgli.StatusId.ToString(), _Lgli.Name)
+                            ItemDesc = "| " + _Lgli.Name
                         };
-                        if (_GroupId == GroupType.HOSPEDAGEM)
+                        if (_Lgli.StatusId != GroupLevelItemStatus.Ativo)
                         {
-                            _Igli.ItemDesc += string.Format(" - No.Ocup. {0} - Prep.PCD? {1}", _Lgli.OccupantsNum, _Lgli.PCD.ToString());
+                            _Igli.ItemDesc = "| " + _Lgli.StatusId.ToString() + "  " + _Igli.ItemDesc;
+                        }
+                        if (_Lgl.GroupId == GroupType.ACOMODACAO)
+                        {
+                            _Igli.ItemDesc = string.Format("{0} - No.Ocup. {1} - Prep.PCD? {2}", _Igli.ItemDesc, _Lgli.OccupantsNum, _Lgli.PCD.ToString());
                         }
                         _Cadaster.CadasterLIST.Add(_Igli);
 
@@ -201,9 +200,9 @@ namespace RCA.Controllers
                 _GroupLevel.Name = _GroupLevel.Name.ToUpper();
 
                 var _Find = _context.Class_GroupLevel.FirstOrDefaultAsync(m => m.Name == _GroupLevel.Name && m.CompanyId == _GroupLevel.CompanyId && m.Id != _GroupLevel.Id);
-                if (_Find != null)
+                if (_Find.Result != null)
                 {
-                    return RedirectToAction(nameof(Error), new { _Message = "Nome já esta cadastrado!" });
+                    return RedirectToAction(nameof(Error), new { _Message = "Nome já esta cadastrado!", _GroupId = _GroupLevel.GroupId });
                 }
 
                 _context.Add(_GroupLevel);
@@ -222,7 +221,7 @@ namespace RCA.Controllers
             var _GroupLevel = await _context.Class_GroupLevel.FindAsync(_GroupLevelId);
             if (_GroupLevel == null)
             {
-                return RedirectToAction(nameof(Error), new { _Message = "Id não encontrado!" });
+                return RedirectToAction(nameof(Error), new { _Message = "Id não encontrado!", _GroupId = _GroupLevel.GroupId });
             }
 
             ViewBag.GroupName = _GroupLevel.GroupId.ToString();
@@ -240,9 +239,9 @@ namespace RCA.Controllers
                     _GroupLevel.Name = _GroupLevel.Name.ToUpper();
 
                     var _Find = _context.Class_GroupLevel.FirstOrDefaultAsync(m => m.Name == _GroupLevel.Name && m.CompanyId == _GroupLevel.CompanyId && m.Id != _GroupLevel.Id);
-                    if (_Find != null)
+                    if (_Find.Result != null)
                     {
-                        return RedirectToAction(nameof(Error), new { _Message = "Nome já esta cadastrado!" });
+                        return RedirectToAction(nameof(Error), new { _Message = "Nome já esta cadastrado!", _GroupId = _GroupLevel.GroupId });
                     }
 
                     _context.Update(_GroupLevel);
@@ -266,7 +265,7 @@ namespace RCA.Controllers
             var _GroupLevel = await _context.Class_GroupLevel.FindAsync(_GroupLevelId);
             if (_GroupLevel == null)
             {
-                return RedirectToAction(nameof(Error), new { _Message = "Id não encontrado!" });
+                return RedirectToAction(nameof(Error), new { _Message = "Id não encontrado!", _GroupId = _GroupLevel.GroupId });
             }
 
             ViewBag.GroupName = _GroupLevel.GroupId.ToString();
@@ -305,6 +304,7 @@ namespace RCA.Controllers
 
             ViewBag.GroupId = Convert.ToInt32(_GroupLevel.GroupId);
             ViewBag.GroupLevelName = _GroupLevel.Name;
+            ViewBag.GroupType = _GroupLevel.GroupId;
             ViewBag.PCD_LIST = new SelectList(Enum.GetValues(typeof(GroupLevelItemPCD)).Cast<GroupLevelItemPCD>().ToList());
             return View(_GroupLevelItem);
         }
@@ -317,9 +317,9 @@ namespace RCA.Controllers
             if (ModelState.IsValid)
             {
                 var _Find = _context.Class_GroupLevelItem.FirstOrDefaultAsync(m => m.Name == _GroupLevelItem.Name && m.GroupLevelId == _GroupLevelItem.GroupLevelId && m.Id != _GroupLevelItem.Id);
-                if (_Find != null)
+                if (_Find.Result != null)
                 {
-                    return RedirectToAction(nameof(Error), new { _Message = "Nome já esta cadastrado!" });
+                    return RedirectToAction(nameof(Error), new { _Message = "Nome já esta cadastrado!", _GroupId = _GroupLevel.GroupId });
                 }
 
                 _context.Add(_GroupLevelItem);
@@ -331,6 +331,7 @@ namespace RCA.Controllers
 
             ViewBag.GroupId = Convert.ToInt32(_GroupLevel.GroupId);
             ViewBag.GroupLevelName = _GroupLevel.Name;
+            ViewBag.GroupType = _GroupLevel.GroupId;
             ViewBag.PCD_LIST = new SelectList(Enum.GetValues(typeof(GroupLevelItemPCD)).Cast<GroupLevelItemPCD>().ToList());
             return View(_GroupLevelItem);
         }
@@ -338,14 +339,16 @@ namespace RCA.Controllers
         public async Task<IActionResult> EditGLI(int _GroupLevelItemId)
         {
             var _GroupLevelItem = await _context.Class_GroupLevelItem.FindAsync(_GroupLevelItemId);
+            var _GroupLevel = _context.Class_GroupLevel.Find(_GroupLevelItem.GroupLevelId);
+
             if (_GroupLevelItem == null)
             {
-                return RedirectToAction(nameof(Error), new { _Message = "Id não encontrado!" });
+                return RedirectToAction(nameof(Error), new { _Message = "Id não encontrado!", _GroupId = _GroupLevel.GroupId });
             }
 
-            var _GroupLevel = _context.Class_GroupLevel.Find(_GroupLevelItem.GroupLevelId);
             ViewBag.GroupId = Convert.ToInt32(_GroupLevel.GroupId);
             ViewBag.GroupLevelName = _GroupLevel.Name;
+            ViewBag.GroupType = _GroupLevel.GroupId;
             ViewBag.PCD_LIST = new SelectList(Enum.GetValues(typeof(GroupLevelItemPCD)).Cast<GroupLevelItemPCD>().ToList());
             return View(_GroupLevelItem);
         }
@@ -362,9 +365,9 @@ namespace RCA.Controllers
                     _GroupLevelItem.StatusId = GroupLevelItemStatus.Ativo;
 
                     var _Find = _context.Class_GroupLevelItem.FirstOrDefaultAsync(m => m.Name == _GroupLevelItem.Name && m.GroupLevelId == _GroupLevelItem.GroupLevelId && m.Id != _GroupLevelItem.Id);
-                    if (_Find != null)
+                    if (_Find.Result != null)
                     {
-                        return RedirectToAction(nameof(Error), new { _Message = "Nome já esta cadastrado!" });
+                        return RedirectToAction(nameof(Error), new { _Message = "Nome já esta cadastrado!", _GroupId = _GroupLevel.GroupId });
                     }
 
                     _context.Update(_GroupLevelItem);
@@ -372,7 +375,7 @@ namespace RCA.Controllers
                 }
                 catch (ApplicationException e)
                 {
-                    return RedirectToAction(nameof(Error), new { _Message = e.Message });
+                    return RedirectToAction(nameof(Error), new { _Message = e.Message, _GroupId = _GroupLevel.GroupId });
                 }
 
                 //retorno Listagem
@@ -381,6 +384,7 @@ namespace RCA.Controllers
 
             ViewBag.GroupId = Convert.ToInt32(_GroupLevel.GroupId);
             ViewBag.GroupLevelName = _GroupLevel.Name;
+            ViewBag.GroupType = _GroupLevel.GroupId;
             ViewBag.PCD_LIST = new SelectList(Enum.GetValues(typeof(GroupLevelItemPCD)).Cast<GroupLevelItemPCD>().ToList());
             return View(_GroupLevel);
         }
@@ -388,14 +392,16 @@ namespace RCA.Controllers
         public async Task<IActionResult> DeleteGLI(int _GroupLevelItemId)
         {
             var _GroupLevelItem = await _context.Class_GroupLevelItem.FindAsync(_GroupLevelItemId);
+            var _GroupLevel = _context.Class_GroupLevel.Find(_GroupLevelItem.GroupLevelId);
+
             if (_GroupLevelItem == null)
             {
-                return RedirectToAction(nameof(Error), new { _Message = "Id não encontrado!" });
+                return RedirectToAction(nameof(Error), new { _Message = "Id não encontrado!", _GroupId = _GroupLevel.GroupId });
             }
-            var _GroupLevel = _context.Class_GroupLevel.Find(_GroupLevelItem.GroupLevelId);
 
             ViewBag.GroupId = Convert.ToInt32(_GroupLevel.GroupId);
             ViewBag.GroupLevelName = _GroupLevel.Name;
+            ViewBag.GroupType = _GroupLevel.GroupId;
             return View(_GroupLevelItem);
         }
         [HttpPost, ActionName("DeleteGLI")]
@@ -424,12 +430,13 @@ namespace RCA.Controllers
         //********************
         // POST: Error Message
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error(string _Message)
+        public IActionResult Error(string _Message, GroupType? _GroupId)
         {
             var _vm = new ErrorViewModel
             {
                 Message = _Message,
-                RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
+                RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier,
+                GroupId = (GroupType)_GroupId
             };
 
             return View(_vm);

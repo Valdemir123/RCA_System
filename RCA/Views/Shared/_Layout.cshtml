@@ -43,8 +43,27 @@
                 <ul class="nav navbar-nav">
                     @if (User.IsInRole(UserTypeAccess.Admin.ToString()))
                     {
-                    <li><a asp-area="" asp-controller="Cadaster" asp-action="Index">Cadastros</a></li>
-                    <li><a asp-area="" asp-controller="Channel" asp-action="Index">Cad.Canal</a></li>
+                        <li class=" dropdown">
+                            <a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                Manutenção <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>@Html.ActionLink("Cad. Temporada", "Index", "Epoca")</li>
+                                <li>@Html.ActionLink("Cad. Canal", "Index", "Channel")</li>
+                                <li>@Html.ActionLink("Cad. Acomodação", "Index", "Group", new {_GroupId = GroupType.ACOMODACAO })</li>
+                                <li>@Html.ActionLink("Cad. Entretenimento", "Index", "Group", new { _GroupId = GroupType.ENTRETENIMENTO })</li>
+                                <li>@Html.ActionLink("Cad. Consumo", "Index", "Group", new { _GroupId = GroupType.CONSUMO })</li>
+                            </ul>
+                        </li>
+                        <li class=" dropdown">
+                            <a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                Gerencial <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>@Html.ActionLink("Estoque", "Gerencial_Estoque", "Gerencial")</li>
+                                <li>@Html.ActionLink("Compras", "Gerencial_Compras", "Gerencial")</li>
+                            </ul>
+                        </li>
                     }
                 </ul>
             </div>

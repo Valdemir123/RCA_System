@@ -73,7 +73,7 @@ namespace RCA.Controllers
             if (ModelState.IsValid)
             {
                 var _Find = _context.Class_Company.FirstOrDefaultAsync(m => m.Name == _Company.Name && m.Id != _Company.Id);
-                if (_Find != null)
+                if (_Find.Result != null)
                 {
                     return RedirectToAction(nameof(Error), new { _Message = "Nome já esta cadastrado!" });
                 }
@@ -125,7 +125,7 @@ namespace RCA.Controllers
                     _Company.StatusId = CompanyStatus.Ativo;
 
                     var _Find = _context.Class_Company.FirstOrDefaultAsync(m => m.Name == _Company.Name && m.Id != _Company.Id);
-                    if (_Find != null)
+                    if (_Find.Result != null)
                     {
                         return RedirectToAction(nameof(Error), new { _Message = "Nome já esta cadastrado!" });
                     }

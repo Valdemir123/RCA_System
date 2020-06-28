@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<RCA.Models.Class_UserLIST>
 @{
-    ViewData["Title"] = "Usuário: LISTAGEM";
+    ViewData["Title"] = "USUÁRIO: Listagem";
 }
 <h2>@ViewData["Title"]</h2>
 <hr />
@@ -17,10 +17,6 @@
                 </div>
                 <div class="col-md-2">
                     ||&nbsp; <input type="submit" value="Filtrar" class="btn btn-default" />
-                </div>
-                <div class="col-md-3">
-                    Observação:
-                    <p>Cadastros na Companhia ()</p>
                 </div>
             </dd>
         </dl>
@@ -54,7 +50,15 @@
             {
                 <tr>
                     <td></td>
-                    <td>|&nbsp;@Html.DisplayFor(m => _Item.StatusId)</td>
+                    @if (_Item.StatusId != UserStatus.Ativo)
+                    {
+                        <td>|&nbsp;@Html.DisplayFor(m => _Item.StatusId)</td>
+
+                    }
+                    else
+                    {
+                        <td></td>
+                    }
                     <td>|&nbsp;@Html.DisplayFor(m => _Item.UserName) (@Html.DisplayFor(m => _Item.TypeAccessId))</td>
                     <td>|&nbsp;@Html.DisplayFor(m => _Item.Name)</td>
                     <td>
