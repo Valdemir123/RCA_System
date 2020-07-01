@@ -89,7 +89,7 @@ namespace RCA.Controllers
                 {
                     AllowRefresh = true,
                     ExpiresUtc = DateTime.Now.ToLocalTime().AddHours(1),
-                    IsPersistent = true,
+                    IsPersistent = true
                 };
 
                 HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimPrincipal, propriedadesDeAutenticacao);

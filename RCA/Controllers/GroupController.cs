@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RCA.Data;
@@ -13,19 +14,19 @@ namespace RCA.Controllers
 {
     public class GroupController : Controller
     {
+        public int _CompanyId;
+
         private readonly RCAContext _context;
         public GroupController(RCAContext context)
         {
             _context = context;
         }
-        //warning
-        public int _CompanyId = 1;
-
 
         //********************
         // Index
         public ActionResult Index(GroupType _GroupId)
         {
+            _CompanyId = int.Parse(User.FindFirst("CompanyId").Value);
             //
             Class_Cadaster _Cadaster = new Class_Cadaster
             {
@@ -63,7 +64,7 @@ namespace RCA.Controllers
                     GroupLevelItemId = 0,
                     GroupLevelItemTaxId = 0,
 
-                    ItemDesc = "| "+_Lgl.Name
+                    ItemDesc = "| " + _Lgl.Name
                 };
                 if (_Lgl.StatusId != GroupLevelStatus.Ativo)
                 {
@@ -180,6 +181,8 @@ namespace RCA.Controllers
         //Create - GroupLevel
         public IActionResult CreateGL(GroupType _GroupId)
         {
+            var _CompanyId = int.Parse(User.FindFirst("CompanyId").Value);
+
             Class_GroupLevel _GroupLevel = new Class_GroupLevel
             {
                 Id = 0,
@@ -188,7 +191,7 @@ namespace RCA.Controllers
                 GroupId = _GroupId
             };
 
-            ViewBag.GroupName = _GroupId.ToString();
+            ViewBag.GroupName = _GroupLevel.GroupId.ToString();
             return View(_GroupLevel);
         }
         [HttpPost]
@@ -218,11 +221,7 @@ namespace RCA.Controllers
         //Edit - GroupLevel
         public async Task<IActionResult> EditGL(int _GroupLevelId)
         {
-            var _GroupLevel = await _context.Class_GroupLevel.FindAsync(_GroupLevelId);
-            if (_GroupLevel == null)
-            {
-                return RedirectToAction(nameof(Error), new { _Message = "Id não encontrado!", _GroupId = _GroupLevel.GroupId });
-            }
+            var _GroupLevel = await _context.Class_GroupLevel.FirstOrDefaultAsync(m => m.Id == _GroupLevelId);
 
             ViewBag.GroupName = _GroupLevel.GroupId.ToString();
             return View(_GroupLevel);
@@ -249,7 +248,7 @@ namespace RCA.Controllers
                 }
                 catch (ApplicationException e)
                 {
-                    return RedirectToAction(nameof(Error), new { _Message = e.Message });
+                    return RedirectToAction(nameof(Error), new { _Message = e.Message, _GroupId = _GroupLevel.GroupId });
                 }
 
                 //retorno Listagem
@@ -263,10 +262,6 @@ namespace RCA.Controllers
         public async Task<IActionResult> DeleteGL(int _GroupLevelId)
         {
             var _GroupLevel = await _context.Class_GroupLevel.FindAsync(_GroupLevelId);
-            if (_GroupLevel == null)
-            {
-                return RedirectToAction(nameof(Error), new { _Message = "Id não encontrado!", _GroupId = _GroupLevel.GroupId });
-            }
 
             ViewBag.GroupName = _GroupLevel.GroupId.ToString();
             return View(_GroupLevel);

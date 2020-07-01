@@ -22,8 +22,10 @@ namespace RCA.Controllers
 
 
         // GET: Channel
-        public async Task<IActionResult> Index(int? _CompanyId)
+        public async Task<IActionResult> Index()
         {
+            var _CompanyId = int.Parse(User.FindFirst("CompanyId").Value);
+
             var _Channel = from s
                            in _context.Class_Channel
                            where s.CompanyId == _CompanyId

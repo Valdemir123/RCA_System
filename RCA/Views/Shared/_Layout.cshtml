@@ -49,7 +49,7 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li>@Html.ActionLink("(FALTA) Cad. Temporada", "Index", "Season")</li>
-                                <li>@Html.ActionLink("Cad. Canal", "Index", "Channel", new {_CompanyId = @User.FindFirst("CompanyId").Value })</li>
+                                <li>@Html.ActionLink("Cad. Canal", "Index", "Channel")</li>
                                 <li>@Html.ActionLink("Cad. Acomodação", "Index", "Group", new {_GroupId = GroupType.ACOMODACAO })</li>
                                 <li>@Html.ActionLink("Cad. Entretenimento", "Index", "Group", new { _GroupId = GroupType.ENTRETENIMENTO })</li>
                                 <li>@Html.ActionLink("Cad. Consumo", "Index", "Group", new { _GroupId = GroupType.CONSUMO })</li>
