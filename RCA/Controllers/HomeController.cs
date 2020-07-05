@@ -43,14 +43,20 @@ namespace RCA.Controllers
                 return RedirectToAction("Index");
             }
 
-            var _UserLogin = new Class_UserLogin();
+            var _UserLogin = new Class_UserLogin()
+            {
+                UserName = "",
+                Password = "",
+                ReEnter = "",
+                PassCheck = ""
+            };
 
             ViewBag.Message = "";
             return View(_UserLogin);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Login([Bind("Id,StatusId,CompanyId,TypeAccessId,Name,Email,Phone,UserName,Password")] Class_UserLogin _UserLogin)
+        public IActionResult Login(Class_UserLogin _UserLogin)
         {
             _UserLogin.UserName = _UserLogin.UserName.ToUpper();
 
@@ -59,7 +65,7 @@ namespace RCA.Controllers
             {
                 if (_UserFound.Password == "Inicial")
                 {
-                    if(_UserLogin.Password != _UserLogin.PassCheck)
+                    if (_UserLogin.Password != _UserLogin.PassCheck)
                     {
                         ViewBag.Message = "(Passwords) inconsistente!";
                         return View(_UserLogin);
@@ -67,7 +73,7 @@ namespace RCA.Controllers
                     _UserFound.Password = _UserLogin.Password;
 
                     _context.Update(_UserFound);
-                    _context.SaveChangesAsync();
+                    _context.SaveChanges();
                 }
                 else if (_UserFound.Password != _UserLogin.Password)
                 {
@@ -105,7 +111,7 @@ namespace RCA.Controllers
         //
         public JsonResult FIND_USER(string _UserName)
         {
-            var _Pass = "";
+            string _Pass = null;
 
             var _UserFound = _context.Class_User.Where(m => m.UserName == _UserName.ToUpper()).FirstOrDefault();
             if (_UserFound != null)

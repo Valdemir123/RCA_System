@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace RCA.Migrations
 {
-    public partial class Initial20200607 : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -21,7 +21,7 @@ namespace RCA.Migrations
                     Channel_Tax = table.Column<double>(nullable: false),
                     Channel_Percent = table.Column<double>(nullable: false),
                     Book_GroupLevelItemId = table.Column<int>(nullable: false),
-                    Book_GroupLevelItemTaxId = table.Column<int>(nullable: false),
+                    Book_GroupLevelItemTaxID = table.Column<int>(nullable: false),
                     Book_DateIn = table.Column<DateTime>(nullable: false),
                     Book_DateOut = table.Column<DateTime>(nullable: false),
                     Book_AdultsNum = table.Column<int>(nullable: false),
@@ -108,26 +108,11 @@ namespace RCA.Migrations
                     GroupLevelId = table.Column<int>(nullable: false),
                     Name = table.Column<string>(maxLength: 50, nullable: false),
                     OccupantsNum = table.Column<int>(nullable: false),
-                    PCD = table.Column<bool>(nullable: false)
+                    PCD = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_GroupLevelItem", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "GroupLevelItemTax",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    GroupLevelItemId = table.Column<int>(nullable: false),
-                    Name = table.Column<string>(maxLength: 20, nullable: false),
-                    Tax = table.Column<double>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_GroupLevelItemTax", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -150,6 +135,56 @@ namespace RCA.Migrations
                 {
                     table.PrimaryKey("PK_Guest", x => x.CPF);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "Season",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    StatusId = table.Column<int>(nullable: false),
+                    CompanyId = table.Column<int>(nullable: false),
+                    Name = table.Column<string>(maxLength: 50, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Season", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SeasonItem",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    SeasonId = table.Column<int>(nullable: false),
+                    GroupLevelItemId = table.Column<int>(nullable: false),
+                    Tax = table.Column<double>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SeasonItem", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "User",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    StatusId = table.Column<int>(nullable: false),
+                    CompanyId = table.Column<int>(nullable: false),
+                    TypeAccessId = table.Column<int>(nullable: false),
+                    Name = table.Column<string>(maxLength: 50, nullable: false),
+                    Email = table.Column<string>(maxLength: 50, nullable: false),
+                    Phone = table.Column<string>(maxLength: 20, nullable: false),
+                    UserName = table.Column<string>(maxLength: 20, nullable: false),
+                    Password = table.Column<string>(maxLength: 100, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_User", x => x.Id);
+                });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -170,10 +205,16 @@ namespace RCA.Migrations
                 name: "GroupLevelItem");
 
             migrationBuilder.DropTable(
-                name: "GroupLevelItemTax");
+                name: "Guest");
 
             migrationBuilder.DropTable(
-                name: "Guest");
+                name: "Season");
+
+            migrationBuilder.DropTable(
+                name: "SeasonItem");
+
+            migrationBuilder.DropTable(
+                name: "User");
         }
     }
 }

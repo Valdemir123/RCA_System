@@ -193,6 +193,13 @@ namespace RCA.Controllers
                     _User.StatusId = UserStatus.Ativo;
                     _User.Email = _User.Email.ToLower();
                     _User.UserName = _User.UserName.ToUpper();
+
+                    var _Find = await _context.Class_User.FirstOrDefaultAsync(m => m.UserName == _User.UserName && m.Id != _User.Id);
+                    if (_Find != null)
+                    {
+                        return RedirectToAction(nameof(Error), new { _Message = "(UserName) já está cadastrado para " + _Find.Name });
+                    }
+
                     if (_User.CompanyId != -1 && _User.TypeAccessId == UserTypeAccess.Master)
                     {
                         _User.TypeAccessId = UserTypeAccess.Admin;
@@ -200,12 +207,6 @@ namespace RCA.Controllers
                     else if (_User.CompanyId == -1 && _User.TypeAccessId != UserTypeAccess.Master)
                     {
                         _User.TypeAccessId = UserTypeAccess.Master;
-                    }
-
-                    var _Find = await _context.Class_User.FirstOrDefaultAsync(m => m.UserName == _User.UserName && m.Id != _User.Id);
-                    if (_Find != null)
-                    {
-                        return RedirectToAction(nameof(Error), new { _Message = "(UserName) já está cadastrado para " + _Find.Name });
                     }
 
                     _context.Update(_User);

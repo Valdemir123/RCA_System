@@ -1,0 +1,48 @@
+﻿@model IEnumerable<RCA.Models.Class_Season>
+@{
+    ViewData["Title"] = "TEMPORADA: Listagem";
+}
+<div>
+    <h2>@ViewData["Title"]</h2>
+    || <a asp-action="Create" asp-route-_CompanyId="@ViewBag.CompanyId" class="btn btn-success">Adicionar Novo</a>
+</div>
+<hr />
+<br />
+<table class="table table-striped table-hover">
+    <thead>
+        <tr class="success">
+            <th>
+                | @Html.DisplayNameFor(m => m.StatusId)
+            </th>
+            <th>
+                | @Html.DisplayNameFor(m => m.Name)
+            </th>
+            <th>|| Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var _Item in Model)
+        {
+            <tr>
+                @if (_Item.StatusId != SeasonStatus.Ativo)
+                {
+                    <td>
+                        | @Html.DisplayFor(m => _Item.StatusId)
+                    </td>
+                }
+                else
+                {
+                    <td></td>
+                }
+                <td>
+                    | @Html.DisplayFor(m => _Item.Name)
+                </td>
+                <td>
+                    || <a asp-action="ListaDePreco" asp-route-id="@_Item.Id" class="btn btn-default">Lista de Preço</a>
+                    || <a asp-action="Edit" asp-route-id="@_Item.Id" class="btn btn-success">Modificar</a>
+                    || <a asp-action="Delete" asp-route-id="@_Item.Id" class="btn btn-warning">Suspender</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

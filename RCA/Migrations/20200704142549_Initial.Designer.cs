@@ -9,8 +9,8 @@ using RCA.Data;
 namespace RCA.Migrations
 {
     [DbContext(typeof(RCAContext))]
-    [Migration("20200607214442_Initial20200607")]
-    partial class Initial20200607
+    [Migration("20200704142549_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -18,54 +18,6 @@ namespace RCA.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.1.14-servicing-32113")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
-
-            modelBuilder.Entity("RCA.Models.Class_Book", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("Book_AdultsNum");
-
-                    b.Property<DateTime>("Book_DateIn");
-
-                    b.Property<DateTime>("Book_DateOut");
-
-                    b.Property<double>("Book_DayValue");
-
-                    b.Property<int>("Book_DiscountPercent");
-
-                    b.Property<int>("Book_GroupLevelItemId");
-
-                    b.Property<int>("Book_GroupLevelItemTaxId");
-
-                    b.Property<double>("Book_InputValue");
-
-                    b.Property<int>("Book_KidsNum");
-
-                    b.Property<bool>("Book_PCD");
-
-                    b.Property<bool>("Book_PET");
-
-                    b.Property<string>("Channel_Code")
-                        .HasMaxLength(50);
-
-                    b.Property<int>("Channel_GroupLevelId");
-
-                    b.Property<int>("Channel_GroupLevelItemId");
-
-                    b.Property<double>("Channel_Percent");
-
-                    b.Property<double>("Channel_Tax");
-
-                    b.Property<string>("GuestCPF")
-                        .IsRequired();
-
-                    b.Property<int>("StatusId");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Book");
-                });
 
             modelBuilder.Entity("RCA.Models.Class_Channel", b =>
                 {
@@ -187,31 +139,13 @@ namespace RCA.Migrations
 
                     b.Property<int>("OccupantsNum");
 
-                    b.Property<bool>("PCD");
+                    b.Property<int>("PCD");
 
                     b.Property<int>("StatusId");
 
                     b.HasKey("Id");
 
                     b.ToTable("GroupLevelItem");
-                });
-
-            modelBuilder.Entity("RCA.Models.Class_GroupLevelItemTax", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("GroupLevelItemId");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(20);
-
-                    b.Property<double>("Tax");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("GroupLevelItemTax");
                 });
 
             modelBuilder.Entity("RCA.Models.Class_Guest", b =>
@@ -261,6 +195,123 @@ namespace RCA.Migrations
                     b.HasKey("CPF");
 
                     b.ToTable("Guest");
+                });
+
+            modelBuilder.Entity("RCA.Models.Class_Reception", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("Book_AdultsNum");
+
+                    b.Property<DateTime>("Book_DateIn");
+
+                    b.Property<DateTime>("Book_DateOut");
+
+                    b.Property<double>("Book_DayValue");
+
+                    b.Property<int>("Book_DiscountPercent");
+
+                    b.Property<int>("Book_GroupLevelItemId");
+
+                    b.Property<int>("Book_GroupLevelItemTaxID");
+
+                    b.Property<double>("Book_InputValue");
+
+                    b.Property<int>("Book_KidsNum");
+
+                    b.Property<bool>("Book_PCD");
+
+                    b.Property<bool>("Book_PET");
+
+                    b.Property<string>("Channel_Code")
+                        .HasMaxLength(50);
+
+                    b.Property<int>("Channel_GroupLevelId");
+
+                    b.Property<int>("Channel_GroupLevelItemId");
+
+                    b.Property<double>("Channel_Percent");
+
+                    b.Property<double>("Channel_Tax");
+
+                    b.Property<string>("GuestCPF")
+                        .IsRequired();
+
+                    b.Property<int>("StatusId");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Book");
+                });
+
+            modelBuilder.Entity("RCA.Models.Class_Season", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("CompanyId");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
+                    b.Property<int>("StatusId");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Season");
+                });
+
+            modelBuilder.Entity("RCA.Models.Class_SeasonItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("GroupLevelItemId");
+
+                    b.Property<int>("SeasonId");
+
+                    b.Property<double>("Tax");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SeasonItem");
+                });
+
+            modelBuilder.Entity("RCA.Models.Class_User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("CompanyId");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
+                    b.Property<string>("Password")
+                        .HasMaxLength(100);
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasMaxLength(20);
+
+                    b.Property<int>("StatusId");
+
+                    b.Property<int>("TypeAccessId");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasMaxLength(20);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("User");
                 });
 #pragma warning restore 612, 618
         }

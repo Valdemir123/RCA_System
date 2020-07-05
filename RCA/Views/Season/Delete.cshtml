@@ -1,7 +1,6 @@
-﻿@model RCA.Models.Class_Channel
-
+﻿@model RCA.Models.Class_Season
 @{
-    ViewData["Title"] = "CANAL: SUSPENDER Cadastro";
+    ViewData["Title"] = "TEMPORADA: SUSPENDER Cadastro";
 }
 <h2>@ViewData["Title"]</h2>
 
@@ -17,31 +16,10 @@
 
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(m => m.TypeId)
-        </dt>
-        <dd>
-            @Html.DisplayFor(m => m.TypeId)
-        </dd>
-        <dt>
             @Html.DisplayNameFor(m => m.Name)
         </dt>
         <dd>
             @Html.DisplayFor(m => m.Name)
-        </dd>
-    </dl>
-    <br />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(m => m.Tax)
-        </dt>
-        <dd>
-            @Html.DisplayFor(m => m.Tax)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(m => m.Percent)
-        </dt>
-        <dd>
-            @Html.DisplayFor(m => m.Percent)
         </dd>
     </dl>
 

@@ -57,7 +57,7 @@ namespace RCA.Models
         [ForeignKey("GroupLevelItemTax")]
         [Required]
         [DisplayName("Temporada")]
-        public int Book_GroupLevelItemTaxId { get; set; }
+        public int Book_GroupLevelItemTaxID { get; set; }
 
         [Required]
         [DisplayName("Início")]

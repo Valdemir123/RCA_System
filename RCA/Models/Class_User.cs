@@ -90,8 +90,6 @@ namespace RCA.Models
 
     public class Class_UserLogin
     {
-        public int Id { get; set; }
-
         [Required(ErrorMessage = "{0} Preenchimento Obrigatório")]
         [StringLength(20)]
         [DisplayName("Nome UserLogin")]

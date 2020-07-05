@@ -49,7 +49,7 @@ namespace RCA.Controllers
 
                     GroupLevelId = 0,
                     GroupLevelItemId = 0,
-                    GroupLevelItemTaxId = 0,
+                    GroupLevelItemTaxID = 0,
 
                     ItemDesc = "Grupo",
                 };
@@ -62,7 +62,7 @@ namespace RCA.Controllers
                     GroupLevelId = _Lgl.Id,
                     GroupLevelName = _Lgl.Name,
                     GroupLevelItemId = 0,
-                    GroupLevelItemTaxId = 0,
+                    GroupLevelItemTaxID = 0,
 
                     ItemDesc = "| " + _Lgl.Name
                 };
@@ -81,7 +81,7 @@ namespace RCA.Controllers
                         GroupLevelId = _Lgl.Id,
                         GroupLevelName = _Lgl.Name,
                         GroupLevelItemId = 0,
-                        GroupLevelItemTaxId = 0,
+                        GroupLevelItemTaxID = 0,
 
                         ItemDesc = "Item do Grupo"
                     };
@@ -103,7 +103,7 @@ namespace RCA.Controllers
                             GroupLevelId = _Lgl.Id,
                             GroupLevelItemId = _Lgli.Id,
                             GroupLevelItemName = _Lgli.Name,
-                            GroupLevelItemTaxId = 0,
+                            GroupLevelItemTaxID = 0,
 
                             ItemDesc = "| " + _Lgli.Name
                         };
@@ -121,27 +121,28 @@ namespace RCA.Controllers
                         {
 
                             //3o estagio
-                            var _GLIT = from s in _context.Class_GroupLevelItemTax
-                                        where s.GroupLevelItemId == _Lgli.Id
-                                        orderby s.Name
-                                        select s;
+                            var _SI = from s1 in _context.Class_SeasonItem
+                                      join s2 in _context.Class_Season on s1.SeasonId equals s2.Id
+                                      where s1.GroupLevelItemId == _Lgli.Id
+                                      orderby s2.Name
+                                      select new { SeasonItemID = s1.Id, SeasonItemTAX = s1.Tax, SeasonItemNAME = s2.Name };
                             //
-                            if (_GLIT.Count() > 0)
+                            if (_SI.Count() > 0)
                             {
                                 _Igli = new Class_CadasterItem()
                                 {
-                                    TypeLine = "Cabec",
+                                    TypeLine = "Item",
 
                                     GroupLevelId = _Lgl.Id,
                                     GroupLevelItemId = _Lgli.Id,
-                                    GroupLevelItemName = _Lgli.Name,
-                                    GroupLevelItemTaxId = 0,
+                                    GroupLevelItemTaxID = 0,
+                                    GroupLevelItemTaxNAME="",
 
-                                    ItemDesc = "Listagem de Preço"
+                                    ItemDesc = "| " + _Lgli.Name
                                 };
                                 _Cadaster.CadasterLIST.Add(_Igli);
                                 //
-                                foreach (var _Lglit in _GLIT)
+                                foreach (var _SIitem in _SI)
                                 {
                                     var _Iglit = new Class_CadasterItem()
                                     {
@@ -149,10 +150,12 @@ namespace RCA.Controllers
 
                                         GroupLevelId = _Lgl.Id,
                                         GroupLevelItemId = _Lgli.Id,
-                                        GroupLevelItemTaxId = _Lglit.Id,
-                                        GroupLevelItemTaxName = _Lglit.Name,
+                                        GroupLevelItemName = _Lgli.Name,
+                                        GroupLevelItemTaxID = _SIitem.SeasonItemID,
+                                        GroupLevelItemTaxNAME = _SIitem.SeasonItemNAME,
+                                        GroupLevelItemTaxTAX = _SIitem.SeasonItemTAX,
 
-                                        ItemDesc = string.Format("{0} - {1}", _Lglit.Name, _Lglit.Tax.ToString("C2"))
+                                        ItemDesc = string.Format("{0} - {1}", _SIitem.SeasonItemNAME, _SIitem.SeasonItemTAX.ToString("C2"))
                                     };
                                     _Cadaster.CadasterLIST.Add(_Iglit);
                                 }
@@ -164,7 +167,7 @@ namespace RCA.Controllers
 
                                 GroupLevelId = 0,
                                 GroupLevelItemId = 0,
-                                GroupLevelItemTaxId = 0,
+                                GroupLevelItemTaxID = 0,
 
                                 ItemDesc = ""
                             };

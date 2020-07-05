@@ -22,8 +22,9 @@ namespace RCA.Models
         public string GroupLevelName { get; set; }
         public int GroupLevelItemId { get; set; }
         public string GroupLevelItemName { get; set; }
-        public int GroupLevelItemTaxId { get; set; }
-        public string GroupLevelItemTaxName { get; set; }
+        public int GroupLevelItemTaxID { get; set; }
+        public string GroupLevelItemTaxNAME { get; set; }
+        public double GroupLevelItemTaxTAX { get; set; }
 
         [DisplayName("Item")]
         public string ItemDesc { get; set; }

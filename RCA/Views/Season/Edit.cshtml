@@ -1,38 +1,31 @@
-﻿@model RCA.Models.Class_GroupLevel
+﻿@model RCA.Models.Class_Season
 @{
-    ViewData["Title"] = "GRUPO de " + ViewBag.GroupName + ": MODIFICAR Cadastro";
+    ViewData["Title"] = "TEMPORADA: MODIFICAR Cadastro";
 }
 <h2>@ViewData["Title"]</h2>
 
-<p>|| <a asp-action="Index" class="btn btn-info" asp-route-_GroupId="@Model.GroupId">Voltar para LISTAGEM</a></p>
+<p>|| <a asp-action="Index" asp-route-_CompanyId="@ViewBag.CompanyId" class="btn btn-info">Voltar para LISTAGEM</a></p>
 <hr />
 
-<br />
-<br />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="EditGL">
+        <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div hidden>
                 @Html.TextBoxFor(m => m.Id);
                 @Html.TextBoxFor(m => m.StatusId);
                 @Html.TextBoxFor(m => m.CompanyId);
-                @Html.TextBoxFor(m => m.GroupId);
             </div>
+
 
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" autofocus="autofocus" />
-            </div>
-
-            <div class="form-group">
                 <p><span asp-validation-for="Name" class="text-danger"></span></p>
             </div>
 
             <div class="form-group">
-                <br />
-                <br />
                 || <input type="submit" value=" Gravar ! " class="btn btn-success" />
             </div>
         </form>

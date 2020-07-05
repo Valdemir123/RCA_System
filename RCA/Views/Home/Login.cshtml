@@ -12,7 +12,7 @@
                     <form asp-action="Login">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-                        <div id="Pass">
+                        <div hidden>
                             @Html.TextBoxFor(m => m.PassCheck)
                         </div>
 
@@ -29,7 +29,7 @@
                                 <p><span asp-validation-for="Password" class="text-danger"></span></p>
                             </div>
 
-                            <div class="form-group" id="Pass2">
+                            <div class="form-group" id="Pass2" hidden>
                                 <label asp-for="ReEnter" class="control-label"></label>
                                 <input asp-for="ReEnter" class="form-control" />
                                 <p><span asp-validation-for="ReEnter" class="text-danger"></span></p>
@@ -58,6 +58,10 @@
         // page modal
         $(window).on('load', function () {
             $('#myModal').modal('show');
+            $('#UserName').val('');
+            $('#Password').val('');
+            $('#ReEnter').val('');
+            $('#PassCheck').val('');
         });
 
         // page fields
@@ -93,10 +97,8 @@
             });
 
             $('#ReEnter').focusout(function () {
-                var $wrapper = document.querySelector('#Pass');
-                _Texto = '<input name="PassCheck" type="text" value="' + $('#ReEnter').val()+'" />';
-
-                $wrapper.innerHTML = _Texto;
+                var _text = $('#ReEnter').val();
+                $('#PassCheck').val(_text);
             });
         });
 </script>

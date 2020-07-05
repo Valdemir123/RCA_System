@@ -177,7 +177,7 @@ namespace RCA.Data
                     CompanyId = 1,
                     GroupId = GroupType.ACOMODACAO,
 
-                    Name = "MASTER"
+                    Name = "Comodação MASTER"
                 };
                 _RCAContext.Class_GroupLevel.Add(_Level);
                 //
@@ -187,7 +187,7 @@ namespace RCA.Data
                     CompanyId = 1,
                     GroupId = GroupType.ACOMODACAO,
 
-                    Name = "PADRÃO"
+                    Name = "Comodação PADRÃO"
                 };
                 _RCAContext.Class_GroupLevel.Add(_Level);
 
@@ -199,7 +199,7 @@ namespace RCA.Data
                     CompanyId = 1,
                     GroupId = GroupType.ENTRETENIMENTO,
 
-                    Name = "PASSEIO JEEP"
+                    Name = "Passeio JEEP"
                 };
                 _RCAContext.Class_GroupLevel.Add(_Level);
                 //
@@ -209,7 +209,7 @@ namespace RCA.Data
                     CompanyId = 1,
                     GroupId = GroupType.ENTRETENIMENTO,
 
-                    Name = "PASSEIO LANCHA"
+                    Name = "Passeio LANCHA"
                 };
                 _RCAContext.Class_GroupLevel.Add(_Level);
                 //
@@ -264,12 +264,350 @@ namespace RCA.Data
                     Name = "REFEIÇÃO"
                 };
                 _RCAContext.Class_GroupLevel.Add(_Level);
+                //
+                _Level = new Class_GroupLevel
+                {
+                    StatusId = GroupLevelStatus.Ativo,
+                    CompanyId = 1,
+                    GroupId = GroupType.CONSUMO,
 
+                    Name = "LOJINHA"
+                };
+                _RCAContext.Class_GroupLevel.Add(_Level);
 
                 //Save
                 _RCAContext.SaveChanges();
             }
 
+            //GroupLevel
+            if (!_RCAContext.Class_GroupLevelItem.Any())
+            {
+                //HOSPEDAGEM - MASTER
+                var _GroupLevelId = _RCAContext.Class_GroupLevel.FirstOrDefault(m => m.Name == "Comodação MASTER");
+                //
+                var _Level = new Class_GroupLevelItem
+                {
+                    StatusId = GroupLevelItemStatus.Ativo,
+                    GroupLevelId = _GroupLevelId.Id,
+
+                    Name = "Sapequinha",
+                    OccupantsNum=2,
+                    PCD= GroupLevelItemPCD.Sim
+                };
+                _RCAContext.Class_GroupLevelItem.Add(_Level);
+
+                //HOSPEDAGEM - PADRÃO
+                _GroupLevelId = _RCAContext.Class_GroupLevel.FirstOrDefault(m => m.Name == "Comodação PADRÃO");
+                //
+                _Level = new Class_GroupLevelItem
+                {
+                    StatusId = GroupLevelItemStatus.Ativo,
+                    GroupLevelId = _GroupLevelId.Id,
+
+                    Name = "Os DEZ Mandamentos do Amor",
+                    OccupantsNum = 3,
+                    PCD = GroupLevelItemPCD.Nao
+                };
+                _RCAContext.Class_GroupLevelItem.Add(_Level);
+                //
+                _Level = new Class_GroupLevelItem
+                {
+                    StatusId = GroupLevelItemStatus.Ativo,
+                    GroupLevelId = _GroupLevelId.Id,
+
+                    Name = "Enamorados",
+                    OccupantsNum = 3,
+                    PCD = GroupLevelItemPCD.Nao
+                };
+                _RCAContext.Class_GroupLevelItem.Add(_Level);
+                //
+                _Level = new Class_GroupLevelItem
+                {
+                    StatusId = GroupLevelItemStatus.Ativo,
+                    GroupLevelId = _GroupLevelId.Id,
+
+                    Name = "Me Apaxonei",
+                    OccupantsNum = 3,
+                    PCD = GroupLevelItemPCD.Nao
+                };
+                _RCAContext.Class_GroupLevelItem.Add(_Level);
+                //
+                _Level = new Class_GroupLevelItem
+                {
+                    StatusId = GroupLevelItemStatus.Ativo,
+                    GroupLevelId = _GroupLevelId.Id,
+
+                    Name = "Anjo Protetor",
+                    OccupantsNum = 3,
+                    PCD = GroupLevelItemPCD.Sim
+                };
+                _RCAContext.Class_GroupLevelItem.Add(_Level);
+                //
+                _Level = new Class_GroupLevelItem
+                {
+                    StatusId = GroupLevelItemStatus.Ativo,
+                    GroupLevelId = _GroupLevelId.Id,
+
+                    Name = "A Carta",
+                    OccupantsNum = 4,
+                    PCD = GroupLevelItemPCD.Nao
+                };
+                _RCAContext.Class_GroupLevelItem.Add(_Level);
+                //
+                _Level = new Class_GroupLevelItem
+                {
+                    StatusId = GroupLevelItemStatus.Ativo,
+                    GroupLevelId = _GroupLevelId.Id,
+
+                    Name = "Eu Amo Você",
+                    OccupantsNum = 4,
+                    PCD = GroupLevelItemPCD.Nao
+                };
+                _RCAContext.Class_GroupLevelItem.Add(_Level);
+                
+
+                //ENTRETENIMENTO - JEEP
+                _GroupLevelId = _RCAContext.Class_GroupLevel.FirstOrDefault(m => m.Name == "Passeio JEEP");
+                //
+                _Level = new Class_GroupLevelItem
+                {
+                    StatusId = GroupLevelItemStatus.Ativo,
+                    GroupLevelId = _GroupLevelId.Id,
+
+                    Name = "JEEP 4X4 - EXCLUSIVO",
+                };
+                _RCAContext.Class_GroupLevelItem.Add(_Level);
+                //
+                _Level = new Class_GroupLevelItem
+                {
+                    StatusId = GroupLevelItemStatus.Ativo,
+                    GroupLevelId = _GroupLevelId.Id,
+
+                    Name = "JEEP 4X4 - 2 pessoas",
+                };
+                _RCAContext.Class_GroupLevelItem.Add(_Level);
+                //
+                _Level = new Class_GroupLevelItem
+                {
+                    StatusId = GroupLevelItemStatus.Ativo,
+                    GroupLevelId = _GroupLevelId.Id,
+
+                    Name = "JEEP 4X4 - 4 pessoas",
+                };
+                _RCAContext.Class_GroupLevelItem.Add(_Level);
+
+
+                //ENTRETENIMENTO - LANCHA
+                _GroupLevelId = _RCAContext.Class_GroupLevel.FirstOrDefault(m => m.Name == "Passeio LANCHA");
+                //
+                _Level = new Class_GroupLevelItem
+                {
+                    StatusId = GroupLevelItemStatus.Ativo,
+                    GroupLevelId = _GroupLevelId.Id,
+
+                    Name = "LANCHA 19p - EXCLUSIVO",
+                };
+                _RCAContext.Class_GroupLevelItem.Add(_Level);
+                //
+                _Level = new Class_GroupLevelItem
+                {
+                    StatusId = GroupLevelItemStatus.Ativo,
+                    GroupLevelId = _GroupLevelId.Id,
+
+                    Name = "LANCHA 19p - 2 pessoas",
+                };
+                _RCAContext.Class_GroupLevelItem.Add(_Level);
+                //
+                _Level = new Class_GroupLevelItem
+                {
+                    StatusId = GroupLevelItemStatus.Ativo,
+                    GroupLevelId = _GroupLevelId.Id,
+
+                    Name = "LANCHA 19p - 4 pessoas",
+                };
+                _RCAContext.Class_GroupLevelItem.Add(_Level);
+                //
+                _Level = new Class_GroupLevelItem
+                {
+                    StatusId = GroupLevelItemStatus.Ativo,
+                    GroupLevelId = _GroupLevelId.Id,
+
+                    Name = "LANCHA 19p - 8 pessoas",
+                };
+                _RCAContext.Class_GroupLevelItem.Add(_Level);
+
+
+                //ENTRETENIMENTO - SPA
+                _GroupLevelId = _RCAContext.Class_GroupLevel.FirstOrDefault(m => m.Name == "SPA");
+                //
+                _Level = new Class_GroupLevelItem
+                {
+                    StatusId = GroupLevelItemStatus.Ativo,
+                    GroupLevelId = _GroupLevelId.Id,
+
+                    Name = "Massagem INDIVIDUAL",
+                };
+                _RCAContext.Class_GroupLevelItem.Add(_Level);
+                //
+                _Level = new Class_GroupLevelItem
+                {
+                    StatusId = GroupLevelItemStatus.Ativo,
+                    GroupLevelId = _GroupLevelId.Id,
+
+                    Name = "Sauna INDIVIDUAL",
+                };
+                _RCAContext.Class_GroupLevelItem.Add(_Level);
+                //
+                _Level = new Class_GroupLevelItem
+                {
+                    StatusId = GroupLevelItemStatus.Ativo,
+                    GroupLevelId = _GroupLevelId.Id,
+
+                    Name = "Yoga INDIVIDUAL",
+                };
+                _RCAContext.Class_GroupLevelItem.Add(_Level);
+
+
+                //ENTRETENIMENTO - ACESSÓRIO
+                _GroupLevelId = _RCAContext.Class_GroupLevel.FirstOrDefault(m => m.Name == "ACESSÓRIO");
+                //
+                _Level = new Class_GroupLevelItem
+                {
+                    StatusId = GroupLevelItemStatus.Ativo,
+                    GroupLevelId = _GroupLevelId.Id,
+
+                    Name = "Proteção a prova dágua p/celular",
+                };
+                _RCAContext.Class_GroupLevelItem.Add(_Level);
+                //
+                _Level = new Class_GroupLevelItem
+                {
+                    StatusId = GroupLevelItemStatus.Ativo,
+                    GroupLevelId = _GroupLevelId.Id,
+
+                    Name = "Mascara de mergulho",
+                };
+                _RCAContext.Class_GroupLevelItem.Add(_Level);
+                //
+                _Level = new Class_GroupLevelItem
+                {
+                    StatusId = GroupLevelItemStatus.Ativo,
+                    GroupLevelId = _GroupLevelId.Id,
+
+                    Name = "Proteção a prova d'agua p/celular",
+                };
+                _RCAContext.Class_GroupLevelItem.Add(_Level);
+
+
+                //CONSUMO - BEBIDA
+                _GroupLevelId = _RCAContext.Class_GroupLevel.FirstOrDefault(m => m.Name == "BEBIDA");
+                //
+                _Level = new Class_GroupLevelItem
+                {
+                    StatusId = GroupLevelItemStatus.Ativo,
+                    GroupLevelId = _GroupLevelId.Id,
+
+                    Name = "Água copo 300ml",
+                };
+                _RCAContext.Class_GroupLevelItem.Add(_Level);
+                //
+                _Level = new Class_GroupLevelItem
+                {
+                    StatusId = GroupLevelItemStatus.Ativo,
+                    GroupLevelId = _GroupLevelId.Id,
+
+                    Name = "Água garrafa 500ml",
+                };
+                _RCAContext.Class_GroupLevelItem.Add(_Level);
+                //
+                _Level = new Class_GroupLevelItem
+                {
+                    StatusId = GroupLevelItemStatus.Ativo,
+                    GroupLevelId = _GroupLevelId.Id,
+
+                    Name = "Refrigerante lata 300ml",
+                };
+                _RCAContext.Class_GroupLevelItem.Add(_Level);
+                //
+                _Level = new Class_GroupLevelItem
+                {
+                    StatusId = GroupLevelItemStatus.Ativo,
+                    GroupLevelId = _GroupLevelId.Id,
+
+                    Name = "Suco natural jarra 500ml",
+                };
+                _RCAContext.Class_GroupLevelItem.Add(_Level);
+
+
+                //CONSUMO - PORCAO
+                _GroupLevelId = _RCAContext.Class_GroupLevel.FirstOrDefault(m => m.Name == "PORÇÃO");
+                //
+                _Level = new Class_GroupLevelItem
+                {
+                    StatusId = GroupLevelItemStatus.Ativo,
+                    GroupLevelId = _GroupLevelId.Id,
+
+                    Name = "Porção de batata frita",
+                };
+                _RCAContext.Class_GroupLevelItem.Add(_Level);
+                //
+                _Level = new Class_GroupLevelItem
+                {
+                    StatusId = GroupLevelItemStatus.Ativo,
+                    GroupLevelId = _GroupLevelId.Id,
+
+                    Name = "Porção de linguiça",
+                };
+                _RCAContext.Class_GroupLevelItem.Add(_Level);
+
+
+                //CONSUMO - REFEICAO
+                _GroupLevelId = _RCAContext.Class_GroupLevel.FirstOrDefault(m => m.Name == "REFEIÇÃO");
+                //
+                _Level = new Class_GroupLevelItem
+                {
+                    StatusId = GroupLevelItemStatus.Ativo,
+                    GroupLevelId = _GroupLevelId.Id,
+
+                    Name = "Prato do dia",
+                };
+                _RCAContext.Class_GroupLevelItem.Add(_Level);
+                //
+                _Level = new Class_GroupLevelItem
+                {
+                    StatusId = GroupLevelItemStatus.Ativo,
+                    GroupLevelId = _GroupLevelId.Id,
+
+                    Name = "Prato Macarronada",
+                };
+                _RCAContext.Class_GroupLevelItem.Add(_Level);
+
+
+                //CONSUMO - LOJINHA
+                _GroupLevelId = _RCAContext.Class_GroupLevel.FirstOrDefault(m => m.Name == "LOJINHA");
+                //
+                _Level = new Class_GroupLevelItem
+                {
+                    StatusId = GroupLevelItemStatus.Ativo,
+                    GroupLevelId = _GroupLevelId.Id,
+
+                    Name = "Camiseta (P/M/G)",
+                };
+                _RCAContext.Class_GroupLevelItem.Add(_Level);
+                //
+                _Level = new Class_GroupLevelItem
+                {
+                    StatusId = GroupLevelItemStatus.Ativo,
+                    GroupLevelId = _GroupLevelId.Id,
+
+                    Name = "Camiseta (PLUS SIZE)",
+                };
+                _RCAContext.Class_GroupLevelItem.Add(_Level);
+
+
+                //Save
+                _RCAContext.SaveChanges();
+            }
         }
     }
 }

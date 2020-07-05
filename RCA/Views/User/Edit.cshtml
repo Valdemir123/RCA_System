@@ -1,7 +1,7 @@
 ﻿@model RCA.Models.Class_User
 
 @{
-    ViewData["Title"] = "Usuário: MODIFICAR CADASTRO";
+    ViewData["Title"] = "USUÁRIO: MODIFICAR Cadastro";
 }
 <h2>@ViewData["Title"]</h2>
 
@@ -57,7 +57,12 @@
 
                 <div class="form-group">
                     <label asp-for="UserName" class="control-label"></label>
-                    <input asp-for="UserName" class="form-control" autofocus="autofocus"/>
+                    <input asp-for="UserName" class="form-control" autofocus="autofocus" />
+                </div>
+
+                <div class="form-group">
+                    <strong style="color:darkred">Para REDEFINIR Password, marque aqui ->&nbsp;&nbsp;</strong>
+                    <input id="RedefinirPassword" type="checkbox">
                 </div>
             </fieldset>
 
@@ -69,7 +74,7 @@
         </div>
 
         <div class="form-group">
-            || <input type="submit" value=" Gravar ! " class="btn btn-success" />
+            || <input id="btGravar" type="submit" value=" Gravar ! " class="btn btn-success" />
         </div>
     </form>
 </div>
@@ -81,6 +86,14 @@
         $(document).ready(function () {
             //mask fields
             $("#Phone").mask('(00) 00000-0000');
+
+            //CheckBox
+            $('#btGravar').click(function () {
+                if ($('#RedefinirPassword').is(':checked')) {
+                    $('#Password').val('Inicial');
+                }
+            });
         });
+
     </script>
 }
