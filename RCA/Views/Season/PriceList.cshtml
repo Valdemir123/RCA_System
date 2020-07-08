@@ -1,27 +1,76 @@
-﻿@model RCA.Models.Class_Season
-
+﻿@model IEnumerable<RCA.Models.Class_SeasonREL>
 @{
-    ViewData["Title"] = "TEMPORADA: Lista de Preço";
+    ViewData["Title"] = "Lista de Preço (" + @ViewBag.SeasonNAME + ")";
 }
 <h2>@ViewData["Title"]</h2>
-
-<p>|| <a asp-action="Index" asp-route-_CompanyId="@ViewBag.CompanyId" class="btn btn-info">Voltar para LISTAGEM</a></p>
 <hr />
 
-<div>
-    <strong style="font-size:25px">Item:&nbsp;&nbsp;<t style="font-style:italic">@Html.DisplayFor(m => m.StatusId)</t></strong>
-    <br />
-    <br />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(m => m.Name)
-        </dt>
-        <dd>
-            @Html.DisplayFor(m => m.Name)
-        </dd>
-    </dl>
+<div class="col-md-10">
+    <div class="col-md-4">
+        <p>||&nbsp;<a asp-action="Index" class="btn btn-info">Voltar para LISTAGEM de TEMPORADA</a></p>
+    </div>
+    <div class="col-md-6">
+        @if (@ViewBag.SeasonLIST != null)
+        {
+            @using (Html.BeginForm("PriceCopy", "Season"))
+            {
+                <div hidden>
+                    <input type="text" name="_SeasonId" class="form-control" Value="@ViewBag.SeasonID" />
+                </div>
+                <div class="col-md-5">
+                    Lista a ser copiada:&nbsp; @Html.DropDownList("_SeasonCopyId", (SelectList)@ViewBag.SeasonLIST, new { @class = "form-control" })
+                </div>
+                <div class="col-md-3">
+                    (%) aumento:&nbsp; <input type="text" name="_PercentAdd" class="form-control" Value="0" autofocus="autofocus" />
+                </div>
+                <div class="col-md-2">
+                    ||&nbsp; <input type="submit" value="COPIAR Lista" class="btn btn-default" />
+                </div>
+            }
+        }
+    </div>
 </div>
-<div>
-    <br />
-    || <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-success ">Modificar !</a>
-</div>
+
+<table class="table table-striped table-hover">
+    <thead>
+        <tr class="success">
+            <th>
+                | @Html.DisplayNameFor(m => m.GroupLevelItemNAME)
+            </th>
+            <th>
+                | @Html.DisplayNameFor(m => m.SeasonItemTAX)
+            </th>
+            <th>|| Ação</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var _Item in Model)
+        {
+            <tr>
+                @if (_Item.TypeLine == "Item")
+                {
+                    <td style="text-align:right">
+                        @Html.DisplayFor(m => _Item.GroupLevelItemNAME)
+                    </td>
+                    <td>
+                        | @Html.DisplayFor(m => _Item.SeasonItemTAX)
+                    </td>
+                    <td>
+                        || <a asp-action="PriceEdit"
+                              asp-route-_SeasonId="@_Item.SeasonID"
+                              asp-route-_GroupLevelItemId="@_Item.GroupLevelItemID"
+                              asp-route-_SeasonItemId="@_Item.SeasonItemID" class="btn btn-success">Modificar Preço</a>
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        | @Html.DisplayFor(m => _Item.GroupLevelNAME)
+                    </td>
+                    <td></td>
+                    <td></td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>

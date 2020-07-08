@@ -1,0 +1,64 @@
+﻿@model RCA.Models.Class_SeasonREL
+@{
+    ViewData["Title"] = "LISTA DE PREÇO: Edição";
+}
+<h2>@ViewData["Title"]</h2>
+
+<p>|| <a asp-action="PriceList" asp-route-_SeasonId="@Model.SeasonID" class="btn btn-info">Voltar para LISTAGEM de PREÇO</a></p>
+<hr />
+
+<div class="row">
+    <form asp-action="PriceEdit" method="post" autocomplete="off">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div hidden>
+            @Html.TextBoxFor(m => m.SeasonID);
+            @Html.TextBoxFor(m => m.SeasonItemID);
+            @Html.TextBoxFor(m => m.GroupLevelItemID);
+        </div>
+
+        <div class="col-md-3">
+            <fieldset>
+                <div class="form-group">
+                    <label asp-for="SeasonNAME" class="control-label"></label>
+                    <p>@Html.DisplayFor(m => m.SeasonNAME)</p>
+                </div>
+            </fieldset>
+        </div>
+
+        <div class="col-md-3">
+            <fieldset>
+                <div class="form-group">
+                    <label asp-for="GroupLevelNAME" class="control-label"></label>
+                    <p>@Html.DisplayFor(m => m.GroupLevelNAME)</p>
+                </div>
+                <div class="form-group">
+                    <label asp-for="GroupLevelItemNAME" class="control-label"></label>
+                    <p>@Html.DisplayFor(m => m.GroupLevelItemNAME)</p>
+                </div>
+            </fieldset>
+        </div>
+
+        <div class="col-md-2">
+            <fieldset>
+                <label asp-for="SeasonItemTAX" class="control-label"></label>
+                <p><input asp-for="SeasonItemTAX" class="form-control" autofocus="autofocus" style="width:200px"/></p>
+                <p><span asp-validation-for="SeasonItemTAX" class="text-danger"></span></p>
+                <br />
+                <br />
+                ||&nbsp; <input type="submit" value=" Gravar ! " class="btn btn-success" />
+            </fieldset>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            //mask fields
+            $("#SeasonItemTAX").mask("0,000.00", { reverse: true });
+        });
+    </script>
+}

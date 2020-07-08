@@ -177,7 +177,7 @@ namespace RCA.Data
                     CompanyId = 1,
                     GroupId = GroupType.ACOMODACAO,
 
-                    Name = "Comodação MASTER"
+                    Name = "Acomodação MASTER"
                 };
                 _RCAContext.Class_GroupLevel.Add(_Level);
                 //
@@ -187,7 +187,7 @@ namespace RCA.Data
                     CompanyId = 1,
                     GroupId = GroupType.ACOMODACAO,
 
-                    Name = "Comodação PADRÃO"
+                    Name = "Acomodação PADRÃO"
                 };
                 _RCAContext.Class_GroupLevel.Add(_Level);
 
@@ -494,7 +494,16 @@ namespace RCA.Data
                     StatusId = GroupLevelItemStatus.Ativo,
                     GroupLevelId = _GroupLevelId.Id,
 
-                    Name = "Proteção a prova d'agua p/celular",
+                    Name = "Boné masculino",
+                };
+                _RCAContext.Class_GroupLevelItem.Add(_Level);
+                //
+                _Level = new Class_GroupLevelItem
+                {
+                    StatusId = GroupLevelItemStatus.Ativo,
+                    GroupLevelId = _GroupLevelId.Id,
+
+                    Name = "Chapéu feminimo",
                 };
                 _RCAContext.Class_GroupLevelItem.Add(_Level);
 

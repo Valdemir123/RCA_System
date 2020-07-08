@@ -38,9 +38,9 @@
                     | @Html.DisplayFor(m => _Item.Name)
                 </td>
                 <td>
-                    || <a asp-action="ListaDePreco" asp-route-id="@_Item.Id" class="btn btn-default">Lista de Preço</a>
-                    || <a asp-action="Edit" asp-route-id="@_Item.Id" class="btn btn-success">Modificar</a>
-                    || <a asp-action="Delete" asp-route-id="@_Item.Id" class="btn btn-warning">Suspender</a>
+                    || <a asp-action="PriceList" asp-route-_SeasonId="@_Item.Id" class="btn btn-default">Lista de Preço</a>
+                    || <a asp-action="Edit" asp-route-_SeasonId="@_Item.Id" class="btn btn-success">Modificar</a>
+                    || <a asp-action="Delete" asp-route-_SeasonId="@_Item.Id" class="btn btn-warning">Suspender</a>
                 </td>
             </tr>
         }

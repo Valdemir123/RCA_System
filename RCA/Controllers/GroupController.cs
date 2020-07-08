@@ -14,8 +14,6 @@ namespace RCA.Controllers
 {
     public class GroupController : Controller
     {
-        public int _CompanyId;
-
         private readonly RCAContext _context;
         public GroupController(RCAContext context)
         {
@@ -26,7 +24,7 @@ namespace RCA.Controllers
         // Index
         public ActionResult Index(GroupType _GroupId)
         {
-            _CompanyId = int.Parse(User.FindFirst("CompanyId").Value);
+            var _CompanyId = int.Parse(User.FindFirst("CompanyId").Value);
             //
             Class_Cadaster _Cadaster = new Class_Cadaster
             {
