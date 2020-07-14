@@ -1,114 +1,35 @@
-﻿using System;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.Collections.Generic;
 
 namespace RCA.Models
 {
-    public enum ReceptionStatus : int
+    public class Class_ReceptionBOOK
     {
-        Reservado = 1,
-        EmUso = 2,
-        Finalizado = 3,
-        Cancelado = 4
+        public int LevelID { get; set; }
+        public string LevelNAME { get; set; }
+
+        public List<Class_ReceptionBOOKItem> BookItem_LIST { get; set; } = new List<Class_ReceptionBOOKItem>();
     }
 
-    [Table("Book")]
-    public class Class_Reception
+    public class Class_ReceptionBOOKItem
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public int Item_Id { get; set; }
+        public string Item_Name { get; set; }
 
-        [DisplayName("Status")]
-        public ReceptionStatus StatusId { get; set; }
+        public int Reserve_Id { get; set; }
+        public int Reserve_StatusId { get; set; }
+        public string Reserve_StatusName { get; set; }
+        public string Reserve_Format { get; set; }
+        public string Reserve_DateOut { get; set; }
 
+        public string Reserve_GuestName { get; set; }
+        public string Reserve_GuestPhone { get; set; }
 
+        public List<Class_ReceptionENTRETENIMENT> Entreteniment_LIST { get; set; }
+    }
 
-        [ForeignKey("GroupLevel")]
-        [Required]
-        [DisplayName("Canal")]
-        public int Channel_GroupLevelId { get; set; }
-
-        [ForeignKey("GroupLevelItem")]
-        [Required]
-        [DisplayName("Local")]
-        public int Channel_GroupLevelItemId { get; set; }
-
-        [DisplayName("Cód.Reserva")]
-        [StringLength(50)]
-        public string Channel_Code { get; set; }
-
-        [DisplayName("Taxa (R$)")]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:C2}")]
-        public double Channel_Tax { get; set; }
-
-        [DisplayName("Taxa (%)")]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:F1}")]
-        public double Channel_Percent { get; set; }
-
-
-
-        [ForeignKey("GroupLevelItem")]
-        [Required]
-        [DisplayName("Quarto")]
-        public int Book_GroupLevelItemId { get; set; }
-
-        [ForeignKey("GroupLevelItemTax")]
-        [Required]
-        [DisplayName("Temporada")]
-        public int Book_GroupLevelItemTaxID { get; set; }
-
-        [Required]
-        [DisplayName("Início")]
-        [DataType(DataType.Date)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
-        public DateTime Book_DateIn { get; set; }
-
-        [Required]
-        [DisplayName("Término")]
-        [DataType(DataType.Date)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
-        public DateTime Book_DateOut { get; set; }
-
-        [Required]
-        [DisplayName("No.Adulto(s)")]
-        public int Book_AdultsNum { get; set; }
-
-        [Required]
-        [DisplayName("No.Criança(s)")]
-        public int Book_KidsNum { get; set; }
-
-        [Required]
-        [DisplayName("PCD ?")]
-        public bool Book_PCD { get; set; }
-
-        [Required]
-        [DisplayName("PET ?")]
-        public bool Book_PET { get; set; }
-
-        [Required]
-        [DisplayName("Valor Diária")]
-        [DataType(DataType.Currency)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:C2}")]
-        public double Book_DayValue { get; set; }
-
-        [Required]
-        [DisplayName("(%) Desconto")]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:F1}")]
-        public int Book_DiscountPercent { get; set; }
-
-        [Required]
-        [DisplayName("Adiantamento")]
-        [DataType(DataType.Currency)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:C2}")]
-        public double Book_InputValue { get; set; }
-
-
-
-        [ForeignKey("Guest")]
-        [Required]
-        [DisplayName("Hóspede responsável")]
-        public string GuestCPF { get; set; }
+    public class Class_ReceptionENTRETENIMENT
+    {
+        public string DayTime { get; set; }
+        public string Name { get; set; }
     }
 }

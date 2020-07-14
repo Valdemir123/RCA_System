@@ -22,7 +22,7 @@
 <body>
     <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="col-lg-1"></div>
-        <div class="col-lg-8">
+        <div class="col-lg-4">
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
@@ -50,7 +50,7 @@
                             <ul class="dropdown-menu">
                                 <li>@Html.ActionLink("Cad. Temporada", "Index", "Season")</li>
                                 <li>@Html.ActionLink("Cad. Canal", "Index", "Channel")</li>
-                                <li>@Html.ActionLink("Cad. Acomodação", "Index", "Group", new {_GroupId = GroupType.ACOMODACAO })</li>
+                                <li>@Html.ActionLink("Cad. Acomodação", "Index", "Group", new { _GroupId = GroupType.ACOMODACAO })</li>
                                 <li>@Html.ActionLink("Cad. Entretenimento", "Index", "Group", new { _GroupId = GroupType.ENTRETENIMENTO })</li>
                                 <li>@Html.ActionLink("Cad. Consumo", "Index", "Group", new { _GroupId = GroupType.CONSUMO })</li>
                             </ul>
@@ -69,6 +69,12 @@
             </div>
         </div>
         <div class="col-lg-3">
+            @if (@User.Identity.IsAuthenticated)
+            {
+                <h4>@User.FindFirst("CompanyName").Value</h4>
+            }
+        </div>
+        <div class="col-lg-2">
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     @if (@User.Identity.IsAuthenticated)

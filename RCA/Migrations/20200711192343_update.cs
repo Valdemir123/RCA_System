@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace RCA.Migrations
 {
-    public partial class Initial : Migration
+    public partial class update : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -15,27 +15,45 @@ namespace RCA.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     StatusId = table.Column<int>(nullable: false),
-                    Channel_GroupLevelId = table.Column<int>(nullable: false),
-                    Channel_GroupLevelItemId = table.Column<int>(nullable: false),
+                    ChannelId = table.Column<int>(nullable: false),
                     Channel_Code = table.Column<string>(maxLength: 50, nullable: true),
                     Channel_Tax = table.Column<double>(nullable: false),
                     Channel_Percent = table.Column<double>(nullable: false),
-                    Book_GroupLevelItemId = table.Column<int>(nullable: false),
-                    Book_GroupLevelItemTaxID = table.Column<int>(nullable: false),
+                    GroupLevelItemId = table.Column<int>(nullable: false),
+                    SeasonId = table.Column<int>(nullable: false),
                     Book_DateIn = table.Column<DateTime>(nullable: false),
                     Book_DateOut = table.Column<DateTime>(nullable: false),
                     Book_AdultsNum = table.Column<int>(nullable: false),
                     Book_KidsNum = table.Column<int>(nullable: false),
-                    Book_PCD = table.Column<bool>(nullable: false),
-                    Book_PET = table.Column<bool>(nullable: false),
-                    Book_DayValue = table.Column<double>(nullable: false),
-                    Book_DiscountPercent = table.Column<int>(nullable: false),
-                    Book_InputValue = table.Column<double>(nullable: false),
+                    Book_PCD = table.Column<int>(nullable: false),
+                    Book_PET = table.Column<int>(nullable: false),
                     GuestCPF = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Book", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BookItem",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    StatusId = table.Column<int>(nullable: false),
+                    BookId = table.Column<int>(nullable: false),
+                    DateConsume = table.Column<DateTime>(nullable: false),
+                    GroupLevelItemId = table.Column<int>(nullable: false),
+                    SeasonUnit = table.Column<int>(nullable: false),
+                    SeasonValue = table.Column<double>(nullable: false),
+                    SeasonDiscountValue = table.Column<double>(nullable: false),
+                    SeasonDiscountPercent = table.Column<int>(nullable: false),
+                    SeasonAdvance = table.Column<double>(nullable: false),
+                    OBS = table.Column<string>(maxLength: 200, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BookItem", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -191,6 +209,9 @@ namespace RCA.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Book");
+
+            migrationBuilder.DropTable(
+                name: "BookItem");
 
             migrationBuilder.DropTable(
                 name: "Channel");

@@ -16,7 +16,7 @@ namespace RCA.Models
         EmManutencao = 3
     }
 
-    public enum GroupLevelItemPCD : int
+    public enum GroupLevelItem_YN : int
     {
         [Display(Name = "Sim")]
         Sim = 1,
@@ -49,6 +49,6 @@ namespace RCA.Models
 
         [Required]
         [DisplayName("Preparado para PCD?")]
-        public GroupLevelItemPCD PCD { get; set; }
+        public GroupLevelItem_YN PCD { get; set; }
     }
 }

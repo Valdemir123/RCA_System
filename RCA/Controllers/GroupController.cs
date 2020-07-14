@@ -295,13 +295,13 @@ namespace RCA.Controllers
                 StatusId = GroupLevelItemStatus.Ativo,
                 GroupLevelId = _GroupLevelId,
                 OccupantsNum = 0,
-                PCD = GroupLevelItemPCD.Nao
+                PCD = GroupLevelItem_YN.Nao
             };
 
             ViewBag.GroupId = Convert.ToInt32(_GroupLevel.GroupId);
             ViewBag.GroupLevelName = _GroupLevel.Name;
             ViewBag.GroupType = _GroupLevel.GroupId;
-            ViewBag.PCD_LIST = new SelectList(Enum.GetValues(typeof(GroupLevelItemPCD)).Cast<GroupLevelItemPCD>().ToList());
+            ViewBag.PCD_LIST = new SelectList(Enum.GetValues(typeof(GroupLevelItem_YN)).Cast<GroupLevelItem_YN>().ToList());
             return View(_GroupLevelItem);
         }
         [HttpPost]
@@ -328,7 +328,7 @@ namespace RCA.Controllers
             ViewBag.GroupId = Convert.ToInt32(_GroupLevel.GroupId);
             ViewBag.GroupLevelName = _GroupLevel.Name;
             ViewBag.GroupType = _GroupLevel.GroupId;
-            ViewBag.PCD_LIST = new SelectList(Enum.GetValues(typeof(GroupLevelItemPCD)).Cast<GroupLevelItemPCD>().ToList());
+            ViewBag.PCD_LIST = new SelectList(Enum.GetValues(typeof(GroupLevelItem_YN)).Cast<GroupLevelItem_YN>().ToList());
             return View(_GroupLevelItem);
         }
         //Edit - GroupLevelItem
@@ -345,7 +345,7 @@ namespace RCA.Controllers
             ViewBag.GroupId = Convert.ToInt32(_GroupLevel.GroupId);
             ViewBag.GroupLevelName = _GroupLevel.Name;
             ViewBag.GroupType = _GroupLevel.GroupId;
-            ViewBag.PCD_LIST = new SelectList(Enum.GetValues(typeof(GroupLevelItemPCD)).Cast<GroupLevelItemPCD>().ToList());
+            ViewBag.PCD_LIST = new SelectList(Enum.GetValues(typeof(GroupLevelItem_YN)).Cast<GroupLevelItem_YN>().ToList());
             return View(_GroupLevelItem);
         }
         [HttpPost]
@@ -381,7 +381,7 @@ namespace RCA.Controllers
             ViewBag.GroupId = Convert.ToInt32(_GroupLevel.GroupId);
             ViewBag.GroupLevelName = _GroupLevel.Name;
             ViewBag.GroupType = _GroupLevel.GroupId;
-            ViewBag.PCD_LIST = new SelectList(Enum.GetValues(typeof(GroupLevelItemPCD)).Cast<GroupLevelItemPCD>().ToList());
+            ViewBag.PCD_LIST = new SelectList(Enum.GetValues(typeof(GroupLevelItem_YN)).Cast<GroupLevelItem_YN>().ToList());
             return View(_GroupLevel);
         }
         //Delete - GroupLevel

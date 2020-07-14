@@ -81,10 +81,13 @@ namespace RCA.Controllers
                     return View(_UserLogin);
                 }
 
+                var _Company = _context.Class_Company.FirstOrDefault(m => m.Id == _UserFound.CompanyId);
+
                 var claims = new List<Claim>()
                 {
                     new Claim(ClaimTypes.Name, _UserFound.UserName),
                     new Claim(ClaimTypes.Role, _UserFound.TypeAccessId.ToString()),
+                    new Claim("CompanyName", _Company.Name),
                     new Claim("CompanyId", _UserFound.CompanyId.ToString())
                 };
 

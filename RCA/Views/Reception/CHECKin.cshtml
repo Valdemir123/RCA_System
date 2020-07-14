@@ -1,0 +1,226 @@
+﻿@model RCA.Models.Class_Checkin
+@{
+    ViewData["Title"] = Model.GroupLevelItem_Name + " ( CHECKin )";
+}
+<h2>@ViewData["Title"]</h2>
+
+<p>|| <a asp-action="Index" class="btn btn-info">Voltar para RECEPÇÃO</a></p>
+<hr />
+
+<div class="row">
+    <form asp-action="CHECKin">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div hidden>
+            @Html.TextBoxFor(m => m.Id);
+            @Html.TextBoxFor(m => m.StatusId);
+
+            @Html.TextBoxFor(m => m.GroupLevelItem_Id);
+
+            @Html.TextBoxFor(m => m.Channel_Percent);
+            @Html.TextBoxFor(m => m.Channel_Tax);
+        </div>
+
+        <div class="col-md-4">
+            <div>
+                <label asp-for="Season_Id" class="control-label"></label>
+                @Html.DropDownListFor(m => m.Season_Id, new SelectList(@ViewBag.Season_LIST, "Id", "Name"), "Selecione...", new { @class = "form-control" })
+                <span asp-validation-for="Season_Id" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="col-md-12" style="background-color:lightgrey; border-radius: 3px 4px;">
+                <fieldset>
+                    <legend>-: CANAL DA RESERVA</legend>
+
+                    <div class="col-md-7">
+                        <label asp-for="Channel_Id" class="control-label"></label>
+                        @Html.DropDownListFor(m => m.Channel_Id, new SelectList(@ViewBag.Channel_LIST, "Id", "Name"), "Selecione...", new { @class = "form-control" })
+                        <span asp-validation-for="Channel_Id" class="text-danger"></span>
+                    </div>
+                    <div id="Channel_INFO" class="col-md-5">
+                        <label class="control-label">Taxa:</label>
+                        <p style="background-color:lightgray; text-align:center" class="form-control">0.00 ($/%)</p>
+                    </div>
+                    <div class="col-md-12">
+                        <label asp-for="Channel_Code" class="control-label"></label>
+                        <input asp-for="Channel_Code" class="form-control" />
+                    </div>
+                    <div class="col-md-1"><br /></div>
+                </fieldset>
+            </div>
+        </div>
+
+        <div class="col-md-4 form-group">
+            <div style="background-color:lightgrey; border-radius: 3px 4px;">
+                <fieldset>
+                    <legend>-: HOSPEDAGEM</legend>
+
+                    <div class="form-group">
+                        <label asp-for="Book_DateIn" class="control-label"></label>
+                        <input asp-for="Book_DateIn" class="form-control" style="width:80px" />
+                        <span asp-validation-for="Book_DateIn" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Book_DateOut" class="control-label"></label>
+                        <input asp-for="Book_DateOut" class="form-control" style="width:80px" />
+                        <span asp-validation-for="Book_DateOut" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Book_AdultsNum" class="control-label"></label>
+                        <input asp-for="Book_AdultsNum" class="form-control" style="width:50px" />
+                        <span asp-validation-for="Book_AdultsNum" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Book_KidsNum" class="control-label"></label>
+                        <input asp-for="Book_KidsNum" class="form-control" style="width:50px" />
+                        <span asp-validation-for="Book_KidsNum" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Book_PCD" class="control-label"></label>
+                        @Html.DropDownListFor(m => m.Book_PCD, (SelectList)@ViewBag.yn_LIST, new { @class = "form-control", @style = "width:50px" })
+                        <span asp-validation-for="Book_PCD" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Book_PET" class="control-label"></label>
+                        @Html.DropDownListFor(m => m.Book_PET, (SelectList)@ViewBag.yn_LIST, new { @class = "form-control", @style = "width:50px" })
+                        <span asp-validation-for="Book_PET" class="text-danger"></span>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+
+        <div class="col-md-4 form-group">
+            <div style="background-color:lightgrey; border-radius: 3px 4px;">
+                <fieldset>
+                    <legend>-: HÓSPEDE</legend>
+
+                    <div class="form-group">
+                        <label asp-for="Guest_CPF" class="control-label"></label>
+                        <input asp-for="Guest_CPF" class="form-control" style="width:250px" placeholder="ex. 000.000.000-00" />
+                        <span asp-validation-for="Guest_CPF" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Guest_Name" class="control-label"></label>
+                        <input asp-for="Guest_Name" class="form-control" />
+                        <span asp-validation-for="Guest_Name" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Guest_Email" class="control-label"></label>
+                        <input asp-for="Guest_Email" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Guest_Phone1" class="control-label"></label>
+                        <input asp-for="Guest_Phone1" class="form-control" style="width:80px" placeholder="ex. (00) 00000-0000" />
+                        <span asp-validation-for="Guest_Phone1" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Guest_Phone2" class="control-label"></label>
+                        <input asp-for="Guest_Phone2" class="form-control" style="width:80px" placeholder="ex. (00) 0000-0000" />
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Guest_PostalCode" class="control-label"></label>
+                        <input asp-for="Guest_PostalCode" class="form-control" style="width:80px" placeholder="ex. 00000-000" />
+                        <span asp-validation-for="Guest_PostalCode" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Guest_Address" class="control-label"></label>
+                        <input asp-for="Guest_Address" class="form-control" />
+                        <span asp-validation-for="Guest_Address" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Guest_Complement" class="control-label"></label>
+                        <input asp-for="Guest_Complement" class="form-control" />
+                        <span asp-validation-for="Guest_Complement" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Guest_City" class="control-label"></label>
+                        <input asp-for="Guest_City" class="form-control" />
+                        <span asp-validation-for="Guest_City" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Guest_State" class="control-label"></label>
+                        <input asp-for="Guest_State" class="form-control" />
+                        <span asp-validation-for="Guest_State" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Guest_Country" class="control-label"></label>
+                        <input asp-for="Guest_Country" class="form-control" />
+                        <span asp-validation-for="Guest_Country" class="text-danger"></span>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <input type="submit" value="Gravar !!!" class="btn btn-default" />
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#Guest_CPF").mask('000.000.000-00');
+
+            $("#Guest_Phone1").mask('(00) 00000-0000');
+            $("#Guest_Phone2").mask('(00) 0000-0000');
+
+            $("#Channel_Id").change(function () {
+                $.ajax({
+                    url: '@Url.Action("FIND_CHANNEL", "Reception")',
+                    type: "GET",
+                    contentType: "application/Json",
+                    data: { _ChannelId: $(this).val() },
+                    success: function (_ret) {
+                        $("#Channel_Tax").val(0);
+                        $("#Channel_Percent").val(0);
+                        var _Taxa = '0.0 ($/%)';
+
+                        var $wrapper = document.querySelector('#Channel_INFO');
+                        var _Conteudo = '<label class="control-label">Taxa:</label><p style="background-color:lightgray; text-align:center" class="form-control">';
+
+                        if (_ret != null) {
+                            if (_ret.tax != 0) {
+                                $("#Channel_Tax").val(_ret.tax);
+                                _Taxa = _ret.tax.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+                            } else if (_ret.percent != 0) {
+                                $("#Channel_Percent").val(_ret.percent);
+                                _Taxa = _ret.percent.toLocaleString('br-PT') + " %";
+                            }
+                        }
+
+                        _Conteudo += _Taxa + '</p >';
+                        $wrapper.innerHTML = _Conteudo;
+                    }
+                });
+            });
+
+            $("#Book_DateIn").mask('00/00/0000');
+
+            $("#Book_DateOut").mask('00/00/0000');
+
+            $("#Guest_PostalCode").mask('00000-000');
+            $("#Guest_PostalCode").focusout(function () {
+                $.ajax({
+                    url: 'https://viacep.com.br/ws/' + $(this).val() + '/json/unicode/',
+                    dataType: 'json',
+                    success: function (_ret) {
+                        $("#Guest_Address").val(_ret.logradouro);
+                        if ($("#Guest_Complement").val() == "") {
+                            $("#Guest_Complement").val("??, ?? - " + _ret.bairro);
+                        }
+                        $("#Guest_City").val(_ret.localidade);
+                        $("#Guest_State").val(_ret.uf);
+
+                        if ($("#Guest_Address").val() != "") {
+                            $("#Guest_Complement").focus();
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+}

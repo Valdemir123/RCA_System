@@ -292,7 +292,7 @@ namespace RCA.Data
 
                     Name = "Sapequinha",
                     OccupantsNum=2,
-                    PCD= GroupLevelItemPCD.Sim
+                    PCD= GroupLevelItem_YN.Sim
                 };
                 _RCAContext.Class_GroupLevelItem.Add(_Level);
 
@@ -306,7 +306,7 @@ namespace RCA.Data
 
                     Name = "Os DEZ Mandamentos do Amor",
                     OccupantsNum = 3,
-                    PCD = GroupLevelItemPCD.Nao
+                    PCD = GroupLevelItem_YN.Nao
                 };
                 _RCAContext.Class_GroupLevelItem.Add(_Level);
                 //
@@ -317,7 +317,7 @@ namespace RCA.Data
 
                     Name = "Enamorados",
                     OccupantsNum = 3,
-                    PCD = GroupLevelItemPCD.Nao
+                    PCD = GroupLevelItem_YN.Nao
                 };
                 _RCAContext.Class_GroupLevelItem.Add(_Level);
                 //
@@ -328,7 +328,7 @@ namespace RCA.Data
 
                     Name = "Me Apaxonei",
                     OccupantsNum = 3,
-                    PCD = GroupLevelItemPCD.Nao
+                    PCD = GroupLevelItem_YN.Nao
                 };
                 _RCAContext.Class_GroupLevelItem.Add(_Level);
                 //
@@ -339,7 +339,7 @@ namespace RCA.Data
 
                     Name = "Anjo Protetor",
                     OccupantsNum = 3,
-                    PCD = GroupLevelItemPCD.Sim
+                    PCD = GroupLevelItem_YN.Sim
                 };
                 _RCAContext.Class_GroupLevelItem.Add(_Level);
                 //
@@ -350,7 +350,7 @@ namespace RCA.Data
 
                     Name = "A Carta",
                     OccupantsNum = 4,
-                    PCD = GroupLevelItemPCD.Nao
+                    PCD = GroupLevelItem_YN.Nao
                 };
                 _RCAContext.Class_GroupLevelItem.Add(_Level);
                 //
@@ -361,7 +361,7 @@ namespace RCA.Data
 
                     Name = "Eu Amo Você",
                     OccupantsNum = 4,
-                    PCD = GroupLevelItemPCD.Nao
+                    PCD = GroupLevelItem_YN.Nao
                 };
                 _RCAContext.Class_GroupLevelItem.Add(_Level);
                 

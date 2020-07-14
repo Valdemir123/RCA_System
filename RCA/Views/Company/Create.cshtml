@@ -136,8 +136,10 @@
         $(document).ready(function () {
             //mask fields
             $("#CNPJ").mask('000.000.000/0000-00');
+
             $("#Phone1").mask('(00) 00000-0000');
             $("#Phone2").mask('(00) 0000-0000');
+
             $("#PostalCode").mask('00000-000');
 
             $("#PostalCode").focusout(function () {
@@ -158,7 +160,7 @@
                         //automaticamente nos campos acima.
                         $("#Address").val(resposta.logradouro);
                         if ($("#Complement").val() == "") {
-                            $("#Complement").val("?? - " + resposta.bairro);
+                            $("#Complement").val("??, ?? - " + resposta.bairro);
                         }
                         $("#City").val(resposta.localidade);
                         $("#State").val(resposta.uf);

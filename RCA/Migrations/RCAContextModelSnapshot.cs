@@ -17,6 +17,77 @@ namespace RCA.Migrations
                 .HasAnnotation("ProductVersion", "2.1.14-servicing-32113")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
+            modelBuilder.Entity("RCA.Models.Class_Book", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("Book_AdultsNum");
+
+                    b.Property<DateTime>("Book_DateIn");
+
+                    b.Property<DateTime>("Book_DateOut");
+
+                    b.Property<int>("Book_KidsNum");
+
+                    b.Property<int>("Book_PCD");
+
+                    b.Property<int>("Book_PET");
+
+                    b.Property<int>("ChannelId");
+
+                    b.Property<string>("Channel_Code")
+                        .HasMaxLength(50);
+
+                    b.Property<double>("Channel_Percent");
+
+                    b.Property<double>("Channel_Tax");
+
+                    b.Property<int>("GroupLevelItemId");
+
+                    b.Property<string>("GuestCPF")
+                        .IsRequired();
+
+                    b.Property<int>("SeasonId");
+
+                    b.Property<int>("StatusId");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Book");
+                });
+
+            modelBuilder.Entity("RCA.Models.Class_BookItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("BookId");
+
+                    b.Property<DateTime>("DateConsume");
+
+                    b.Property<int>("GroupLevelItemId");
+
+                    b.Property<string>("OBS")
+                        .HasMaxLength(200);
+
+                    b.Property<double>("SeasonAdvance");
+
+                    b.Property<int>("SeasonDiscountPercent");
+
+                    b.Property<double>("SeasonDiscountValue");
+
+                    b.Property<int>("SeasonUnit");
+
+                    b.Property<double>("SeasonValue");
+
+                    b.Property<int>("StatusId");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BookItem");
+                });
+
             modelBuilder.Entity("RCA.Models.Class_Channel", b =>
                 {
                     b.Property<int>("Id")
@@ -193,54 +264,6 @@ namespace RCA.Migrations
                     b.HasKey("CPF");
 
                     b.ToTable("Guest");
-                });
-
-            modelBuilder.Entity("RCA.Models.Class_Reception", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("Book_AdultsNum");
-
-                    b.Property<DateTime>("Book_DateIn");
-
-                    b.Property<DateTime>("Book_DateOut");
-
-                    b.Property<double>("Book_DayValue");
-
-                    b.Property<int>("Book_DiscountPercent");
-
-                    b.Property<int>("Book_GroupLevelItemId");
-
-                    b.Property<int>("Book_GroupLevelItemTaxID");
-
-                    b.Property<double>("Book_InputValue");
-
-                    b.Property<int>("Book_KidsNum");
-
-                    b.Property<bool>("Book_PCD");
-
-                    b.Property<bool>("Book_PET");
-
-                    b.Property<string>("Channel_Code")
-                        .HasMaxLength(50);
-
-                    b.Property<int>("Channel_GroupLevelId");
-
-                    b.Property<int>("Channel_GroupLevelItemId");
-
-                    b.Property<double>("Channel_Percent");
-
-                    b.Property<double>("Channel_Tax");
-
-                    b.Property<string>("GuestCPF")
-                        .IsRequired();
-
-                    b.Property<int>("StatusId");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Book");
                 });
 
             modelBuilder.Entity("RCA.Models.Class_Season", b =>

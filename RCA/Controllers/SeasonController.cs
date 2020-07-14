@@ -7,11 +7,8 @@ using RCA.Models;
 using RCA.Models.ViewModels;
 using System;
 using System.Collections.Generic;
-using System.Data.Common;
-using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Threading.Tasks;
 
 namespace RCA.Controllers
