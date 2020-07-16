@@ -65,6 +65,22 @@ namespace RCA.Models
         [DisplayName("PET ?")]
         public GroupLevelItem_YN Book_PET { get; set; }
 
+        [Required]
+        [DisplayName("Diária")]
+        [DataType(DataType.Currency)]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:C2}")]
+        public double Book_PayTax { get; set; }
+
+        [Required]
+        [DisplayName("Desconto (%)")]
+        [Range(0,99,ErrorMessage ="{0}: Mínimo {1}, Máximo {2}")]
+        public int Book_PayDiscount { get; set; }
+
+        [Required]
+        [DisplayName("Adiantamento")]
+        [DataType(DataType.Currency)]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:C2}")]
+        public double Book_PayCash { get; set; }
 
 
         [Required]

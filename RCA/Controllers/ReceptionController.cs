@@ -146,7 +146,7 @@ namespace RCA.Controllers
                 Guest_Complement = "",
                 Guest_City = "",
                 Guest_State = "",
-                Guest_Country = ""
+                Guest_Country = "Brasil"
             };
             //
             var _CompanyId = int.Parse(User.FindFirst("CompanyId").Value);
@@ -185,6 +185,11 @@ namespace RCA.Controllers
 
 
         // Function AJAX
+        public JsonResult FIND_SEASON(int _SeasonId, int _GroupLevelItemId)
+        {
+            var _SeasonFound = _context.Class_SeasonItem.FirstOrDefault(m => m.SeasonId == _SeasonId && m.GroupLevelItemId == _GroupLevelItemId);
+            return Json(_SeasonFound);
+        }
         public JsonResult FIND_CHANNEL(int _ChannelId)
         {
             var _ChannelFound = _context.Class_Channel.FirstOrDefault(m => m.Id == _ChannelId);

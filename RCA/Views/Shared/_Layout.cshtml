@@ -68,7 +68,7 @@
                 </ul>
             </div>
         </div>
-        <div class="col-lg-3">
+        <div class="col-lg-4">
             @if (@User.Identity.IsAuthenticated)
             {
                 <h4>@User.FindFirst("CompanyName").Value</h4>
@@ -93,7 +93,7 @@
     </nav>
 
     <div class="col-lg-1"></div>
-    <div class="col-lg-9 body-content">
+    <div class="col-lg-10 body-content">
         @RenderBody()
         <hr />
         <footer>
