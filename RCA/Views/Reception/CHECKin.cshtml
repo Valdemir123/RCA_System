@@ -109,7 +109,7 @@
                         <label asp-for="Guest_CPF" class="control-label"></label>
                         <input asp-for="Guest_CPF" class="form-control" placeholder="ex. 000.000.000-00" />
                         <span asp-validation-for="Guest_CPF" class="text-danger"></span>
-                        <p>||&nbsp;<button id="btFIND_CPF" class="btn btn-default">buscar CPF!</button></p>
+                        ||&nbsp;<p id="btFIND_CPF" class="btn btn-default">buscar CPF!</p>
                     </div>
                     <div class="col-md-8">
                         <label asp-for="Guest_Name" class="control-label"></label>
@@ -137,7 +137,7 @@
                         <label asp-for="Guest_PostalCode" class="control-label"></label>
                         <input asp-for="Guest_PostalCode" class="form-control" placeholder="ex. 00000-000" />
                         <span asp-validation-for="Guest_PostalCode" class="text-danger"></span>
-                        <p>||&nbsp;<button id="btFIND_CEP" class="btn btn-default">buscar CEP!</button></p>
+                        ||&nbsp;<p id="btFIND_CEP" class="btn btn-default">buscar CEP!</p>
                     </div>
                     <div class="col-md-8">
                         <label asp-for="Guest_Address" class="control-label"></label>
@@ -290,20 +290,21 @@
                     url: '@Url.Action("FIND_CPF", "Reception")',
                     type: "GET",
                     contentType: "application/Json",
-                    data: { _ChannelId: $("#Guest_CPF").val() },
+                    data: { _CPF: ''+$("#Guest_CPF").val() },
                     success: function (_ret) {
-                        if (_ret != null) {
-                            $("#Guest_Name").val(_ret.Name);
-                            $("#Guest_Email").val(_ret.Email);
-                            $("#Guest_Phone1").val(_ret.Phone1);
-                            $("#Guest_Phone2").val(_ret.Phone2);
 
-                            $("#Guest_PostalCode").val(_ret.PostalCode);
-                            $("#Guest_Address").val(_ret.Address);
-                            $("#Guest_Complement").val(_ret.Complement);
-                            $("#Guest_City").val(_ret.City);
-                            $("#Guest_State").val(_ret.State);
-                            $("#Guest_Country").val(_ret.Country);
+                        if (_ret != null) {
+                            $("#Guest_Name").val(_ret.name);
+                            $("#Guest_Email").val(_ret.email);
+                            $("#Guest_Phone1").val(_ret.phone1);
+                            $("#Guest_Phone2").val(_ret.phone2);
+
+                            $("#Guest_PostalCode").val(_ret.postalCode);
+                            $("#Guest_Address").val(_ret.address);
+                            $("#Guest_Complement").val(_ret.complement);
+                            $("#Guest_City").val(_ret.city);
+                            $("#Guest_State").val(_ret.state);
+                            $("#Guest_Country").val(_ret.country);
 
                             $("#btGravar").focus();
                         } else {
@@ -325,7 +326,7 @@
                         if (_ret != null) {
                             $("#Guest_Address").val(_ret.logradouro);
                             if ($("#Guest_Complement").val() == "") {
-                                $("#Guest_Complement").val("??, ?? - " + _ret.bairro);
+                                $("#Guest_Complement").val(" - " + _ret.bairro);
                             }
                             $("#Guest_City").val(_ret.localidade);
                             $("#Guest_State").val(_ret.uf);

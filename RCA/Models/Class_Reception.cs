@@ -24,7 +24,7 @@ namespace RCA.Models
         public string Reserve_GuestName { get; set; }
         public string Reserve_GuestPhone { get; set; }
 
-        public List<Class_ReceptionENTRETENIMENT> Entreteniment_LIST { get; set; }
+        public List<Class_ReceptionENTRETENIMENT> Entreteniment_LIST { get; set; } = new List<Class_ReceptionENTRETENIMENT>();
     }
 
     public class Class_ReceptionENTRETENIMENT

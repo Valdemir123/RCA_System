@@ -37,15 +37,11 @@ namespace RCA.Models
 
         [Required]
         [DisplayName("Início")]
-        [DataType(DataType.Date)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
-        public DateTime Book_DateIn { get; set; }
+        public string Book_DateIn { get; set; }
 
         [Required]
         [DisplayName("Término")]
-        [DataType(DataType.Date)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
-        public DateTime Book_DateOut { get; set; }
+        public string Book_DateOut { get; set; }
 
         [Required]
         [DisplayName("Adulto(s)")]
@@ -66,7 +62,6 @@ namespace RCA.Models
         [Required]
         [DisplayName("Diária")]
         [DataType(DataType.Currency)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:C2}")]
         public double Book_PayTax { get; set; }
 
         [Required]

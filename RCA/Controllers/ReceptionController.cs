@@ -22,7 +22,15 @@ namespace RCA.Controllers
 
         public IActionResult Index()
         {
-            var _CompanyId = int.Parse(User.FindFirst("CompanyId").Value);
+            int _CompanyId;
+            try
+            {
+                _CompanyId = int.Parse(User.FindFirst("CompanyId").Value);
+            }
+            catch (Execption)
+            {
+                return RedirectToAction(nameof(Index));
+            }
             var _Reception = new List<Class_ReceptionBOOK>();
 
             //
@@ -70,8 +78,11 @@ namespace RCA.Controllers
                     {
                         _GLIi.Reserve_Id = _Book.Id;
                         _GLIi.Reserve_StatusId = _Book.StatusId.GetHashCode();
-                        _GLIi.Reserve_StatusName = _Book.StatusId.ToString();
-                        _GLIi.Reserve_Format = string.Format("{0} Adultos, {1} Crianças, PCD?{2}, PET?{3}", _Book.Book_AdultsNum, _Book.Book_KidsNum, _Book.Book_PCD, _Book.Book_PET);
+                        _GLIi.Reserve_StatusName = string.Format("( {0} )", _Book.StatusId.ToString());
+                        _GLIi.Reserve_Format = string.Format("{0} Adultos", _Book.Book_AdultsNum);
+                        if (_Book.Book_KidsNum != 0) { _GLIi.Reserve_Format += string.Format(", {0} Crianças", _Book.Book_KidsNum); }
+                        if (_Book.Book_PCD == GroupLevelItem_YN.Sim) { _GLIi.Reserve_Format += string.Format(", PCD?{0}", _Book.Book_PCD); }
+                        if (_Book.Book_PET == GroupLevelItem_YN.Sim) { _GLIi.Reserve_Format += string.Format(", PET?{0}", _Book.Book_PET); }
                         _GLIi.Reserve_DateOut = _Book.Book_DateOut.ToString("dd/MM/yyyy");
                         _GLIi.Reserve_GuestName = "???";
                         _GLIi.Reserve_GuestPhone = "";
@@ -125,8 +136,8 @@ namespace RCA.Controllers
                 Channel_Percent = 0,
                 Channel_Tax = 0,
 
-                Book_DateIn = DateTime.Today,
-                Book_DateOut = DateTime.Today.AddDays(5),
+                Book_DateIn = DateTime.Today.ToString("dd/MM/yyyy"),
+                Book_DateOut = DateTime.Today.AddDays(5).ToString("dd/MM/yyyy"),
                 Book_AdultsNum = _Room.OccupantsNum,
                 Book_KidsNum = 0,
                 Book_PCD = _Room.PCD,
@@ -146,7 +157,15 @@ namespace RCA.Controllers
                 Guest_Country = "Brasil"
             };
             //
-            var _CompanyId = int.Parse(User.FindFirst("CompanyId").Value);
+            int _CompanyId;
+            try
+            {
+                _CompanyId = int.Parse(User.FindFirst("CompanyId").Value);
+            }
+            catch (Execption)
+            {
+                return RedirectToAction(nameof(Index));
+            }
             //
             ViewBag.Season_LIST = from s in _context.Class_Season
                                   where s.StatusId == SeasonStatus.Ativo && s.CompanyId == _CompanyId
@@ -164,44 +183,53 @@ namespace RCA.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CHECKin([Bind("GroupLevelItem_Id,GroupLevelItem_Name,"+
-                                                        " Season_Id, "+
-                                                        "Channel_Id,Channel_Tax,Channel_Percent,Channel_Code, "+
-                                                        "Book_DateIn,Book_DateOut,Book_AdultsNum,Book_KidsNum,Book_PCD,Book_PET,Book_PayTax,Book_PayDiscount,Book_PayCash, "+
-                                                        "Guest_CPF,Guest_Name,Guest_Phone1,Guest_Phone2,Guest_Email,Guest_PostalCode,Guest_Address,Guest_Complement,Guest_City,Guest_State,Guest_Country")] Class_Checkin _Checkin)
+        public ActionResult CHECKin(Class_Checkin _Checkin)
         {
             if (ModelState.IsValid)
             {
                 // Guest
-                var _Guest = new Class_Guest()
-                {
-                    CPF = _Checkin.Guest_CPF,
-                    Name = _Checkin.Guest_Name,
-                    Phone1 = _Checkin.Guest_Phone1,
-                    Phone2 = _Checkin.Guest_Phone2,
-                    Email = _Checkin.Guest_Email,
-                    PostalCode = _Checkin.Guest_PostalCode,
-                    Address = _Checkin.Guest_Address,
-                    Complement = _Checkin.Guest_Complement,
-                    City = _Checkin.Guest_City,
-                    State = _Checkin.Guest_State,
-                    Country = _Checkin.Guest_Country
-                };
-                var _Find = _context.Class_Guest.Where(m => m.CPF == _Guest.CPF).FirstOrDefault();
+
+                var _Find = _context.Class_Guest.Where(m => m.CPF == _Checkin.Guest_CPF).FirstOrDefault();
                 if (_Find == null)
                 {
-                    _context.Add(_Guest);
+                    _Find = new Class_Guest()
+                    {
+                        CPF = _Checkin.Guest_CPF,
+                        Name = _Checkin.Guest_Name,
+                        Phone1 = _Checkin.Guest_Phone1,
+                        Phone2 = _Checkin.Guest_Phone2,
+                        Email = _Checkin.Guest_Email,
+                        PostalCode = _Checkin.Guest_PostalCode,
+                        Address = _Checkin.Guest_Address,
+                        Complement = _Checkin.Guest_Complement,
+                        City = _Checkin.Guest_City,
+                        State = _Checkin.Guest_State,
+                        Country = _Checkin.Guest_Country
+                    };
+                    _context.Add(_Find);
                 }
                 else
                 {
-                    _context.Update(_Guest);
+                    _Find.CPF = _Checkin.Guest_CPF;
+                    _Find.Name = _Checkin.Guest_Name;
+                    _Find.Phone1 = _Checkin.Guest_Phone1;
+                    _Find.Phone2 = _Checkin.Guest_Phone2;
+                    _Find.Email = _Checkin.Guest_Email;
+                    _Find.PostalCode = _Checkin.Guest_PostalCode;
+                    _Find.Address = _Checkin.Guest_Address;
+                    _Find.Complement = _Checkin.Guest_Complement;
+                    _Find.City = _Checkin.Guest_City;
+                    _Find.State = _Checkin.Guest_State;
+                    _Find.Country = _Checkin.Guest_Country;
+                    _context.Update(_Find);
                 }
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
 
                 // Book
                 var _Book = _context.Class_Book.Where(m => m.GroupLevelItemId == _Checkin.GroupLevelItem_Id && m.StatusId == BookStatus.Reservado).FirstOrDefault();
                 if (_Book == null)
                 {
+                    _Book = new Class_Book();
                     _Book.Id = 0;
                 }
                 _Book.StatusId = BookStatus.EmUso;
@@ -211,8 +239,8 @@ namespace RCA.Controllers
                 _Book.Channel_Code = _Checkin.Channel_Code;
                 _Book.Channel_Tax = _Checkin.Channel_Tax;
                 _Book.Channel_Percent = _Checkin.Channel_Percent;
-                _Book.Book_DateIn = _Checkin.Book_DateIn;
-                _Book.Book_DateOut = _Checkin.Book_DateOut;
+                _Book.Book_DateIn = DateTime.ParseExact(_Checkin.Book_DateIn, "dd/MM/yyyy", null);
+                _Book.Book_DateOut = DateTime.ParseExact(_Checkin.Book_DateOut, "dd/MM/yyyy", null);
                 _Book.Book_AdultsNum = _Checkin.Book_AdultsNum;
                 _Book.Book_KidsNum = _Checkin.Book_KidsNum;
                 _Book.Book_PCD = _Checkin.Book_PCD;
@@ -227,13 +255,21 @@ namespace RCA.Controllers
                 {
                     _context.Update(_Book);
                 }
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
 
                 return RedirectToAction(nameof(Index));
             }
 
             //
-            var _CompanyId = int.Parse(User.FindFirst("CompanyId").Value);
+            int _CompanyId;
+            try
+            {
+                _CompanyId = int.Parse(User.FindFirst("CompanyId").Value);
+            }
+            catch (Execption)
+            {
+                return RedirectToAction(nameof(Index));
+            }
             //
             ViewBag.Season_LIST = from s in _context.Class_Season
                                   where s.StatusId == SeasonStatus.Ativo && s.CompanyId == _CompanyId

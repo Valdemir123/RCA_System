@@ -13,52 +13,39 @@
             @foreach (var @_room in _roomType.BookItem_LIST)
             {
                 <div class="col-sm-5 col-md-3 mb-5" style="border:double">
-                    <p class="form-control" style="background-color:ButtonFace">@_room.Item_Name</p>
+                    <p class="form-control" style="background-color:ButtonFace">@_room.Item_Name <text style="color:brown"> @_room.Reserve_StatusName </text></p>
 
                     @if (@_room.Reserve_Id == 0 || @_room.Reserve_StatusId == 1)
                     {
                         <p style="font-size: 11px; color: green">@_room.Reserve_Format</p>
-                        <div class="col-lg-6" style="font-size: 11px; color: green">
+                        <div class="col-md-6" style="font-size: 11px; color: green">
                             <p>-</p>
                             <p>-</p>
                             <p>-</p>
                         </div>
-                        <div class="col-lg-6" style="text-align:right; height:50px">
-                            @if (@_room.Reserve_StatusId != 0)
-                            {
-                                <p style="color:blueviolet">@_room.Reserve_StatusName</p>
-                            }
-                            else
-                            {
-                                <p>-</p>
-                            }
+                        <div class="col-md-6" style="text-align:right; height:50px; font-size:9px">
+                            <p>-</p>
+                            <p>-</p>
+                            <p>-</p>
                         </div>
-                        <div class="col-lg-12" style="text-align: right">
+                        <div class="col-md-12" style="text-align:right">
                             <a class="btn btn-success" href="@Url.Action("CHECKin", "Reception", new { _RoomID = @_room.Item_Id })">CHECK-in</a>
                         </div>
                     }
                     else
                     {
                         <p style="font-size: 11px; color: blue">@_room.Reserve_Format</p>
-                        <div class="col-lg-4" style="font-size:11px">
-                            <p style="color:blue;">@_room.Reserve_GuestName</p>
-                            <p style="color:blue;">@_room.Reserve_GuestPhone</p>
-                            <p style="color:blue;">@_room.Reserve_DateOut</p>
-
-                            @if (@_room.Reserve_StatusId != 0)
-                            {
-                                <p style="color:blueviolet">@_room.Reserve_StatusName</p>
-                            }
-                            else
-                            {
-                                <p>-</p>
-                            }
+                        <div class="col-md-6" style="font-size: 11px; color:blue;">
+                            <p>@_room.Reserve_GuestName</p>
+                            <p>@_room.Reserve_GuestPhone</p>
+                            <p>Saída: @_room.Reserve_DateOut</p>
                         </div>
-                        <div class="col-lg-6" style="text-align: right; height: 50px; font-size:8px">
+                        <div class="col-md-6" style="text-align:right; height:50px; font-size:9px">
                             @if (@_room.Entreteniment_LIST.Count == 0)
                             {
-                                <p></p>
-                                <p></p>
+                                <p>-</p>
+                                <p>-</p>
+                                <p>-</p>
                             }
                             else
                             {
@@ -69,13 +56,10 @@
                                 }
                             }
                         </div>
-                        <div class="col-lg-10" style="text-align: left">
+                        <div class="col-md-12" style="text-align:right">
                             <a class="btn btn-info" href="@Url.Action("SERVICES", "Reception", new { _ReserveID = @_room.Reserve_Id, _ExtratoID = 0 })">SERVIÇO</a>
                         </div>
                     }
-                </div>
-
-                <div class="col-sm-1 col-md-1">
                 </div>
             }
         </div>

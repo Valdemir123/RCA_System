@@ -62,8 +62,5 @@ namespace RCA.Models
         [DisplayName("Obs.")]
         [StringLength(200)]
         public string OBS { get; set; }
-
     }
-
-   
 }
