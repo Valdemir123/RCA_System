@@ -115,9 +115,6 @@ namespace RCA.Controllers
             var _Group = _context.Class_GroupLevel.FirstOrDefault(s => s.Id == _Room.GroupLevelId);
             var _Checkin = new Class_Checkin()
             {
-                Id = 0,
-                StatusId = BookStatus.EmUso,
-
                 GroupLevelItem_Id = _RoomID,
                 GroupLevelItem_Name = string.Format("{0} - {1}", _Group.Name, _Room.Name),
 
@@ -148,6 +145,93 @@ namespace RCA.Controllers
                 Guest_State = "",
                 Guest_Country = "Brasil"
             };
+            //
+            var _CompanyId = int.Parse(User.FindFirst("CompanyId").Value);
+            //
+            ViewBag.Season_LIST = from s in _context.Class_Season
+                                  where s.StatusId == SeasonStatus.Ativo && s.CompanyId == _CompanyId
+                                  orderby s.Name
+                                  select new { s.Id, s.Name };
+            //
+            ViewBag.Channel_LIST = from s in _context.Class_Channel
+                                   where s.CompanyId == _CompanyId && s.StatusId == ChannelStatus.Ativo
+                                   orderby s.TypeId, s.Name
+                                   select new { s.Id, s.Name };
+            //
+            ViewBag.yn_LIST = new SelectList(Enum.GetValues(typeof(GroupLevelItem_YN)));
+            //
+            return View(_Checkin);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CHECKin([Bind("GroupLevelItem_Id,GroupLevelItem_Name,"+
+                                                        " Season_Id, "+
+                                                        "Channel_Id,Channel_Tax,Channel_Percent,Channel_Code, "+
+                                                        "Book_DateIn,Book_DateOut,Book_AdultsNum,Book_KidsNum,Book_PCD,Book_PET,Book_PayTax,Book_PayDiscount,Book_PayCash, "+
+                                                        "Guest_CPF,Guest_Name,Guest_Phone1,Guest_Phone2,Guest_Email,Guest_PostalCode,Guest_Address,Guest_Complement,Guest_City,Guest_State,Guest_Country")] Class_Checkin _Checkin)
+        {
+            if (ModelState.IsValid)
+            {
+                // Guest
+                var _Guest = new Class_Guest()
+                {
+                    CPF = _Checkin.Guest_CPF,
+                    Name = _Checkin.Guest_Name,
+                    Phone1 = _Checkin.Guest_Phone1,
+                    Phone2 = _Checkin.Guest_Phone2,
+                    Email = _Checkin.Guest_Email,
+                    PostalCode = _Checkin.Guest_PostalCode,
+                    Address = _Checkin.Guest_Address,
+                    Complement = _Checkin.Guest_Complement,
+                    City = _Checkin.Guest_City,
+                    State = _Checkin.Guest_State,
+                    Country = _Checkin.Guest_Country
+                };
+                var _Find = _context.Class_Guest.Where(m => m.CPF == _Guest.CPF).FirstOrDefault();
+                if (_Find == null)
+                {
+                    _context.Add(_Guest);
+                }
+                else
+                {
+                    _context.Update(_Guest);
+                }
+                await _context.SaveChangesAsync();
+
+                // Book
+                var _Book = _context.Class_Book.Where(m => m.GroupLevelItemId == _Checkin.GroupLevelItem_Id && m.StatusId == BookStatus.Reservado).FirstOrDefault();
+                if (_Book == null)
+                {
+                    _Book.Id = 0;
+                }
+                _Book.StatusId = BookStatus.EmUso;
+                _Book.GroupLevelItemId = _Checkin.GroupLevelItem_Id;
+                _Book.SeasonId = _Checkin.Season_Id;
+                _Book.ChannelId = _Checkin.Channel_Id;
+                _Book.Channel_Code = _Checkin.Channel_Code;
+                _Book.Channel_Tax = _Checkin.Channel_Tax;
+                _Book.Channel_Percent = _Checkin.Channel_Percent;
+                _Book.Book_DateIn = _Checkin.Book_DateIn;
+                _Book.Book_DateOut = _Checkin.Book_DateOut;
+                _Book.Book_AdultsNum = _Checkin.Book_AdultsNum;
+                _Book.Book_KidsNum = _Checkin.Book_KidsNum;
+                _Book.Book_PCD = _Checkin.Book_PCD;
+                _Book.Book_PET = _Checkin.Book_PET;
+                _Book.GuestCPF = _Checkin.Guest_CPF;
+
+                if (_Book.Id == 0)
+                {
+                    _context.Add(_Book);
+                }
+                else
+                {
+                    _context.Update(_Book);
+                }
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction(nameof(Index));
+            }
+
             //
             var _CompanyId = int.Parse(User.FindFirst("CompanyId").Value);
             //

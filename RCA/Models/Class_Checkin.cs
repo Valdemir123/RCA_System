@@ -8,8 +8,6 @@ namespace RCA.Models
 {
     public class Class_Checkin
     {
-        public int Id { get; set; }
-        public BookStatus StatusId { get; set; }
         public int GroupLevelItem_Id { get; set; }
         public string GroupLevelItem_Name { get; set; }
 
