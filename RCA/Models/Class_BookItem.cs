@@ -37,6 +37,10 @@ namespace RCA.Models
         [DisplayName("Quantidade")]
         public int SeasonUnit { get; set; }
 
+        [DisplayName("Descrição")]
+        [StringLength(50)]
+        public string SeasonDesciption { get; set; }
+
         [Required]
         [DisplayName("Valor")]
         [DataType(DataType.Currency)]

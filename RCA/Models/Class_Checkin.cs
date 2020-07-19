@@ -63,6 +63,7 @@ namespace RCA.Models
         [DisplayName("Diária")]
         [DataType(DataType.Currency)]
         public double Book_PayTax { get; set; }
+        public int Book_Days { get; set; }
 
         [Required]
         [DisplayName("Desconto (%)")]

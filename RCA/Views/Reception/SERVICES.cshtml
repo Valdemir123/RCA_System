@@ -1,0 +1,1159 @@
+﻿@model RCA.Models.Class_Services
+@{
+    ViewData["Title"] = "Recepção ( SERVIÇOS )";
+}
+<body>
+    <div class="col-md-12">
+        <div class="col-md-3">
+            <h3>@ViewData["Title"]</h3>
+            <p>|| <a asp-action="Index" class="btn btn-info">Voltar para RECEPÇÃO</a></p>
+        </div>
+        <div class="col-md-9">
+            <div class="col-md-6">
+                <h4><strong>Suíte:</strong>&nbsp; @Model.Reserve_BookName</h4>
+                <h5>@Model.Reserve_Date &nbsp;&nbsp; @Model.Season_NAME</h5>
+            </div>
+            <div class="col-md-6">
+                <h4>@Model.Reserve_GuestName</h4>
+                <h5>@Model.Reserve_Occupants</h5>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <h3>@ViewBag.Message</h3>
+            <hr />
+        </div>
+    </div>
+    <div class="col-md-12">
+
+        <div class="col-md-8">
+            <div id="tabs" class="col-md-12" style="height: 450px; font-size:12px">
+                <ul>
+                    @if (@Model.TabDefault == 0 || @Model.TabDefault == 3)
+                    {
+                        <li><a href="#tabs-3">CONSUMO</a></li>
+                    }
+                    @if (@Model.TabDefault == 0 || @Model.TabDefault == 2)
+                    {
+                        <li><a href="#tabs-2">ENTRETENIMENTO</a></li>
+                    }
+                    @if (@Model.TabDefault == 0 || @Model.TabDefault == 1)
+                    {
+                        <li><a href="#tabs-1">Ajustar PERÍODO</a></li>
+                    }
+                    @if (@Model.TabDefault == 0 || @Model.TabDefault == 4)
+                    {
+                        <li><a href="#tabs-4">CHECK-out</a></li>
+                    }
+                </ul>
+
+                @if (@Model.TabDefault == 0 || @Model.TabDefault == 3)
+                {
+                    @*//CONSUMO*@
+                    <div id="tabs-3">
+                        @if (@Model.TabDefault != 0)
+                        {
+                            <a class="btn btn-warning" href="@Url.Action("SERVICES", "Reception", new { _ReserveID = @Model.Reserve_ID, _ExtratoID = 0 })">Voltar</a>
+                        }
+                        else
+                        {
+                            <a class="btn btn-success" href="@Url.Action("SERVICES_History", "Reception" , new { _ReserveID=@Model.Reserve_ID, _GroupId=3 })">Buscar Histórico</a>
+                        }
+                        <section>
+                            @using (Html.BeginForm(new { role = "form", @class = "form-horizontal" }))
+                            {
+                                <table>
+                                    <tr hidden>
+                                        <td>
+                                            @Html.TextBoxFor(m => m.Reserve_ID)
+                                            @Html.TextBoxFor(m => m.Reserve_BookName)
+                                            @Html.TextBoxFor(m => m.Reserve_Occupants)
+                                            @Html.TextBoxFor(m => m.Reserve_Date)
+                                            @Html.TextBoxFor(m => m.Reserve_GuestName)
+
+                                            @Html.TextBoxFor(m => m.Season_Id)
+                                            @Html.TextBoxFor(m => m.Season_NAME)
+
+                                            @Html.TextBoxFor(m => m.Consumo_ExtractID)
+                                            @Html.TextBoxFor(m => m.Consumo_StatusId)
+                                        </td>
+                                    </tr>
+                                </table>
+
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <table>
+                                    <tr>
+                                        <td width="5%"></td>
+                                        <td width="5%"></td>
+
+                                        <td width="5%"></td>
+                                        <td width="5%"></td>
+
+                                        <td width="5%"></td>
+                                        <td width="5%"></td>
+
+                                        <td width="5%"></td>
+                                        <td width="5%"></td>
+
+                                        <td width="5%"></td>
+                                        <td width="5%"></td>
+
+                                        <td width="5%"></td>
+                                        <td width="5%"></td>
+
+                                        <td width="5%"></td>
+                                        <td width="5%"></td>
+
+                                        <td width="5%"></td>
+                                        <td width="5%"></td>
+
+                                        <td width="5%"></td>
+                                        <td width="5%"></td>
+
+                                        <td width="5%"></td>
+                                        <td width="5%"></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td colspan="5"></td>
+                                        <td colspan="5">
+                                            <p class="control-label">@Html.LabelFor(m => m.Consumo_GroupLevelID)</p>
+                                            @Html.DropDownListFor(m => m.Consumo_GroupLevelID, new SelectList(@Model.Consumo_GroupLevel_LIST, "ID", "Name"), "Selecionar..", new { @class = "form-control" })
+                                            <p><span asp-validation-for="Consumo_GroupLevelID" class="text-danger"></span></p>
+                                        </td>
+                                        <td></td>
+                                        <td colspan="5">
+                                            <p class="control-label">@Html.LabelFor(m => m.Consumo_GroupLevelItemID)</p>
+                                            @Html.DropDownListFor(m => m.Consumo_GroupLevelItemID, new SelectList(@Model.Consumo_GroupLevelItem_LIST, "ID", "Name"), "Selecione GRUPO..", new { @class = "form-control" })
+                                            <p><span asp-validation-for="Consumo_GroupLevelItemID" class="text-danger"></span></p>
+                                        </td>
+                                        <td></td>
+                                        <td colspan="3">
+                                            <p class="control-label">@Html.LabelFor(m => m.Consumo_VlUnit)</p>
+                                            @Html.TextBoxFor(m => m.Consumo_VlUnit, new { @class = "form-control", @disabled = "disabled", @style = "text-align:right" })
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td colspan="2"></td>
+                                        <td colspan="3">
+                                            <p class="control-label">@Html.LabelFor(m => m.Consumo_Date)</p>
+                                            @Html.TextBoxFor(m => m.Consumo_Date, new { @class = "form-control" })
+                                            <p><span asp-validation-for="Consumo_Date" class="text-danger"></span></p>
+                                        </td>
+                                        <td colspan="2">
+                                            <p class="control-label">@Html.LabelFor(m => m.Consumo_QtUnit)</p>
+                                            @Html.TextBoxFor(m => m.Consumo_QtUnit, new { @class = "form-control" })
+                                            <p><span asp-validation-for="Consumo_QtUnit" class="text-danger"></span></p>
+                                        </td>
+                                        <td colspan="3">
+                                            <p class="control-label">@Html.LabelFor(m => m.Consumo_VlTotal_VIEW)</p>
+                                            @Html.TextBoxFor(m => m.Consumo_VlTotal_VIEW, new { @class = "form-control", @disabled = "disabled", @style = "text-align:right" })
+                                        </td>
+                                        <td></td>
+                                        <td colspan="3">
+                                            <p class="control-label">@Html.LabelFor(m => m.Consumo_VlDiscount)</p>
+                                            @Html.TextBoxFor(m => m.Consumo_VlDiscount, new { @class = "form-control" })
+                                            <p><span asp-validation-for="Consumo_VlDiscount" class="text-danger"></span></p>
+                                        </td>
+                                        <td></td>
+                                        <td colspan="3">
+                                            <p class="control-label">@Html.LabelFor(m => m.Consumo_VlFinal_VIEW)</p>
+                                            @Html.TextBoxFor(m => m.Consumo_VlFinal_VIEW, new { @class = "form-control", @disabled = "disabled", @style = "text-align:right" })
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td colspan="11"></td>
+                                        <td colspan="5">
+                                            <p class="control-label">@Html.LabelFor(m => m.Consumo_OBS)</p>
+                                            @Html.TextAreaFor(m => m.Consumo_OBS, new { @class = "form-control multiline", @style = "width:300px; height:80px" })
+                                        </td>
+                                        <td colspan="4"></td>
+                                    </tr>
+                                </table>
+                                <br />
+                                <div style="text-align:right">
+                                    @if (@Model.Consumo_ExtractID != 0)
+                                    {
+                                        <a class="btn btn-warning" href="@Url.Action("SERVICES_ApagarItem", "Reception", new { _ExtractID = @Model.Consumo_ExtractID })">Apagar Item</a>
+                                    }
+
+                                    <input type="submit" value="Gravar dados" class="btn btn-success" />
+                                </div>
+                            }
+                        </section>
+                    </div>
+                }
+
+                @if (@Model.TabDefault == 0 || @Model.TabDefault == 2)
+                {
+                    @*//ENTRETENIMENTO
+                        <div id="tabs-2">
+                            @if (@Model.TabDefault != 0)
+                            {
+                                <a class="btn btn-warning" href="@Url.Action("SERVICES", "Reception", new { _ReserveID = @Model.Reserve_ID, _ExtratoID = 0 })">Voltar</a>
+                            }
+                            else
+                            {
+                                <a class="btn btn-success" href="@Url.Action("SERVICES_History", "Reception", new { _ReserveID = @Model.Reserve_ID, _TypeItem = "ENTRETENIMENTO" })">Buscar Histórico</a>
+                            }
+                            <section>
+                                @using (Html.BeginForm(new { role = "form", @class = "form-horizontal" }))
+                                {
+                                    <table>
+                                        <tr hidden>
+                                            <td>
+                                                @Html.TextBoxFor(m => m.Reserve_ID)
+                                                @Html.TextBoxFor(m => m.DailyGroupLevelItemTaxID)
+                                                @Html.TextBoxFor(m => m.ReserveTEMPORADA)
+
+                                                @Html.TextBoxFor(m => m.ReserveDateIN)
+                                                @Html.TextBoxFor(m => m.ReserveDateOUT)
+                                                @Html.TextBoxFor(m => m.ReserveDayTAX)
+                                                @Html.TextBoxFor(m => m.ReserveDiscountTAX)
+                                                @Html.TextBoxFor(m => m.ReserveInputTAX)
+
+                                                @Html.TextBoxFor(m => m.Entreten_TypeTab)
+                                                @Html.TextBoxFor(m => m.Entreten_ExtractID)
+                                                @Html.TextBoxFor(m => m.Entreten_StatusID)
+
+                                                @Html.TextBoxFor(m => m.Entreten_GroupLevelNAME)
+                                                @Html.TextBoxFor(m => m.Entreten_GroupLevelItemNAME)
+
+                                                @Html.TextBoxFor(m => m.Entreten_GroupLevelItemTaxID)
+                                                @Html.TextBoxFor(m => m.Entreten_GroupLevelItemTAX)
+                                            </td>
+                                        </tr>
+                                    </table>
+
+                                    @Html.AntiForgeryToken()
+                                    @Html.ValidationSummary(true)
+                                    <table>
+                                        <tr>
+                                            <td width="5%"></td>
+                                            <td width="5%"></td>
+
+                                            <td width="5%"></td>
+                                            <td width="5%"></td>
+
+                                            <td width="5%"></td>
+                                            <td width="5%"></td>
+
+                                            <td width="5%"></td>
+                                            <td width="5%"></td>
+
+                                            <td width="5%"></td>
+                                            <td width="5%"></td>
+
+                                            <td width="5%"></td>
+                                            <td width="5%"></td>
+
+                                            <td width="5%"></td>
+                                            <td width="5%"></td>
+
+                                            <td width="5%"></td>
+                                            <td width="5%"></td>
+
+                                            <td width="5%"></td>
+                                            <td width="5%"></td>
+
+                                            <td width="5%"></td>
+                                            <td width="5%"></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td colspan="5"></td>
+                                            <td colspan="5">
+                                                <p class="control-label">@Html.LabelFor(m => m.Entreten_GroupLevelID)</p>
+                                                @Html.DropDownListFor(m => m.Entreten_GroupLevelID, new SelectList(@Model.Entreten_GroupLevel_LIST, "ID", "Name"), "Selecionar..", new { @class = "form-control" })
+                                            </td>
+                                            <td></td>
+                                            <td colspan="5">
+                                                <p class="control-label">@Html.LabelFor(m => m.Entreten_GroupLevelItemID)</p>
+                                                @Html.DropDownListFor(m => m.Entreten_GroupLevelItemID, new SelectList(@Model.Entreten_GroupLevelItem_LIST, "ID", "Name"), "Selecione GRUPO..", new { @class = "form-control" })
+                                            </td>
+                                            <td></td>
+                                            <td colspan="3">
+                                                <p class="control-label">@Html.LabelFor(m => m.Entreten_GroupLevelItemTAX_VIEW)</p>
+                                                @Html.TextBoxFor(m => m.Entreten_GroupLevelItemTAX_VIEW, new { @class = "form-control", @disabled = "disabled", @style = "text-align:right" })
+                                            </td>
+                                        </tr>
+                                        <tr style="font-size:10px">
+                                            <td colspan="5"></td>
+                                            <td colspan="15">
+                                                &nbsp;@Html.ValidationMessageFor(m => m.Entreten_GroupLevelID) &nbsp;
+                                                &nbsp;@Html.ValidationMessageFor(m => m.Entreten_GroupLevelItemID)
+                                            </td>
+                                        </tr>
+
+
+                                        <tr>
+                                            <td colspan="2"></td>
+                                            <td colspan="3">
+                                                <p class="control-label">@Html.LabelFor(m => m.Entreten_Date)</p>
+                                                @Html.TextBoxFor(m => m.Entreten_Date, new { @class = "form-control" })
+                                            </td>
+                                            <td colspan="2">
+                                                <p class="control-label">@Html.LabelFor(m => m.Entreten_Unid)</p>
+                                                @Html.TextBoxFor(m => m.Entreten_Unid, new { @class = "form-control" })
+                                            </td>
+                                            <td colspan="3">
+                                                <p class="control-label">@Html.LabelFor(m => m.Entreten_ValueTot_VIEW)</p>
+                                                @Html.TextBoxFor(m => m.Entreten_ValueTot_VIEW, new { @class = "form-control", @disabled = "disabled", @style = "text-align:right" })
+                                            </td>
+                                            <td></td>
+                                            <td colspan="2">
+                                                <p class="control-label">@Html.LabelFor(m => m.Entreten_ValueDiscountNAME)</p>
+                                                @Html.DropDownListFor(m => m.Entreten_ValueDiscountNAME, new SelectList(@Model.Entreten_ValueDiscount_LIST), new { @class = "form-control" })
+                                            </td>
+                                            <td colspan="3">
+                                                <p class="control-label">@Html.LabelFor(m => m.Entreten_ValueDiscount)</p>
+                                                @Html.TextBoxFor(m => m.Entreten_ValueDiscount, new { @class = "form-control" })
+                                            </td>
+                                            <td></td>
+                                            <td colspan="3">
+                                                <p class="control-label">@Html.LabelFor(m => m.Entreten_ValueFinal_VIEW)</p>
+                                                @Html.TextBoxFor(m => m.Entreten_ValueFinal_VIEW, new { @class = "form-control", @disabled = "disabled", @style = "text-align:right" })
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2"></td>
+                                            <td colspan="1">
+                                                <p class="control-label">@Html.LabelFor(m => m.Entreten_Time)</p>
+                                            </td>
+                                            <td colspan="2">
+                                                @Html.TextBoxFor(m => m.Entreten_Time, new { @class = "form-control" })
+                                            </td>
+                                            <td colspan="6"></td>
+                                            <td colspan="2">
+                                                <p class="control-label">@Html.LabelFor(m => m.Entreten_ValueInput)</p>
+                                            </td>
+                                            <td colspan="3">
+                                                @Html.TextBoxFor(m => m.Entreten_ValueInput, new { @class = "form-control" })
+                                            </td>
+                                            <td colspan="4"></td>
+                                        </tr>
+                                        <tr style="font-size:10px">
+                                            <td colspan="20">
+                                                &nbsp;@Html.ValidationMessageFor(m => m.Entreten_Date) &nbsp;
+                                                &nbsp;@Html.ValidationMessageFor(m => m.Entreten_Time) &nbsp;
+                                                &nbsp;@Html.ValidationMessageFor(m => m.Entreten_Unid) &nbsp;
+                                                &nbsp;@Html.ValidationMessageFor(m => m.Entreten_ValueDiscount)
+                                                &nbsp;@Html.ValidationMessageFor(m => m.Entreten_ValueInput)
+                                                &nbsp;@Html.ValidationMessageFor(m => m.Entreten_OBS)
+                                            </td>
+                                        </tr>
+
+
+                                        <tr>
+                                            <td colspan="11"></td>
+                                            <td colspan="5">
+                                                <p class="control-label">@Html.LabelFor(m => m.Entreten_OBS)</p>
+                                                @Html.TextAreaFor(m => m.Entreten_OBS, new { @class = "form-control multiline", @style = "width:300px; height:80px" })
+                                            </td>
+                                            <td colspan="4"></td>
+                                        </tr>
+                                    </table>
+                                    <br />
+                                    <div style="text-align:right">
+                                        @if (@Model.Entreten_ExtractID != 0)
+                                        {
+                                            <a class="btn btn-warning" href="@Url.Action("SERVICES_ApagarItem", "Home", new { _ReserveID = @Model.Reserve_ID, _ExtractID = @Model.Entreten_ExtractID })">Apagar Item</a>
+                                        }
+
+                                        @if (@Model.Entreten_StatusNAME == "Reservado")
+                                        {
+                                            <a class="btn btn-info" href="@Url.Action("SERVICES_EfetivarUso", "Home", new { _ReserveID = @Model.Reserve_ID, _ExtractID = @Model.Entreten_ExtractID })">Efetivar Uso</a>
+                                        }
+
+                                        <input type="submit" value="Gravar dados" class="btn btn-success" />
+                                    </div>
+                                }
+                            </section>
+                        </div>
+                    *@
+                }
+
+                @if (@Model.TabDefault == 0 || @Model.TabDefault == 1)
+                {
+                    @*//Ajustar PERIODO
+                        <div id="tabs-1">
+                            <section>
+                                @using (Html.BeginForm(new { role = "form", @class = "form-horizontal" }))
+                                {
+                                    <table>
+                                        <tr hidden>
+                                            <td>
+                                                @Html.TextBoxFor(m => m.Reserve_ID)
+                                                @Html.TextBoxFor(m => m.DailyGroupLevelItemTaxID)
+                                                @Html.TextBoxFor(m => m.ReserveTEMPORADA)
+
+                                                @Html.TextBoxFor(m => m.ReserveDateIN)
+                                                @Html.TextBoxFor(m => m.ReserveDateOUT)
+                                                @Html.TextBoxFor(m => m.ReserveDayTAX)
+                                                @Html.TextBoxFor(m => m.ReserveDiscountTAX)
+                                                @Html.TextBoxFor(m => m.ReserveInputTAX)
+
+                                                @Html.TextBoxFor(m => m.Ajuste_TypeTab)
+                                                @Html.TextBoxFor(m => m.Ajuste_AJU_DateOUT_Days)
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    @Html.AntiForgeryToken()
+                                    @Html.ValidationSummary(true)
+
+                                    <div class="col-md-7">
+                                        <table>
+                                            <tr>
+                                                <td width="5%"></td>
+                                                <td width="5%"></td>
+
+                                                <td width="5%"></td>
+                                                <td width="5%"></td>
+
+                                                <td width="5%"></td>
+                                                <td width="5%"></td>
+
+                                                <td width="5%"></td>
+                                                <td width="5%"></td>
+
+                                                <td width="5%"></td>
+                                                <td width="5%"></td>
+
+                                                <td width="5%"></td>
+                                                <td width="5%"></td>
+
+                                                <td width="5%"></td>
+                                                <td width="5%"></td>
+
+                                                <td width="5%"></td>
+                                                <td width="5%"></td>
+
+                                                <td width="5%"></td>
+                                                <td width="5%"></td>
+
+                                                <td width="5%"></td>
+                                                <td width="5%"></td>
+                                            </tr>
+
+
+                                            <tr>
+                                                <td colspan="4"></td>
+                                                <td></td>
+                                                <td colspan="4"><h5 class="form-control" style="background-color:ButtonFace">ATUAL</h5></td>
+                                                <td></td>
+                                                <td colspan="4"><h5 class="form-control" style="background-color:ButtonFace">AJUSTE</h5></td>
+                                                <td></td>
+                                                <td colspan="4"><h5 class="form-control" style="background-color:ButtonFace">ATUALIZADO</h5></td>
+                                                <td></td>
+                                            </tr>
+
+                                            <tr>
+                                                <td colspan="4" class="control-label">Nova Data Saída</td>
+                                                <td></td>
+                                                <td colspan="4">@Html.TextBoxFor(m => m.ReserveDateOUT, new { @class = "form-control", @disabled = "disabled", @style = "text-align:right" })</td>
+                                                <td></td>
+                                                <td colspan="4">@Html.TextBoxFor(m => m.Ajuste_AJU_DateOUT, new { @class = "form-control" })</td>
+                                                <td></td>
+                                                <td colspan="4">@Html.TextBoxFor(m => m.Ajuste_TOT_DateOUT_Days_VIEW, new { @class = "form-control", @disabled = "disabled", @style = "text-align:right" })</td>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="4" class="control-label">Valor Diária(s)</td>
+                                                <td></td>
+                                                <td colspan="4">@Html.TextBoxFor(m => m.Ajuste_ATU_Diaria_VIEW, new { @class = "form-control", @disabled = "disabled", @style = "text-align:right" })</td>
+                                                <td></td>
+                                                <td colspan="4"></td>
+                                                <td></td>
+                                                <td colspan="4">@Html.TextBoxFor(m => m.Ajuste_TOT_Diaria_VIEW, new { @class = "form-control", @disabled = "disabled", @style = "text-align:right" })</td>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="4" class="control-label">(-) Desconto (@Model.ReserveDiscountTAX %)</td>
+                                                <td></td>
+                                                <td colspan="4">@Html.TextBoxFor(m => m.Ajuste_ATU_Discount_VIEW, new { @class = "form-control", @disabled = "disabled", @style = "text-align:right" })</td>
+                                                <td></td>
+                                                <td colspan="4"></td>
+                                                <td></td>
+                                                <td colspan="4">@Html.TextBoxFor(m => m.Ajuste_TOT_Discount_VIEW, new { @class = "form-control", @disabled = "disabled", @style = "text-align:right" })</td>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="4" class="control-label">Valor Adiantamento</td>
+                                                <td></td>
+                                                <td colspan="4">@Html.TextBoxFor(m => m.Ajuste_ATU_Input_VIEW, new { @class = "form-control", @disabled = "disabled", @style = "text-align:right" })</td>
+                                                <td></td>
+                                                <td colspan="4">@Html.TextBoxFor(m => m.Ajuste_AJU_Input, new { @class = "form-control" })</td>
+                                                <td></td>
+                                                <td colspan="4">@Html.TextBoxFor(m => m.Ajuste_TOT_Input_VIEW, new { @class = "form-control", @disabled = "disabled", @style = "text-align:right" })</td>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="4" class="control-label">Valor A PAGAR</td>
+                                                <td></td>
+                                                <td colspan="4">@Html.TextBoxFor(m => m.Ajuste_ATU_Payment_VIEW, new { @class = "form-control", @disabled = "disabled", @style = "text-align:right" })</td>
+                                                <td></td>
+                                                <td colspan="4"></td>
+                                                <td></td>
+                                                <td colspan="4">@Html.TextBoxFor(m => m.Ajuste_TOT_Payment_VIEW, new { @class = "form-control", @disabled = "disabled", @style = "text-align:right" })</td>
+                                                <td></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <p class="control-label">@Html.LabelFor(m => m.Ajuste_OBS)</p>
+                                        @Html.TextAreaFor(m => m.Ajuste_OBS, new { @class = "form-control multiline", @style = "width:300px; height:80px" })
+
+                                        <br />
+                                        <br />
+                                        <input type="submit" value="Gravar dados" class="btn btn-success" />
+
+                                        <p>@Html.ValidationMessageFor(m => m.Ajuste_AJU_DateOUT)</p>
+                                        <p>@Html.ValidationMessageFor(m => m.Ajuste_AJU_Input)</p>
+                                        <p>@Html.ValidationMessageFor(m => m.Ajuste_OBS)</p>
+                                    </div>
+                                }
+                            </section>
+                        </div>
+                    *@
+                }
+
+                @if (@Model.TabDefault == 0 || @Model.TabDefault == 4)
+                {
+                    @*//CHECK-out
+                        <div id="tabs-4">
+                            <section>
+                                @using (Html.BeginForm(new { role = "form", @class = "form-horizontal" }))
+                                {
+                                    <table>
+                                        <tr>
+                                            <td hidden>
+                                                @Html.TextBoxFor(m => m.Reserve_ID)
+
+                                                @Html.TextBoxFor(m => m.ReserveDateIN)
+                                                @Html.TextBoxFor(m => m.ReserveDateOUT)
+                                                @Html.TextBoxFor(m => m.ReserveDayTAX)
+                                                @Html.TextBoxFor(m => m.ReserveDiscountTAX)
+                                                @Html.TextBoxFor(m => m.ReserveInputTAX)
+
+                                                @Html.TextBoxFor(m => m.Ajuste_ATU_Diaria_VIEW)
+
+                                                @Html.TextBoxFor(m => m.CheckOut_TypeTab)
+                                                @Html.TextBoxFor(m => m.CheckOut_Total)
+                                                @Html.TextBoxFor(m => m.CheckOut_APagar)
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    @Html.AntiForgeryToken()
+                                    @Html.ValidationSummary(true)
+
+                                    <div class="col-md-3" style="height: 150px; border: dotted; border-radius: 8px;">
+                                        <h5 style="font-size: 10px; background-color: ButtonFace; text-align: center">HOSPEDAGEM</h5>
+                                        <table style="font-size: 8px; text-align: right; overflow-y: auto;">
+                                            <tr>
+                                                <td width="40%"></td>
+                                                <td width="20%"></td>
+                                                <td width="20%"></td>
+                                                <td width="20%"></td>
+                                            </tr>
+                                            @foreach (var @_item in @Model.CheckOut_Hospedagem_LIST)
+                                            {
+                                                <tr>
+                                                    <td>@_item.DESC</td>
+                                                    <td>@_item.VALOR</td>
+                                                    <td>@_item.DESCONTO</td>
+                                                    <td>@_item.ENTRADA</td>
+                                                </tr>
+                                            }
+                                        </table>
+                                    </div>
+                                    <div class="col-md-3" style="height: 150px; border: dotted; border-radius: 8px;">
+                                        <h5 style="font-size: 10px; background-color: ButtonFace; text-align: center">CONSUMO</h5>
+                                        <table style="font-size: 8px; text-align: right; overflow-y: auto;">
+                                            <tr>
+                                                <td width="40%"></td>
+                                                <td width="20%"></td>
+                                                <td width="20%"></td>
+                                                <td width="20%"></td>
+                                            </tr>
+                                            @foreach (var @_item in @Model.CheckOut_Consumo_LIST)
+                                            {
+                                                <tr>
+                                                    <td>@_item.DESC</td>
+                                                    <td>@_item.VALOR</td>
+                                                    <td>@_item.DESCONTO</td>
+                                                    <td>@_item.ENTRADA</td>
+                                                </tr>
+                                            }
+                                        </table>
+                                    </div>
+                                    <div class="col-md-4" style="height: 150px; border: dotted; border-radius: 8px;">
+                                        <h5 style="font-size: 10px; background-color: ButtonFace; text-align: center">ENTRETENIMENTO</h5>
+                                        <table style="font-size: 8px; text-align: right; overflow-y: auto;">
+                                            <tr>
+                                                <td width="40%"></td>
+                                                <td width="20%"></td>
+                                                <td width="20%"></td>
+                                                <td width="20%"></td>
+                                            </tr>
+                                            @foreach (var @_item in @Model.CheckOut_Entreten_LIST)
+                                            {
+                                                <tr>
+                                                    <td>@_item.DESC</td>
+                                                    <td>@_item.VALOR</td>
+                                                    <td>@_item.DESCONTO</td>
+                                                    <td>@_item.ENTRADA</td>
+                                                </tr>
+                                            }
+                                        </table>
+                                    </div>
+
+                                    <div class="col-md-10">
+                                        <table>
+                                            <tr>
+                                                <td width="5%"></td>
+                                                <td width="5%"></td>
+                                                <td width="5%"></td>
+
+                                                <td width="5%"></td>
+                                                <td width="5%"></td>
+                                                <td width="5%"></td>
+
+                                                <td width="5%"></td>
+                                                <td width="5%"></td>
+                                                <td width="5%"></td>
+
+                                                <td width="5%"></td>
+                                                <td width="5%"></td>
+                                                <td width="5%"></td>
+
+                                                <td width="5%"></td>
+                                                <td width="5%"></td>
+                                                <td width="5%"></td>
+
+                                                <td width="5%"></td>
+                                                <td width="5%"></td>
+                                                <td width="5%"></td>
+
+                                                <td width="5%"></td>
+                                                <td width="5%"></td>
+                                            </tr>
+
+                                            <tr>
+                                                <td colspan="3">
+                                                    <p class="control-label">@Html.LabelFor(m => m.CheckOut_Total_VIEW)</p>
+                                                    @Html.TextBoxFor(m => m.CheckOut_Total_VIEW, new { @class = "form-control", @disabled = "disabled", @style = "text-align:right" })
+                                                </td>
+                                                <td colspan="2">
+                                                    <p class="control-label">@Html.LabelFor(m => m.CheckOut_DiscountNAME)</p>
+                                                    @Html.DropDownListFor(m => m.CheckOut_DiscountNAME, new SelectList(@Model.CheckOut_Discount_LIST), new { @class = "form-control" })
+                                                </td>
+                                                <td colspan="3">
+                                                    <p class="control-label">@Html.LabelFor(m => m.CheckOut_Discount)</p>
+                                                    @Html.TextBoxFor(m => m.CheckOut_Discount, new { @class = "form-control" })
+                                                </td>
+                                                <td colspan="3">
+                                                    <p class="control-label">@Html.LabelFor(m => m.CheckOut_APagar_VIEW)</p>
+                                                    @Html.TextBoxFor(m => m.CheckOut_APagar_VIEW, new { @class = "form-control", @disabled = "disabled", @style = "text-align:right" })
+                                                </td>
+                                                <td colspan="4">
+                                                    <p class="control-label">@Html.LabelFor(m => m.CheckOut_PayForm)</p>
+                                                    @Html.DropDownListFor(m => m.CheckOut_PayForm, new SelectList(@Model.CheckOut_PayForm_LIST), new { @class = "form-control" })
+                                                </td>
+                                                <td colspan="5">
+                                                    <p class="control-label">@Html.LabelFor(m => m.CheckOut_PayDESCRICAO)</p>
+                                                    @Html.TextBoxFor(m => m.CheckOut_PayDESCRICAO, new { @class = "form-control", @placeholder = "ex. No.Cartão, No.Cheque,..." })
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td colspan="9">
+                                                    <p>@Html.ValidationMessageFor(m => m.CheckOut_DiscountNAME)</p>
+                                                    <p>@Html.ValidationMessageFor(m => m.CheckOut_Discount)</p>
+                                                    <p>@Html.ValidationMessageFor(m => m.CheckOut_PayForm)</p>
+                                                    <p>@Html.ValidationMessageFor(m => m.CheckOut_PayDESCRICAO)</p>
+                                                    <p>@Html.ValidationMessageFor(m => m.CheckOut_OBS)</p>
+                                                </td>
+                                                <td colspan="6">
+                                                    <p class="control-label">@Html.LabelFor(m => m.CheckOut_OBS)</p>
+                                                    @Html.TextAreaFor(m => m.CheckOut_OBS, new { @class = "form-control multiline", @style = "width:300px; height:80px" })
+                                                </td>
+                                                <td colspan="2"></td>
+                                                <td colspan="3">
+                                                    <input type="submit" value="Gravar dados" class="btn btn-success" />
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                }
+                            </section>
+                        </div>
+                    *@
+                }
+            </div>
+        </div>
+
+
+        <div class="col-md-4">
+            <div class="col-md-12">
+                <h4 class="form-control" style="background-color:ButtonFace">Extrato da Hospedagem</h4>
+            </div>
+            <div class="col-md-12" id="ExtractLIST" style="border: dotted; border-radius: 8px; height: 450px; font-size: 10px; overflow-y: auto;">
+                <table>
+                    <tr>
+                        <td>
+                            <table>
+                                <tr>
+                                    <td width="75%"></td>
+                                    <td width="25%"></td>
+                                </tr>
+                                @foreach (var @_Item in @Model.ExtractLIST)
+                                {
+                                    <tr>
+                                        @if (@_Item.ExtractVALUE != "0")
+                                        {
+                                            <td style="text-align:right">
+                                                @_Item.ExtractTEXT
+                                            </td>
+                                            <td style="text-align:right">
+                                                @_Item.ExtractVALUE
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td colspan="2" style="text-align: center; font-size:15px; color:blue">
+                                                @_Item.ExtractTEXT
+                                            </td>
+                                        }
+                                    </tr>
+                                }
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-md-12" style="text-align:right">
+                <a class="btn btn-success" href="@Url.Action("SERVICES_ImprimirExtrato", "Home", new { _ReserveID = @Model.Reserve_ID })">Imprimir Extrato</a>
+            </div>
+        </div>
+    </div>
+</body>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script type="text/javascript">
+        //Tabs
+        $(function () {
+            $("#tabs").tabs({
+                collapsible: true
+            });
+        });
+        //calculo dif datas
+        Date.prototype.addDias = function (dias) {
+            this.setDate(this.getDate() + dias)
+        };
+        function DifBetweenDates(_Dt1, _Dt2) {
+            var _Date = _Dt1.split("/");
+            var _Date1 = new Date(_Date[2], _Date[1], _Date[0], 0, 0, 0, 0);
+
+            var _Date = _Dt2.split("/");
+            var _Date2 = new Date(_Date[2], _Date[1], _Date[0], 0, 0, 0, 0);
+
+            var _count = 0;
+            if (_Date1.getDate() < _Date2.getDate()) {
+                while (_Date1.getDate() < _Date2.getDate()) {
+                    _count += 1;
+
+                    _Date1.addDias(1);
+                }
+            } else {
+                while (_Date1.getDate() > _Date2.getDate()) {
+                    _count -= 1;
+
+                    _Date1.addDias(-1);
+                }
+            }
+            return parseInt(_count);
+        };
+        // Extrato
+        function CalculoDiaria() {
+            var $wrapper = document.querySelector('#Season_Day');
+            var _Texto = "R$ 0";
+
+            // valor da diaria
+            var _ValorDiaria = $('#Book_PayTax').val();
+            var _ValorPeriodo = 0;
+
+            if (_ValorDiaria != 0) {
+                //Calculo de Diarias
+                var _Data1 = $('#Book_DateIn').val()
+                var _Data2 = $('#Book_DateOut').val()
+                //
+                var _Dias = DifBetweenDates(_Data1, _Data2)
+
+                //Calculo do Valor das diarias
+                _ValorPeriodo = _ValorDiaria * _Dias;
+
+                //
+                _Texto = "Período de " + _Dias.toString() + " dia(s): " + _ValorPeriodo.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+            }
+            $wrapper.innerHTML = _Texto;
+        };
+
+        $(document).ready(function () {
+
+
+        });
+    </script>
+}
+
+
+@*@section scripts {
+        <script type="text/javascript">
+            
+            //calculo dif datas
+            Date.prototype.addDias = function (dias) {
+                this.setDate(this.getDate() + dias)
+            };
+            function DifBetweenDates(_Dt1, _Dt2) {
+                var _Date = _Dt1.split("/");
+                var _Date1 = new Date(_Date[2], _Date[1], _Date[0], 0, 0, 0, 0);
+
+                var _Date = _Dt2.split("/");
+                var _Date2 = new Date(_Date[2], _Date[1], _Date[0], 0, 0, 0, 0);
+
+                var _count = 0;
+                if (_Date1.getDate() < _Date2.getDate()) {
+                    while (_Date1.getDate() < _Date2.getDate()) {
+                        _count += 1;
+
+                        _Date1.addDias(1);
+                    }
+                } else {
+                    while (_Date1.getDate() > _Date2.getDate()) {
+                        _count -= 1;
+
+                        _Date1.addDias(-1);
+                    }
+                }
+
+                return parseInt(_count);
+            };
+            // Formatacao de campos
+            function formataCampo(campo, Mascara, evento) {
+                var boleanoMascara;
+
+                var Digitato = evento.keyCode;
+                exp = /\-|\.|\/|\(|\)|\:| /g
+                campoSoNumeros = campo.value.toString().replace(exp, "");
+
+                var posicaoCampo = 0;
+                var NovoValorCampo = "";
+                var TamanhoMascara = campoSoNumeros.length;;
+
+                if (Digitato != 8) { // backspace
+                    for (i = 0; i <= TamanhoMascara; i++) {
+                        boleanoMascara = ((Mascara.charAt(i) == "-") || (Mascara.charAt(i) == ".")
+                                                                || (Mascara.charAt(i) == "/"))
+                        boleanoMascara = boleanoMascara || ((Mascara.charAt(i) == "(")
+                                                                || (Mascara.charAt(i) == ")") || (Mascara.charAt(i) == " "))
+                        if (boleanoMascara) {
+                            NovoValorCampo += Mascara.charAt(i);
+                            TamanhoMascara++;
+                        } else {
+                            NovoValorCampo += campoSoNumeros.charAt(posicaoCampo);
+                            posicaoCampo++;
+                        }
+                    }
+                    campo.value = NovoValorCampo;
+                    return true;
+                } else {
+                    return true;
+                }
+            }
+
+            //CALCULOS
+            function Consumo_CalculaValor() {
+                $('#Consumo_TypeTab').val("CONSUMO");
+
+                var _valorUnid = $('#Consumo_GroupLevelItemTAX').val();
+                var _unid = $('#Consumo_Unid').val();
+                var _valorTotal = 0;
+                var _tipoDesc = $('#Consumo_ValueDiscountNAME').val();
+                var _valorDesc = $('#Consumo_ValueDiscount').val();
+                var _valorFinal = 0;
+
+                //
+                _valorTotal = _valorUnid * _unid;
+                _valorTotal = parseFloat(_valorTotal.toFixed(2));
+
+                //
+                if (_valorDesc != 0) {
+                    if (_tipoDesc == "( % )") {
+                        _valorDesc = _valorTotal * (_valorDesc / 100);
+                        _valorDesc = parseFloat(_valorDesc.toFixed(2));
+                    }
+                }
+
+                //
+                _valorFinal = _valorTotal - _valorDesc;
+
+                //
+                $('#Consumo_ValueTot_VIEW').val(_valorTotal.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }));
+                $('#Consumo_ValueFinal_VIEW').val(_valorFinal.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }));
+            };
+            //
+            function Entreten_CalculaValor() {
+                $('#Entreten_TypeTab').val("ENTRETENIMENTO");
+
+                var _valorUnid = $('#Entreten_GroupLevelItemTAX').val();
+                var _unid = $('#Entreten_Unid').val();
+                var _valorTotal = 0;
+                var _tipoDesc = $('#Entreten_ValueDiscountNAME').val();
+                var _valorDesc = $('#Entreten_ValueDiscount').val();
+                var _valorFinal = 0;
+
+                //
+                _valorTotal = _valorUnid * _unid;
+                _valorTotal = parseFloat(_valorTotal.toFixed(2));
+
+                //
+                if (_valorDesc != 0) {
+                    if (_tipoDesc == "( % )") {
+                        _valorDesc = _valorTotal * (_valorDesc / 100);
+                        _valorDesc = parseFloat(_valorDesc.toFixed(2));
+                    }
+                }
+
+                //
+                _valorFinal = _valorTotal - _valorDesc;
+
+                //
+                $('#Entreten_ValueTot_VIEW').val(_valorTotal.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }));
+                $('#Entreten_ValueFinal_VIEW').val(_valorFinal.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }));
+            };
+            //
+            function CheckOut_CalculaValor() {
+                $('#CheckOut_TypeTab').val("CHECK-OUT");
+
+                var _valorTotal = $('#CheckOut_Total').val();
+                _valorTotal = parseFloat(_valorTotal);
+                var _tipoDesc = $('#CheckOut_DiscountNAME').val();
+                var _valorDesc = $('#CheckOut_Discount').val();
+                _valorDesc = parseFloat(_valorDesc);
+                var _valorFinal = $('#CheckOut_Total').val();
+                _valorFinal = parseFloat(_valorFinal);
+                //
+                if (_valorDesc != 0) {
+                    if (_tipoDesc == "( % )") {
+                        _valorDesc = _valorTotal * (_valorDesc / 100);
+                    }
+                    _valorDesc = parseFloat(_valorDesc.toFixed(2));
+                    _valorFinal -= _valorDesc;
+                }
+
+                //
+                $('#CheckOut_APagar_VIEW').val(_valorFinal.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }));
+                $('#CheckOut_APagar').val(_valorFinal);
+            };
+            //
+            function Ajuste_CalculoValor() {
+                $('#Ajuste_TypeTab').val('AJUSTE');
+
+                // Datas
+                var _DtIN = $('#ReserveDateIN').val();
+                var _DtOUT = $('#ReserveDateOUT').val();
+                var _DtDIG = $('#Ajuste_AJU_DateOUT').val();
+
+                // calculo da diferença em dias
+                var _DiasTOT = DifBetweenDates(_DtOUT, _DtDIG);
+                $('#Ajuste_AJU_DateOUT_Days').val(_DiasTOT);
+
+                var _DiasTOT = DifBetweenDates(_DtIN, _DtDIG);
+                $('#Ajuste_TOT_DateOUT_Days_VIEW').val(_DiasTOT);
+
+                // valor diaria
+                var _Diarias = $('#ReserveDayTAX').val() * _DiasTOT;
+                $('#Ajuste_TOT_Diaria_VIEW').val(_Diarias.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }));
+
+                // valor desconto
+                var _PercDesc = $('#ReserveDiscountTAX').val();
+                var _Desconto = _Diarias * (_PercDesc / 100) * -1;
+                $('#Ajuste_TOT_Discount_VIEW').val(_Desconto.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }));
+
+                // valor Adiantamento
+                var _Adiant1 = parseFloat($('#ReserveInputTAX').val());
+                var _Adiant2 = parseFloat($('#Ajuste_AJU_Input').val());
+                var _Adiantamento = _Adiant1 + _Adiant2;
+                $('#Ajuste_TOT_Input_VIEW').val(_Adiantamento.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }));
+
+                // valor Total
+                var _Total = _Diarias + _Desconto - _Adiant1 - _Adiant2;
+                $('#Ajuste_TOT_Payment_VIEW').val(_Total.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }));
+            };
+
+
+
+
+            $(document).ready(function () {
+                //CONSUMO
+                $('#Consumo_GroupLevelID').change(function () {
+                    $.ajax({
+                        url: '@Url.Action("BUSCAR_GroupLevelItemS", "Home")',
+                        type: "GET",
+                        contentType: "application/Json",
+                        data: { _GroupLevelID: $("#Consumo_GroupLevelID").val(), _GroupLevelItemTaxNAME: $("#ReserveTEMPORADA").val() },
+                        success: function (_ret) {
+                            $('#Consumo_GroupLevelItemID option').remove();
+                            for (var i = 0; i < _ret.length; i++) {
+                                $('#Consumo_GroupLevelItemID').append('<option value="' + _ret[i].ID + '">' + _ret[i].Name + '</option>');
+                            }
+                            $('#Consumo_GroupLevelNAME').val(_ret[0].PaiNAME);
+
+                            $('#Consumo_GroupLevelItemID').val(_ret[0].ID);
+                            $('#Consumo_GroupLevelItemNAME').val(_ret[0].Name);
+
+                            $('#Consumo_GroupLevelItemTaxID').val(_ret[0].FirstID);
+                            $('#Consumo_GroupLevelItemTAX_VIEW').val(_ret[0].FirstTAX.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }));
+                            $('#Consumo_GroupLevelItemTAX').val(_ret[0].FirstTAX);
+
+                            Consumo_CalculaValor();
+                        }
+                    });
+                });
+                $('#Consumo_GroupLevelItemID').change(function () {
+                    $.ajax({
+                        url: '@Url.Action("BUSCAR_GroupLevelItemTaxS", "Home")',
+                        type: "GET",
+                        contentType: "application/Json",
+                        data: { _GroupLevelItemID: $("#Consumo_GroupLevelItemID").val(), _GroupLevelItemTaxID: 0, _GroupLevelItemTaxNAME: $("#ReserveTEMPORADA").val() },
+                        success: function (_ret) {
+                            $('#Consumo_GroupLevelNAME').val(_ret[0].GroupLevelNAME);
+
+                            $('#Consumo_GroupLevelItemNAME').val(_ret[0].GroupLevelItemNAME);
+
+                            $('#Consumo_GroupLevelItemTaxID').val(_ret[0].GroupLevelItemTaxID);
+                            $('#Consumo_GroupLevelItemTAX_VIEW').val(_ret[0].TaxTAX.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }));
+                            $('#Consumo_GroupLevelItemTAX').val(_ret[0].TaxTAX);
+
+                            Consumo_CalculaValor();
+                        }
+                    });
+                });
+                $("#Consumo_Date").datepicker({
+                    dateFormat: 'dd/mm/yy',
+                    numberOfMonths: 2
+                });
+                $("#Consumo_Date").keyup(function () {
+                    var _RET = formataCampo(this, '99/99/9999', this);
+                    return _RET;
+                });
+                $("#Consumo_Unid").keyup(function () {
+                    Consumo_CalculaValor();
+                });
+                $("#Consumo_ValueDiscountNAME").change(function () {
+                    Consumo_CalculaValor();
+                });
+                $("#Consumo_ValueDiscount").keyup(function () {
+                    Consumo_CalculaValor();
+                });
+
+
+                //ENTRETENIMENTO
+                $('#Entreten_GroupLevelID').change(function () {
+                    $.ajax({
+                        url: '@Url.Action("BUSCAR_GroupLevelItemS", "Home")',
+                        type: "GET",
+                        contentType: "application/Json",
+                        data: { _GroupLevelID: $("#Entreten_GroupLevelID").val(), _GroupLevelItemTaxNAME: $("#ReserveTEMPORADA").val() },
+                        success: function (_ret) {
+                            $('#Entreten_GroupLevelItemID option').remove();
+                            for (var i = 0; i < _ret.length; i++) {
+                                $('#Entreten_GroupLevelItemID').append('<option value="' + _ret[i].ID + '">' + _ret[i].Name + '</option>');
+                            }
+
+
+
+                            $('#Entreten_GroupLevelNAME').val(_ret[0].PaiNAME);
+
+                            $('#Entreten_GroupLevelItemID').val(_ret[0].ID);
+                            $('#Entreten_GroupLevelItemNAME').val(_ret[0].Name);
+
+                            $('#Entreten_GroupLevelItemTaxID').val(_ret[0].FirstID);
+                            $('#Entreten_GroupLevelItemTAX_VIEW').val(_ret[0].FirstTAX.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }));
+                            $('#Entreten_GroupLevelItemTAX').val(_ret[0].FirstTAX);
+
+                            Entreten_CalculaValor();
+                        }
+                    });
+                });
+                $('#Entreten_GroupLevelItemID').change(function () {
+                    $.ajax({
+                        url: '@Url.Action("BUSCAR_GroupLevelItemTaxS", "Home")',
+                        type: "GET",
+                        contentType: "application/Json",
+                        data: { _GroupLevelItemID: $("#Entreten_GroupLevelItemID").val(), _GroupLevelItemTaxID: 0, _GroupLevelItemTaxNAME: $("#ReserveTEMPORADA").val() },
+                        success: function (_ret) {
+                            $('#Entreten_GroupLevelNAME').val(_ret[0].GroupLevelNAME);
+
+                            $('#Entreten_GroupLevelItemNAME').val(_ret[0].GroupLevelItemNAME);
+
+                            $('#Entreten_GroupLevelItemTaxID').val(_ret[0].GroupLevelItemTaxID);
+                            $('#Entreten_GroupLevelItemTAX_VIEW').val(_ret[0].TaxTAX.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }));
+                            $('#Entreten_GroupLevelItemTAX').val(_ret[0].TaxTAX);
+
+                            Entreten_CalculaValor();
+                        }
+                    });
+                });
+                $("#Entreten_Date").datepicker({
+                    dateFormat: 'dd/mm/yy',
+                    numberOfMonths: 2
+                });
+                $("#Entreten_Date").keyup(function () {
+                    var _RET = formataCampo(this, '99/99/9999', this);
+                    return _RET;
+                });
+                $("#Entreten_Unid").keyup(function () {
+                    Entreten_CalculaValor();
+                });
+                $("#Entreten_ValueDiscountNAME").change(function () {
+                    Entreten_CalculaValor();
+                });
+                $("#Entreten_ValueDiscount").keyup(function () {
+                    Entreten_CalculaValor();
+                });
+
+                //CHECK-OUT
+                $("#CheckOut_DiscountNAME").change(function () {
+                    CheckOut_CalculaValor();
+                });
+                $("#CheckOut_Discount").keyup(function () {
+                    CheckOut_CalculaValor();
+                });
+                $("#CheckOut_OBS").change(function () {
+                    CheckOut_CalculaValor();
+                });
+
+                //AJUSTE
+                $("#Ajuste_AJU_DateOUT").datepicker({
+                    dateFormat: 'dd/mm/yy',
+                    numberOfMonths: 2
+                });
+                $("#Ajuste_AJU_DateOUT").keyup(function () {
+                    var _RET = formataCampo(this, '99/99/9999', this);
+                    return _RET;
+                });
+                $("#Ajuste_AJU_DateOUT").change(function () {
+                    Ajuste_CalculoValor();
+                });
+                $("#Ajuste_AJU_Input").keyup(function () {
+                    Ajuste_CalculoValor();
+                });
+                $("#Ajuste_OBS").change(function () {
+                    Ajuste_CalculoValor();
+                });
+            });
+        </script>
+    }*@

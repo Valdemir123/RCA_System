@@ -18,6 +18,7 @@
             @Html.TextBoxFor(m => m.Channel_Tax);
 
             @Html.TextBoxFor(m => m.Book_PayTax);
+            @Html.TextBoxFor(m => m.Book_Days);
         </div>
 
         <div class="col-md-6">
@@ -96,7 +97,7 @@
             </div>
             <div class="col-md-12">&nbsp;</div>
             <div class="col-md-12">
-                <input id="btGravar" type="submit" value="Gravar !!!" class="btn btn-default" />
+                <input id="btGravar" type="submit" value="Gravar !!!" class="btn btn-success" />
             </div>
         </div>
 
@@ -221,6 +222,7 @@
                 var _Data2 = $('#Book_DateOut').val()
                 //
                 var _Dias = DifBetweenDates(_Data1, _Data2)
+                $('#Book_Days').val(_Dias);
 
                 //Calculo do Valor das diarias
                 _ValorPeriodo = _ValorDiaria * _Dias;
