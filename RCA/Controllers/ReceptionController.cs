@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity.UI.Pages.Internal.Account.Manage;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -28,12 +29,10 @@ namespace RCA.Controllers
             {
                 _CompanyId = int.Parse(User.FindFirst("CompanyId").Value);
             }
-            catch
-            {
-                return RedirectToAction(nameof(Index));
-            }
+            catch (Exception) { return RedirectToAction(nameof(Error), new { _Message = "Login Necessário!" }); }
+            //
             var _Reception = new List<Class_ReceptionBOOK>();
-
+            //
             //
             var _GroupLevel = from s in _context.Class_GroupLevel
                               where s.CompanyId == _CompanyId && s.GroupId == GroupType.ACOMODACAO && s.StatusId == GroupLevelStatus.Ativo
@@ -164,10 +163,7 @@ namespace RCA.Controllers
             {
                 _CompanyId = int.Parse(User.FindFirst("CompanyId").Value);
             }
-            catch
-            {
-                return RedirectToAction(nameof(Index));
-            }
+            catch (Exception) { return RedirectToAction(nameof(Error), new { _Message = "Login Necessário!" }); }
             //
             ViewBag.Season_LIST = from s in _context.Class_Season
                                   where s.StatusId == SeasonStatus.Ativo && s.CompanyId == _CompanyId
@@ -228,11 +224,13 @@ namespace RCA.Controllers
                 _context.SaveChanges();
 
                 // Book
-                var _Book = _context.Class_Book.Where(m => m.GroupLevelItemId == _Checkin.GroupLevelItem_Id && m.StatusId == BookStatus.Reservado).FirstOrDefault();
+                var _Book = _context.Class_Book.Where(m => m.GroupLevelItemId == _Checkin.GroupLevelItem_Id && m.StatusId == BookStatus.EmUso).FirstOrDefault();
                 if (_Book == null)
                 {
-                    _Book = new Class_Book();
-                    _Book.Id = 0;
+                    _Book = new Class_Book
+                    {
+                        Id = 0
+                    };
                 }
                 _Book.StatusId = BookStatus.EmUso;
                 _Book.GroupLevelItemId = _Checkin.GroupLevelItem_Id;
@@ -258,7 +256,7 @@ namespace RCA.Controllers
                     _context.Update(_Book);
                 }
                 _context.SaveChanges();
-                _Book = _context.Class_Book.Where(m => m.GroupLevelItemId == _Checkin.GroupLevelItem_Id && m.StatusId == BookStatus.Reservado).FirstOrDefault();
+                _Book = _context.Class_Book.Where(m => m.GroupLevelItemId == _Checkin.GroupLevelItem_Id && m.StatusId == BookStatus.EmUso).FirstOrDefault();
 
                 //Services
                 var _BookItem = new Class_BookItem()
@@ -270,11 +268,12 @@ namespace RCA.Controllers
                     DateConsume = _Book.Book_DateIn,
                     GroupLevelItemId = _Book.GroupLevelItemId,
 
+                    SeasonDesciption = "Diárias de Hospedagem",
                     SeasonUnit = _Checkin.Book_Days,
                     SeasonValue = _Checkin.Book_PayTax,
 
-                    SeasonDiscountValue = _Checkin.Book_PayDiscount,
-                    SeasonDiscountPercent = 0,
+                    SeasonDiscountValue = (_Checkin.Book_PayTax * _Checkin.Book_Days) * ((double)_Checkin.Book_PayDiscount / 100),
+                    SeasonDiscountPercent = _Checkin.Book_PayDiscount,
                     SeasonAdvance = _Checkin.Book_PayCash,
 
                     OBS = ""
@@ -291,10 +290,7 @@ namespace RCA.Controllers
             {
                 _CompanyId = int.Parse(User.FindFirst("CompanyId").Value);
             }
-            catch
-            {
-                return RedirectToAction(nameof(Index));
-            }
+            catch (Exception) { return RedirectToAction(nameof(Error), new { _Message = "Login Necessário!" }); }
             //
             ViewBag.Season_LIST = from s in _context.Class_Season
                                   where s.StatusId == SeasonStatus.Ativo && s.CompanyId == _CompanyId
@@ -314,6 +310,13 @@ namespace RCA.Controllers
         //SERVICE
         public IActionResult SERVICES(int _ReserveID, int _ExtratoID)
         {
+            //
+            int _CompanyId;
+            try
+            {
+                _CompanyId = int.Parse(User.FindFirst("CompanyId").Value);
+            }
+            catch (Exception) { return RedirectToAction(nameof(Error), new { _Message = "Login Necessário!" }); }
             // Find Reserve
             var _Reserve = _context.Class_Book.FirstOrDefault(m => m.Id == _ReserveID);
             // Find HOSPEDE
@@ -330,7 +333,7 @@ namespace RCA.Controllers
 
                 Reserve_ID = _Reserve.Id,
                 Reserve_BookName = string.Format("{0} - {1}", _GroupLevel.Name, _GroupLevelItem.Name),
-                Reserve_Date = string.Format("Entrada: {0}, Saída: {1}",_Reserve.Book_DateIn.ToString("dd/MM"), _Reserve.Book_DateOut.ToString("dd/MM")),
+                Reserve_Date = string.Format("Entrada: {0}, Saída: {1}", _Reserve.Book_DateIn.ToString("dd/MM"), _Reserve.Book_DateOut.ToString("dd/MM")),
                 Reserve_GuestName = string.Format("{0} ({1}) {2}", _Guest.Name, _Guest.City, _Guest.Phone1),
                 Reserve_Occupants = string.Format("Adulto(s) {0}, Criança(s) {1}, PCD? {2}, PET? {3}", _Reserve.Book_AdultsNum, _Reserve.Book_KidsNum, _Reserve.Book_PCD, _Reserve.Book_PET),
 
@@ -341,6 +344,7 @@ namespace RCA.Controllers
             // Find ExtractItem
             if (_ExtratoID == 0)
             {
+                //CONSUMO
                 _Services.Consumo_ExtractID = 0;
                 _Services.Consumo_StatusId = BookItemStatus.Consumido;
                 _Services.Consumo_Date = DateTime.Today.ToString("dd/MM/yyyy");
@@ -348,98 +352,67 @@ namespace RCA.Controllers
                 _Services.Consumo_GroupLevelItemID = 0;
                 _Services.Consumo_NAME = "";
                 _Services.Consumo_QtUnit = 0;
+                _Services.Consumo_VlUnit_VIEW = "R$ 0";
                 _Services.Consumo_VlUnit = 0;
                 _Services.Consumo_VlTotal_VIEW = "R$ 0";
+                _Services.Consumo_VlTotal = 0;
+                _Services.Consumo_PercDiscount = 0;
+                _Services.Consumo_VlDiscount_VIEW = "R$ 0";
                 _Services.Consumo_VlDiscount = 0;
                 _Services.Consumo_VlFinal_VIEW = "R$ 0";
                 _Services.Consumo_OBS = "";
 
-                _Services.Entreteniment_ExtractID = 0;
-                _Services.Entreteniment_StatusId = BookItemStatus.Reservado;
-                _Services.Entreteniment_Date = DateTime.Today.ToString("dd/MM/yyyy");
-                _Services.Entreteniment_Time = DateTime.Today.ToString("HH:mm");
-                _Services.Entreteniment_GroupLevelID = 0;
-                _Services.Entreteniment_GroupLevelItemID = 0;
-                _Services.Entreteniment_NAME = "";
-                _Services.Entreteniment_QtUnit = 0;
-                _Services.Entreteniment_VlUnit = 0;
-                _Services.Entreteniment_VlTotal_VIEW = "R$ 0";
-                _Services.Entreteniment_VlDiscount = 0;
-                _Services.Entreteniment_VlFinal_VIEW = "R$ 0";
-                _Services.Entreteniment_OBS = "";
-            }
-            else
-            {
-                var _Extrato = _context.Class_BookItem.FirstOrDefault(m => m.Id == _ExtratoID);
+                var _Item = from s in _context.Class_GroupLevel
+                            where s.CompanyId == _CompanyId && s.StatusId == GroupLevelStatus.Ativo && s.GroupId == GroupType.CONSUMO
+                            orderby s.Name
+                            select new { s.Id, s.Name };
+                ViewBag.Consumo_GroupLevel_LIST = new SelectList(_Item, "Id", "Name");
+                ViewBag.Consumo_GroupLevelItem_LIST = new List<Class_Service_LIST> { new Class_Service_LIST { ID = 0, Name = "Selecione GRUPO..." } };
 
-                _GroupLevelItem = _context.Class_GroupLevelItem.FirstOrDefault(s => s.Id == _Extrato.GroupLevelItemId);
-                _GroupLevel = _context.Class_GroupLevel.FirstOrDefault(s => s.Id == _GroupLevelItem.GroupLevelId);
+                //ENTRETENIMENTO
+                _Services.Entretenimento_ExtractID = 0;
+                _Services.Entretenimento_StatusId = BookItemStatus.Reservado;
+                _Services.Entretenimento_Date = DateTime.Today.AddDays(1).ToString("dd/MM/yyyy");
+                _Services.Entretenimento_Time = "14:00";
+                _Services.Entretenimento_GroupLevelID = 0;
+                _Services.Entretenimento_GroupLevelItemID = 0;
+                _Services.Entretenimento_NAME = "";
+                _Services.Entretenimento_QtUnit = 0;
+                _Services.Entretenimento_VlUnit_VIEW = "R$ 0";
+                _Services.Entretenimento_VlUnit = 0;
+                _Services.Entretenimento_VlTotal_VIEW = "R$ 0";
+                _Services.Entretenimento_VlTotal = 0;
+                _Services.Entretenimento_PercDiscount = 0;
+                _Services.Entretenimento_VlDiscount_VIEW = "R$ 0";
+                _Services.Entretenimento_VlDiscount = 0;
+                _Services.Entretenimento_VlFinal_VIEW = "R$ 0";
+                _Services.Entretenimento_OBS = "";
 
-                _Services.TabDefault = _GroupLevel.GroupId.GetHashCode();
+                _Item = from s in _context.Class_GroupLevel
+                        where s.CompanyId == _CompanyId && s.StatusId == GroupLevelStatus.Ativo && s.GroupId == GroupType.ENTRETENIMENTO
+                        orderby s.Name
+                        select new { s.Id, s.Name };
+                ViewBag.Entretenimento_GroupLevel_LIST = new SelectList(_Item, "Id", "Name");
+                ViewBag.Entretenimento_GroupLevelItem_LIST = new List<Class_Service_LIST> { new Class_Service_LIST { ID = 0, Name = "Selecione GRUPO..." } };
 
-                if (_Services.TabDefault == 3)
-                {
-                    _Services.Consumo_ExtractID = _Extrato.Id;
-                    _Services.Consumo_StatusId = _Extrato.StatusId;
-                    _Services.Consumo_Date = _Extrato.DateConsume.ToString("dd/MM/yyyy");
-                    _Services.Consumo_GroupLevelID = _GroupLevel.Id;
-                    _Services.Consumo_GroupLevelItemID = _GroupLevelItem.Id;
-                    _Services.Consumo_NAME = _Extrato.SeasonDesciption;
-                    _Services.Consumo_QtUnit = _Extrato.SeasonUnit;
-                    _Services.Consumo_VlUnit = _Extrato.SeasonValue;
-                    double _VlTotal = _Extrato.SeasonUnit * _Extrato.SeasonValue;
-                    _Services.Consumo_VlTotal_VIEW = _VlTotal.ToString("C2");
-                    _Services.Consumo_VlDiscount = _Extrato.SeasonDiscountValue;
-                    double _VlFinal = _VlTotal - _Extrato.SeasonDiscountValue;
-                    _Services.Consumo_VlFinal_VIEW = _VlFinal.ToString("C2");
-                    _Services.Consumo_OBS = _Extrato.OBS;
-                    //
-                    var _Item = new Class_Service_LIST()
-                    {
-                        ID = _GroupLevel.Id,
-                        Name = _GroupLevel.Name
-                    };
-                    _Services.Consumo_GroupLevel_LIST.Add(_Item);
-                    //
-                    _Item = new Class_Service_LIST()
-                    {
-                        ID = _GroupLevelItem.Id,
-                        Name = _GroupLevelItem.Name
-                    };
-                    _Services.Consumo_GroupLevelItem_LIST.Add(_Item);
-                }
-                else
-                {
-                    _Services.Entreteniment_ExtractID = _Extrato.Id;
-                    _Services.Entreteniment_StatusId = _Extrato.StatusId;
-                    _Services.Entreteniment_Date = _Extrato.DateConsume.ToString("dd/MM/yyyy");
-                    _Services.Entreteniment_Time = _Extrato.DateConsume.ToString("HH:mm");
-                    _Services.Entreteniment_GroupLevelID = _GroupLevel.Id;
-                    _Services.Entreteniment_GroupLevelItemID = _GroupLevelItem.Id;
-                    _Services.Entreteniment_NAME = _Extrato.SeasonDesciption;
-                    _Services.Entreteniment_QtUnit = _Extrato.SeasonUnit;
-                    _Services.Entreteniment_VlUnit = _Extrato.SeasonValue;
-                    double _VlTotal = _Extrato.SeasonUnit * _Extrato.SeasonValue;
-                    _Services.Entreteniment_VlTotal_VIEW = _VlTotal.ToString("C2");
-                    _Services.Entreteniment_VlDiscount = _Extrato.SeasonDiscountValue;
-                    double _VlFinal = _VlTotal - _Extrato.SeasonDiscountValue;
-                    _Services.Entreteniment_VlFinal_VIEW = _VlFinal.ToString("C2");
-                    _Services.Entreteniment_OBS = _Extrato.OBS;
-                    //
-                    var _Item = new Class_Service_LIST()
-                    {
-                        ID = _GroupLevel.Id,
-                        Name = _GroupLevel.Name
-                    };
-                    _Services.Entreteniment_GroupLevel_LIST.Add(_Item);
-                    //
-                    _Item = new Class_Service_LIST()
-                    {
-                        ID = _GroupLevelItem.Id,
-                        Name = _GroupLevelItem.Name
-                    };
-                    _Services.Entreteniment_GroupLevelItem_LIST.Add(_Item);
-                }
+                //AJUSTE PERIODO
+                var _ReserveItem = _context.Class_BookItem.FirstOrDefault(m => m.BookId == _ReserveID && m.GroupLevelItemId == _Reserve.GroupLevelItemId);
+                _Services.Ajuste_ExtractID = _ReserveItem.Id;
+                _Services.Ajuste_SeasonValue = _ReserveItem.SeasonValue;
+                _Services.Ajuste_SeasonPercDiscount = _ReserveItem.SeasonDiscountPercent;
+                _Services.Ajuste_SeasonAdvance = _ReserveItem.SeasonAdvance;
+
+                _Services.Ajuste_DateIn = _Reserve.Book_DateIn.ToString("dd/MM/yyyy");
+                _Services.Ajuste_DateOut = _Reserve.Book_DateOut.ToString("dd/MM/yyyy");
+                _Services.Ajuste_Days_VIEW = _ReserveItem.SeasonUnit.ToString();
+                var _VlTotal = _ReserveItem.SeasonUnit * _ReserveItem.SeasonValue;
+                _Services.Ajuste_VlTotal_VIEW = _VlTotal.ToString("C2");
+                _Services.Ajuste_VlDiscount_VIEW = _ReserveItem.SeasonDiscountValue.ToString("C2");
+                _Services.Ajuste_VlAdvance_VIEW = _ReserveItem.SeasonAdvance.ToString("C2");
+                var _VlFinal = _VlTotal - _ReserveItem.SeasonDiscountValue - _ReserveItem.SeasonAdvance;
+                _Services.Ajuste_VlFinal_VIEW = _VlFinal.ToString("C2");
+                _Services.Ajuste_OBS = _ReserveItem.OBS;
+
             }
             return View(_Services);
         }
@@ -464,8 +437,17 @@ namespace RCA.Controllers
         // Function AJAX
         public JsonResult FIND_SEASON(int _SeasonId, int _GroupLevelItemId)
         {
+            var _GroupLevelItem = _context.Class_GroupLevelItem.FirstOrDefault(m => m.Id == _GroupLevelItemId);
+            var _GroupLevel = _context.Class_GroupLevel.FirstOrDefault(m => m.Id == _GroupLevelItem.GroupLevelId);
             var _SeasonFound = _context.Class_SeasonItem.FirstOrDefault(m => m.SeasonId == _SeasonId && m.GroupLevelItemId == _GroupLevelItemId);
-            return Json(_SeasonFound);
+
+            var _Return = new Class_Service_LIST()
+            {
+                Name = string.Format("{0} - {1}", _GroupLevel.Name, _GroupLevelItem.Name),
+                Tax = _SeasonFound.Tax
+            };
+
+            return Json(_Return);
         }
         public JsonResult FIND_CHANNEL(int _ChannelId)
         {
@@ -477,41 +459,12 @@ namespace RCA.Controllers
             var _UserFound = _context.Class_Guest.FirstOrDefault(m => m.CPF == _CPF);
             return Json(_UserFound);
         }
-        public JsonResult FIND_GroupLevel(int _GroupId, int _GroupLevelID)
+        public JsonResult FIND_GroupLevelItem(int _GroupLevelID)
         {
-            var _GroupLevel = new List<Class_GroupLevel>();
-            if (_GroupLevelID == 0)
-            {
-                var _CompanyId = int.Parse(User.FindFirst("CompanyId").Value);
-                _GroupLevel = (List<Class_GroupLevel>)from s in _context.Class_GroupLevel
-                                                      where s.CompanyId == _CompanyId && s.StatusId == GroupLevelStatus.Ativo && s.GroupId == (GroupType)_GroupId
-                                                      orderby s.Name
-                                                      select new { s.Id, s.Name };
-            }
-            else
-            {
-                _GroupLevel = (List<Class_GroupLevel>)from s in _context.Class_GroupLevel
-                                                      where s.Id == _GroupLevelID
-                                                      select new { s.Id, s.Name };
-            }
-            return Json(_GroupLevel);
-        }
-        public JsonResult FIND_GroupLevelItem(int _GroupLevelID, int _GroupLevelItemID)
-        {
-            var _GroupLevelItem = new List<Class_GroupLevelItem>();
-            if (_GroupLevelItemID == 0)
-            {
-                _GroupLevelItem = (List<Class_GroupLevelItem>)from s in _context.Class_GroupLevelItem
-                                                              where s.GroupLevelId == _GroupLevelID
-                                                              orderby s.Name
-                                                              select new { s.Id, s.Name };
-            }
-            else
-            {
-                _GroupLevelItem = (List<Class_GroupLevelItem>)from s in _context.Class_GroupLevelItem
-                                                              where s.Id == _GroupLevelItemID
-                                                              select new { s.Id, s.Name };
-            }
+            var _GroupLevelItem = (from s in _context.Class_GroupLevelItem
+                                   where s.GroupLevelId == _GroupLevelID
+                                   orderby s.Name
+                                   select new { s.Id, s.Name });
             return Json(_GroupLevelItem);
         }
     }

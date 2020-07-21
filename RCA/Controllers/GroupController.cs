@@ -24,7 +24,12 @@ namespace RCA.Controllers
         // Index
         public ActionResult Index(GroupType _GroupId)
         {
-            var _CompanyId = int.Parse(User.FindFirst("CompanyId").Value);
+            int _CompanyId;
+            try
+            {
+                _CompanyId = int.Parse(User.FindFirst("CompanyId").Value);
+            }
+            catch (Exception) { return RedirectToAction(nameof(Error), new { _Message = "Login Necessário!" }); }
             //
             Class_Cadaster _Cadaster = new Class_Cadaster
             {
@@ -182,8 +187,13 @@ namespace RCA.Controllers
         //Create - GroupLevel
         public IActionResult CreateGL(GroupType _GroupId)
         {
-            var _CompanyId = int.Parse(User.FindFirst("CompanyId").Value);
-
+            int _CompanyId;
+            try
+            {
+                _CompanyId = int.Parse(User.FindFirst("CompanyId").Value);
+            }
+            catch (Exception) { return RedirectToAction(nameof(Error), new { _Message = "Login Necessário!" }); }
+            //
             Class_GroupLevel _GroupLevel = new Class_GroupLevel
             {
                 Id = 0,

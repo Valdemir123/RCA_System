@@ -24,8 +24,13 @@ namespace RCA.Controllers
         // GET: Channel
         public async Task<IActionResult> Index()
         {
-            var _CompanyId = int.Parse(User.FindFirst("CompanyId").Value);
-
+            int _CompanyId;
+            try
+            {
+                _CompanyId = int.Parse(User.FindFirst("CompanyId").Value);
+            }
+            catch (Exception) { return RedirectToAction(nameof(Error), new { _Message = "Login Necessário!" }); }
+            //
             var _Channel = from s
                            in _context.Class_Channel
                            where s.CompanyId == _CompanyId
@@ -58,8 +63,13 @@ namespace RCA.Controllers
         // GET: Channel/Create
         public IActionResult Create()
         {
-            var _CompanyId = int.Parse(User.FindFirst("CompanyId").Value);
-
+            int _CompanyId;
+            try
+            {
+                _CompanyId = int.Parse(User.FindFirst("CompanyId").Value);
+            }
+            catch (Exception) { return RedirectToAction(nameof(Error), new { _Message = "Login Necessário!" }); }
+            //
             Class_Channel _Channel = new Class_Channel
             {
                 Id = 0,

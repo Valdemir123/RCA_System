@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Security.Policy;
 
 namespace RCA.Models
 {
     public class Class_Services
     {
-       
         public int TabDefault { get; set; }
+        public string TabInput { get; set; }
 
         public int Reserve_ID { get; set; }
         public string Reserve_BookName { get; set; }
@@ -29,12 +30,11 @@ namespace RCA.Models
         [Required]
         [Display(Name = "Grupo")]
         public int Consumo_GroupLevelID { get; set; }
-        public List<Class_Service_LIST> Consumo_GroupLevel_LIST { get; set; } = new List<Class_Service_LIST>();
 
         [Required]
         [Display(Name = "Item")]
         public int Consumo_GroupLevelItemID { get; set; }
-        public List<Class_Service_LIST> Consumo_GroupLevelItem_LIST { get; set; } = new List<Class_Service_LIST>();
+
         public string Consumo_NAME { get; set; }
 
         [Required]
@@ -46,16 +46,20 @@ namespace RCA.Models
         [Range(1, 100,ErrorMessage ="{0}: minimo {1}, Máximo {2}")]
         public int Consumo_QtUnit { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:C2}")]
+        [Display(Name = "Valor Unid")]
+        public string Consumo_VlUnit_VIEW { get; set; }
         public double Consumo_VlUnit { get; set; }
 
         [Display(Name = "Valor Total")]
         public string Consumo_VlTotal_VIEW { get; set; }
+        public double Consumo_VlTotal { get; set; }
 
         [Required]
+        [Display(Name = "(%)")]
+        [Range(0, 50, ErrorMessage = "{0}: minimo {1}, Máximo {2}")]
+        public int Consumo_PercDiscount { get; set; }
         [Display(Name = "(-) Desconto")]
-        [DisplayFormat(DataFormatString = "{0:C2}")]
-        [Range(0, double.PositiveInfinity)]
+        public string Consumo_VlDiscount_VIEW { get; set; }
         public double Consumo_VlDiscount { get; set; }
 
         [Display(Name = "Valor Final")]
@@ -68,55 +72,92 @@ namespace RCA.Models
 
 
         //ENTRETENIMENTO
-        public int Entreteniment_ExtractID { get; set; }
-        public BookItemStatus Entreteniment_StatusId { get; set; }
+        public int Entretenimento_ExtractID { get; set; }
+        public BookItemStatus Entretenimento_StatusId { get; set; }
 
         [Required]
         [Display(Name = "Grupo")]
-        public int Entreteniment_GroupLevelID { get; set; }
-        public List<Class_Service_LIST> Entreteniment_GroupLevel_LIST { get; set; } = new List<Class_Service_LIST>();
+        public int Entretenimento_GroupLevelID { get; set; }
 
         [Required]
         [Display(Name = "Item")]
-        public int Entreteniment_GroupLevelItemID { get; set; }
-        public List<Class_Service_LIST> Entreteniment_GroupLevelItem_LIST { get; set; } = new List<Class_Service_LIST>();
-        public string Entreteniment_NAME { get; set; }
+        public int Entretenimento_GroupLevelItemID { get; set; }
+
+        public string Entretenimento_NAME { get; set; }
 
         [Required]
         [Display(Name = "Data")]
-        public string Entreteniment_Date { get; set; }
-        public string Entreteniment_Time { get; set; }
+        public string Entretenimento_Date { get; set; }
+        [Required]
+        public string Entretenimento_Time { get; set; }
 
         [Required]
         [Display(Name = "Unid")]
         [Range(1, 100, ErrorMessage = "{0}: minimo {1}, Máximo {2}")]
-        public int Entreteniment_QtUnit { get; set; }
-        public double Entreteniment_VlUnit { get; set; }
+        public int Entretenimento_QtUnit { get; set; }
+
+        [Display(Name = "Valor Unid")]
+        public string Entretenimento_VlUnit_VIEW { get; set; }
+        public double Entretenimento_VlUnit { get; set; }
 
         [Display(Name = "Valor Total")]
-        public string Entreteniment_VlTotal_VIEW { get; set; }
+        public string Entretenimento_VlTotal_VIEW { get; set; }
+        public double Entretenimento_VlTotal { get; set; }
 
         [Required]
+        [Display(Name = "(%)")]
+        [Range(0, 50, ErrorMessage = "{0}: minimo {1}, Máximo {2}")]
+        public int Entretenimento_PercDiscount { get; set; }
         [Display(Name = "(-) Desconto")]
-        [Range(0, double.PositiveInfinity)]
-        public double Entreteniment_VlDiscount { get; set; }
+        public string Entretenimento_VlDiscount_VIEW { get; set; }
+        public double Entretenimento_VlDiscount { get; set; }
 
         [Display(Name = "Valor Final")]
-        public string Entreteniment_VlFinal_VIEW { get; set; }
+        public string Entretenimento_VlFinal_VIEW { get; set; }
 
         [Display(Name = "Observação")]
         [StringLength(100)]
-        public string Entreteniment_OBS { get; set; }
+        public string Entretenimento_OBS { get; set; }
 
 
 
+
+        //Ajuste Hospedagem
+        public int Ajuste_ExtractID { get; set; }
+        public double Ajuste_SeasonValue { get; set; }
+        public int Ajuste_SeasonPercDiscount { get; set; }
+        public double Ajuste_SeasonAdvance { get; set; }
+
+        [Display(Name = "Entrada")]
+        public string Ajuste_DateIn { get; set; }
+        [Required]
+        [Display(Name = "Nova Saída")]
+        public string Ajuste_DateOut { get; set; }
+        [Display(Name = "Dias")]
+        public string Ajuste_Days_VIEW { get; set; }
+        [Display(Name = "Valor Total")]
+        public string Ajuste_VlTotal_VIEW { get; set; }
+        [Display(Name = "(-) Desconto")]
+        public string Ajuste_VlDiscount_VIEW { get; set; }
+        [Display(Name = "Valor Entrada")]
+        public string Ajuste_VlAdvance_VIEW { get; set; }
+        [Display(Name = "Valor Final")]
+        public string Ajuste_VlFinal_VIEW { get; set; }
+
+        [Required]
+        [Display(Name = "Observação")]
+        [StringLength(100)]
+        public string Ajuste_OBS { get; set; }
+        
+        
+        
         //Check-out
         [Display(Name = "HOSPEDAGEM")]
         public List<Class_Service_Detail> CheckOut_Hospedagem_LIST { get; set; } = new List<Class_Service_Detail>();
         [Display(Name = "CONSUMO")]
         public List<Class_Service_Detail> CheckOut_Consumo_LIST { get; set; } = new List<Class_Service_Detail>();
         [Display(Name = "ENTRETENIMENTO")]
-        public List<Class_Service_Detail> CheckOut_Entreten_LIST { get; set; } = new List<Class_Service_Detail>();
+        public List<Class_Service_Detail> CheckOut_Entretenimento_LIST { get; set; } = new List<Class_Service_Detail>();
 
         [Display(Name = "Total")]
         public string CheckOut_Total_VIEW { get; set; }
@@ -142,30 +183,7 @@ namespace RCA.Models
 
 
 
-        //Ajuste Hospedagem
-        [Required]
-        public string Ajuste_AJU_DateOUT { get; set; }
-        public int Ajuste_AJU_DateOUT_Days { get; set; }
-        public string Ajuste_TOT_DateOUT_Days_VIEW { get; set; }
-
-        public string Ajuste_ATU_Diaria_VIEW { get; set; }
-        public string Ajuste_TOT_Diaria_VIEW { get; set; }
-
-        public string Ajuste_ATU_Discount_VIEW { get; set; }
-        public string Ajuste_TOT_Discount_VIEW { get; set; }
-
-        [Required]
-        public double Ajuste_AJU_Input { get; set; }
-        public string Ajuste_ATU_Input_VIEW { get; set; }
-        public string Ajuste_TOT_Input_VIEW { get; set; }
-
-        public string Ajuste_ATU_Payment_VIEW { get; set; }
-        public string Ajuste_TOT_Payment_VIEW { get; set; }
-
-        [Required]
-        [Display(Name = "Observação")]
-        [StringLength(100)]
-        public string Ajuste_OBS { get; set; }
+        
 
     }
 
@@ -179,6 +197,7 @@ namespace RCA.Models
     {
         public int ID { get; set; }
         public string Name { get; set; }
+        public double Tax { get; set; }
     }
 
     public class Class_Service_Detail

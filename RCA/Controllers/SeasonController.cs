@@ -25,8 +25,13 @@ namespace RCA.Controllers
         // GET: Channel
         public async Task<IActionResult> Index()
         {
-            var _CompanyId = int.Parse(User.FindFirst("CompanyId").Value);
-
+            int _CompanyId;
+            try
+            {
+                _CompanyId = int.Parse(User.FindFirst("CompanyId").Value);
+            }
+            catch (Exception) { return RedirectToAction(nameof(Error), new { _Message = "Login Necessário!" }); }
+            //
             var _Season = from s
                           in _context.Class_Season
                           where s.CompanyId == _CompanyId
@@ -41,9 +46,14 @@ namespace RCA.Controllers
         // GET: Price LIST
         public IActionResult PriceList(int _SeasonId)
         {
-            var _CompanyId = int.Parse(User.FindFirst("CompanyId").Value);
+            int _CompanyId;
+            try
+            {
+                _CompanyId = int.Parse(User.FindFirst("CompanyId").Value);
+            }
+            catch (Exception) { return RedirectToAction(nameof(Error), new { _Message = "Login Necessário!" }); }
+            //
             var _SeasonREL = new List<Class_SeasonREL>();
-
             //GroupLevel
             var _GroupLevel = from s in _context.Class_GroupLevel
                               where s.CompanyId == _CompanyId && s.StatusId == GroupLevelStatus.Ativo
@@ -196,15 +206,20 @@ namespace RCA.Controllers
                 }
                 _context.SaveChanges();
             }
-            return RedirectToAction(nameof(PriceList), new { _SeasonId = _SeasonId });
+            return RedirectToAction(nameof(PriceList), new { _SeasonId });
         }
 
 
         // GET: Create
         public IActionResult Create()
         {
-            var _CompanyId = int.Parse(User.FindFirst("CompanyId").Value);
-
+            int _CompanyId;
+            try
+            {
+                _CompanyId = int.Parse(User.FindFirst("CompanyId").Value);
+            }
+            catch (Exception) { return RedirectToAction(nameof(Error), new { _Message = "Login Necessário!" }); }
+            //
             Class_Season _Season = new Class_Season
             {
                 Id = 0,

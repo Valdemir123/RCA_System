@@ -15,7 +15,7 @@
                 <div class="col-sm-5 col-md-3 mb-5" style="border:double">
                     <p class="form-control" style="background-color:ButtonFace">@_room.Item_Name <text style="color:brown"> @_room.Reserve_StatusName </text></p>
 
-                    @if (@_room.Reserve_Id == 0 || @_room.Reserve_StatusId == 1)
+                    @if (@_room.Reserve_Id == 0 || @_room.Reserve_StatusId == 2)
                     {
                         <p style="font-size: 11px; color: green">@_room.Reserve_Format</p>
                         <div class="col-md-6" style="font-size: 11px; color: green">

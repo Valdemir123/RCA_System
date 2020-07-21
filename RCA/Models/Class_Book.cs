@@ -7,8 +7,8 @@ namespace RCA.Models
 {
     public enum BookStatus : int
     {
-        Reservado = 1,
-        EmUso = 2,
+        EmUso = 1,
+        Reservado = 2,
         Finalizado = 3,
         Cancelado = 4
     }
