@@ -1,10 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Policy;
 
 namespace RCA.Models
 {
+    public enum Services_Checkout_PayForm : int
+    {
+        Credito = 1,
+        Debito = 2,
+        Cheque = 3,
+        Dinheiro = 4,
+        Outro = 0
+    }
+    [DefaultValue(0)]
+
     public class Class_Services
     {
         public int TabDefault { get; set; }
@@ -43,7 +54,7 @@ namespace RCA.Models
 
         [Required]
         [Display(Name = "Unid")]
-        [Range(1, 100,ErrorMessage ="{0}: minimo {1}, Máximo {2}")]
+        [Range(1, 100, ErrorMessage = "{0}: minimo {1}, Máximo {2}")]
         public int Consumo_QtUnit { get; set; }
 
         [Display(Name = "Valor Unid")]
@@ -124,8 +135,9 @@ namespace RCA.Models
 
         //Ajuste Hospedagem
         public int Ajuste_ExtractID { get; set; }
+        public int Ajuste_SeasonDays { get; set; }
         public double Ajuste_SeasonValue { get; set; }
-        public int Ajuste_SeasonPercDiscount { get; set; }
+        public double Ajuste_SeasonDiscountVALUE { get; set; }
         public double Ajuste_SeasonAdvance { get; set; }
 
         [Display(Name = "Entrada")]
@@ -133,13 +145,17 @@ namespace RCA.Models
         [Required]
         [Display(Name = "Nova Saída")]
         public string Ajuste_DateOut { get; set; }
-        [Display(Name = "Dias")]
+        [Display(Name = "Dia(s)")]
         public string Ajuste_Days_VIEW { get; set; }
         [Display(Name = "Valor Total")]
         public string Ajuste_VlTotal_VIEW { get; set; }
-        [Display(Name = "(-) Desconto")]
+        [Required]
+        [Display(Name = "(%)")]
+        [Range(0, 50, ErrorMessage = "{0}: minimo {1}, Máximo {2}")]
+        public int Ajuste_PercDiscount { get; set; }
+        [Display(Name = "Desconto (-)")]
         public string Ajuste_VlDiscount_VIEW { get; set; }
-        [Display(Name = "Valor Entrada")]
+        [Display(Name = "Adiantamento")]
         public string Ajuste_VlAdvance_VIEW { get; set; }
         [Display(Name = "Valor Final")]
         public string Ajuste_VlFinal_VIEW { get; set; }
@@ -148,9 +164,9 @@ namespace RCA.Models
         [Display(Name = "Observação")]
         [StringLength(100)]
         public string Ajuste_OBS { get; set; }
-        
-        
-        
+
+
+
         //Check-out
         [Display(Name = "HOSPEDAGEM")]
         public List<Class_Service_Detail> CheckOut_Hospedagem_LIST { get; set; } = new List<Class_Service_Detail>();
@@ -159,32 +175,18 @@ namespace RCA.Models
         [Display(Name = "ENTRETENIMENTO")]
         public List<Class_Service_Detail> CheckOut_Entretenimento_LIST { get; set; } = new List<Class_Service_Detail>();
 
-        [Display(Name = "Total")]
-        public string CheckOut_Total_VIEW { get; set; }
-        [Display(Name = "Desconto")]
-        public string CheckOut_Discount_VIEW { get; set; }
         [Display(Name = "TOTAL A PAGAR")]
         public string CheckOut_APagar_VIEW { get; set; }
+        public double CheckOut_APagar { get; set; }
 
         [Required]
         [Display(Name = "Forma de Pagamento")]
         public string CheckOut_PayForm { get; set; }
-        public List<string> CheckOut_PayForm_LIST { get; set; }
 
         [Required]
-        [Display(Name = "Complemento")]
-        [StringLength(30)]
-        public string CheckOut_PayText { get; set; }
-
-        [Required]
-        [Display(Name = "Observação")]
+        [Display(Name = "Informação do Pagamento")]
         [StringLength(100)]
         public string CheckOut_OBS { get; set; }
-
-
-
-        
-
     }
 
     public class Class_ServiceExtract
@@ -203,10 +205,7 @@ namespace RCA.Models
     public class Class_Service_Detail
     {
         public string DESC { get; set; }
-        public string UNID { get; set; }
-        public string VALOR { get; set; }
-        public string DESCONTO { get; set; }
-        public string ENTRADA { get; set; }
+        public string VALUE { get; set; }
     }
 
     public class Class_Service_History

@@ -22,13 +22,10 @@ namespace RCA.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             int _CompanyId;
-            try
-            {
-                _CompanyId = int.Parse(User.FindFirst("CompanyId").Value);
-            }
+            try { _CompanyId = int.Parse(User.FindFirst("CompanyId").Value); }
             catch (Exception) { return RedirectToAction(nameof(Error), new { _Message = "Login Necessário!" }); }
             //
             var _Reception = new List<Class_ReceptionBOOK>();
@@ -117,7 +114,7 @@ namespace RCA.Controllers
             }
 
             //
-            return View(_Reception);
+            return View(await _Reception.ToAsyncEnumerable().ToList());
         }
 
         // CHECKin
@@ -159,10 +156,7 @@ namespace RCA.Controllers
             };
             //
             int _CompanyId;
-            try
-            {
-                _CompanyId = int.Parse(User.FindFirst("CompanyId").Value);
-            }
+            try { _CompanyId = int.Parse(User.FindFirst("CompanyId").Value); }
             catch (Exception) { return RedirectToAction(nameof(Error), new { _Message = "Login Necessário!" }); }
             //
             ViewBag.Season_LIST = from s in _context.Class_Season
@@ -259,6 +253,9 @@ namespace RCA.Controllers
                 _Book = _context.Class_Book.Where(m => m.GroupLevelItemId == _Checkin.GroupLevelItem_Id && m.StatusId == BookStatus.EmUso).FirstOrDefault();
 
                 //Services
+                var _VlTotal = _Checkin.Book_PayTax * _Checkin.Book_Days;
+                var _VlDiscount = _VlTotal * ((double)_Checkin.Book_PayDiscount / 100);
+                var _VlFinal = _VlTotal - _VlDiscount - _Checkin.Book_PayCash;
                 var _BookItem = new Class_BookItem()
                 {
                     Id = 0,
@@ -272,11 +269,15 @@ namespace RCA.Controllers
                     SeasonUnit = _Checkin.Book_Days,
                     SeasonValue = _Checkin.Book_PayTax,
 
-                    SeasonDiscountValue = (_Checkin.Book_PayTax * _Checkin.Book_Days) * ((double)_Checkin.Book_PayDiscount / 100),
+                    SeasonDiscountValue = _VlDiscount,
                     SeasonDiscountPercent = _Checkin.Book_PayDiscount,
                     SeasonAdvance = _Checkin.Book_PayCash,
 
-                    OBS = ""
+                    OBS = string.Format("Parâmetros iniciais: Entrada ({0}), Saída ({1}), {2} dia(s), Vl.Pagar {3}",
+                    _Book.Book_DateIn.ToString("dd/MM"),
+                    _Book.Book_DateOut.ToString("dd/MM"),
+                    _Checkin.Book_Days, _VlFinal.ToString("C2"))
+
                 };
                 _context.Add(_BookItem);
                 _context.SaveChanges();
@@ -286,10 +287,7 @@ namespace RCA.Controllers
 
             //
             int _CompanyId;
-            try
-            {
-                _CompanyId = int.Parse(User.FindFirst("CompanyId").Value);
-            }
+            try { _CompanyId = int.Parse(User.FindFirst("CompanyId").Value); }
             catch (Exception) { return RedirectToAction(nameof(Error), new { _Message = "Login Necessário!" }); }
             //
             ViewBag.Season_LIST = from s in _context.Class_Season
@@ -310,12 +308,8 @@ namespace RCA.Controllers
         //SERVICE
         public IActionResult SERVICES(int _ReserveID, int _ExtratoID)
         {
-            //
             int _CompanyId;
-            try
-            {
-                _CompanyId = int.Parse(User.FindFirst("CompanyId").Value);
-            }
+            try { _CompanyId = int.Parse(User.FindFirst("CompanyId").Value); }
             catch (Exception) { return RedirectToAction(nameof(Error), new { _Message = "Login Necessário!" }); }
             // Find Reserve
             var _Reserve = _context.Class_Book.FirstOrDefault(m => m.Id == _ReserveID);
@@ -397,23 +391,229 @@ namespace RCA.Controllers
 
                 //AJUSTE PERIODO
                 var _ReserveItem = _context.Class_BookItem.FirstOrDefault(m => m.BookId == _ReserveID && m.GroupLevelItemId == _Reserve.GroupLevelItemId);
-                _Services.Ajuste_ExtractID = _ReserveItem.Id;
-                _Services.Ajuste_SeasonValue = _ReserveItem.SeasonValue;
-                _Services.Ajuste_SeasonPercDiscount = _ReserveItem.SeasonDiscountPercent;
-                _Services.Ajuste_SeasonAdvance = _ReserveItem.SeasonAdvance;
-
-                _Services.Ajuste_DateIn = _Reserve.Book_DateIn.ToString("dd/MM/yyyy");
-                _Services.Ajuste_DateOut = _Reserve.Book_DateOut.ToString("dd/MM/yyyy");
-                _Services.Ajuste_Days_VIEW = _ReserveItem.SeasonUnit.ToString();
                 var _VlTotal = _ReserveItem.SeasonUnit * _ReserveItem.SeasonValue;
-                _Services.Ajuste_VlTotal_VIEW = _VlTotal.ToString("C2");
-                _Services.Ajuste_VlDiscount_VIEW = _ReserveItem.SeasonDiscountValue.ToString("C2");
-                _Services.Ajuste_VlAdvance_VIEW = _ReserveItem.SeasonAdvance.ToString("C2");
                 var _VlFinal = _VlTotal - _ReserveItem.SeasonDiscountValue - _ReserveItem.SeasonAdvance;
-                _Services.Ajuste_VlFinal_VIEW = _VlFinal.ToString("C2");
-                _Services.Ajuste_OBS = _ReserveItem.OBS;
+                if (_ReserveItem != null)
+                {
+                    _Services.Ajuste_ExtractID = _ReserveItem.Id;
+                    _Services.Ajuste_SeasonDays = _ReserveItem.SeasonUnit;
+                    _Services.Ajuste_SeasonValue = _ReserveItem.SeasonValue;
+                    _Services.Ajuste_SeasonAdvance = _ReserveItem.SeasonAdvance;
+                    _Services.Ajuste_SeasonDiscountVALUE = _ReserveItem.SeasonDiscountValue;
 
+                    _Services.Ajuste_DateIn = _Reserve.Book_DateIn.ToString("dd/MM/yyyy");
+                    _Services.Ajuste_DateOut = _Reserve.Book_DateOut.ToString("dd/MM/yyyy");
+                    _Services.Ajuste_Days_VIEW = _ReserveItem.SeasonUnit.ToString();
+                    _Services.Ajuste_VlTotal_VIEW = _VlTotal.ToString("C2");
+
+                    _Services.Ajuste_PercDiscount = _ReserveItem.SeasonDiscountPercent;
+                    _Services.Ajuste_VlDiscount_VIEW = _ReserveItem.SeasonDiscountValue.ToString("C2");
+                    _Services.Ajuste_VlAdvance_VIEW = _ReserveItem.SeasonAdvance.ToString("C2");
+                    _Services.Ajuste_VlFinal_VIEW = _VlFinal.ToString("C2");
+                    _Services.Ajuste_OBS = "";
+                }
+
+                //CHECK-out
+                // hospedagem
+                var _Detail = new Class_Service_Detail()
+                {
+                    DESC = "Vl.Total",
+                    VALUE = _VlTotal.ToString("C2")
+                };
+                _Services.CheckOut_Hospedagem_LIST.Add(_Detail);
+                if (_ReserveItem.SeasonDiscountValue != 0)
+                {
+                    _Detail = new Class_Service_Detail()
+                    {
+                        DESC = string.Format("({0} %) desc.", _ReserveItem.SeasonDiscountPercent),
+                        VALUE = _ReserveItem.SeasonDiscountValue.ToString("C2")
+                    };
+                    _Services.CheckOut_Hospedagem_LIST.Add(_Detail);
+                }
+                if (_ReserveItem.SeasonAdvance != 0)
+                {
+                    _Detail = new Class_Service_Detail()
+                    {
+                        DESC = "Adiant.",
+                        VALUE = _ReserveItem.SeasonAdvance.ToString("C2")
+                    };
+                    _Services.CheckOut_Hospedagem_LIST.Add(_Detail);
+                }
+                if (_VlTotal != _VlFinal)
+                {
+                    _Detail = new Class_Service_Detail()
+                    {
+                        DESC = "Vl.Final",
+                        VALUE = _VlFinal.ToString("C2")
+                    };
+                    _Services.CheckOut_Hospedagem_LIST.Add(_Detail);
+                }
+                // consumo
+                var _Consumo = from s in _context.Class_BookItem
+                               join s2 in _context.Class_GroupLevelItem on s.GroupLevelItemId equals s2.Id
+                               join s3 in _context.Class_GroupLevel on s2.GroupLevelId equals s3.Id
+                               where s.BookId == _ReserveID && s3.GroupId == GroupType.CONSUMO
+                               group s by s.BookId into BookGroup
+                               select new { SomaTotal = BookGroup.Sum(f => f.SeasonValue * f.SeasonUnit), SomaDesc = BookGroup.Sum(f => f.SeasonDiscountValue) };
+                foreach (var _loop in _Consumo)
+                {
+                    _Detail = new Class_Service_Detail()
+                    {
+                        DESC = "Vl.Total",
+                        VALUE = _loop.SomaTotal.ToString("C2")
+                    };
+                    _Services.CheckOut_Consumo_LIST.Add(_Detail);
+                    //
+                    if (_loop.SomaDesc != 0)
+                    {
+                        var _PercDesc = Math.Round(_loop.SomaDesc / _loop.SomaTotal * 100, 1);
+                        _Detail = new Class_Service_Detail()
+                        {
+                            DESC = string.Format("({0} %) desc.", _PercDesc),
+                            VALUE = _loop.SomaDesc.ToString("C2")
+                        };
+                        _Services.CheckOut_Consumo_LIST.Add(_Detail);
+                        //
+                        var _vlTotal = _loop.SomaTotal - _loop.SomaDesc;
+                        _Detail = new Class_Service_Detail()
+                        {
+                            DESC = "Vl.Final",
+                            VALUE = _loop.SomaDesc.ToString("C2")
+                        };
+                        _Services.CheckOut_Consumo_LIST.Add(_Detail);
+                    }
+                }
+                // entretenimento
+                var _Entretenimento = from s in _context.Class_BookItem
+                                      join s2 in _context.Class_GroupLevelItem on s.GroupLevelItemId equals s2.Id
+                                      join s3 in _context.Class_GroupLevel on s2.GroupLevelId equals s3.Id
+                                      where s.BookId == _ReserveID && s3.GroupId == GroupType.ENTRETENIMENTO
+                                      group s by s.BookId into BookGroup
+                                      select new { SomaTotal = BookGroup.Sum(f => f.SeasonValue * f.SeasonUnit), SomaDesc = BookGroup.Sum(f => f.SeasonDiscountValue) };
+                foreach (var _loop in _Consumo)
+                {
+                    _Detail = new Class_Service_Detail()
+                    {
+                        DESC = "Vl.Total",
+                        VALUE = _loop.SomaTotal.ToString("C2")
+                    };
+                    _Services.CheckOut_Entretenimento_LIST.Add(_Detail);
+                    //
+                    if (_loop.SomaDesc != 0)
+                    {
+                        var _PercDesc = Math.Round(_loop.SomaDesc / _loop.SomaTotal * 100, 1);
+                        _Detail = new Class_Service_Detail()
+                        {
+                            DESC = string.Format("({0} %) desc.", _PercDesc),
+                            VALUE = _loop.SomaDesc.ToString("C2")
+                        };
+                        _Services.CheckOut_Entretenimento_LIST.Add(_Detail);
+                        //
+                        var _vlTotal = _loop.SomaTotal - _loop.SomaDesc;
+                        _Detail = new Class_Service_Detail()
+                        {
+                            DESC = "Vl.Final",
+                            VALUE = _loop.SomaDesc.ToString("C2")
+                        };
+                        _Services.CheckOut_Entretenimento_LIST.Add(_Detail);
+                    }
+                }
+                // Pay 
+                var _PayTotal = from s in _context.Class_BookItem
+                                where s.BookId == _ReserveID
+                                group s by s.BookId into BookGroup
+                                select new { SomaTotal = BookGroup.Sum(f => f.SeasonValue * f.SeasonUnit), SomaDesc = BookGroup.Sum(f => f.SeasonDiscountValue), SomaAdiant = BookGroup.Sum(f => f.SeasonAdvance) };
+                foreach (var _loop in _PayTotal)
+                {
+                    var _final = _loop.SomaTotal - _loop.SomaDesc - _loop.SomaAdiant;
+                    _Services.CheckOut_APagar = _final;
+                    _Services.CheckOut_APagar_VIEW = _final.ToString("C2");
+                }
+                ViewBag.CheckOut_PayForm_LIST = new SelectList(Enum.GetValues(typeof(Services_Checkout_PayForm)).Cast<Services_Checkout_PayForm>().ToList());
             }
+            //Extrato
+            var _Extrato = from s in _context.Class_BookItem
+                           where s.BookId == _ReserveID
+                           orderby s.DateConsume, s.GroupLevelItemId
+                           select s;
+            var _VlPagar = 0.0;
+            var _Date = _Reserve.Book_DateIn.AddDays(-1);
+            var _ItemExtrato = new Class_ServiceExtract();
+            foreach (var _Item in _Extrato)
+            {
+                if (_Date != _Item.DateConsume)
+                {
+                    _ItemExtrato = new Class_ServiceExtract()
+                    {
+                        ExtractTEXT = "",
+                        ExtractVALUE = ""
+                    };
+                    _Services.ExtractLIST.Add(_ItemExtrato);
+                    //
+                    _ItemExtrato = new Class_ServiceExtract()
+                    {
+                        ExtractTEXT = string.Format("==( {0} )==", _Item.DateConsume.ToString("dd/MM")),
+                        ExtractVALUE = ""
+                    };
+                    _Services.ExtractLIST.Add(_ItemExtrato);
+                    //
+                    _Date = _Item.DateConsume;
+                }
+                //
+                var _Total = _Item.SeasonValue * _Item.SeasonUnit;
+                _ItemExtrato = new Class_ServiceExtract()
+                {
+                    ExtractTEXT = _Item.SeasonDesciption,
+                    ExtractVALUE = _Total.ToString("C2")
+                };
+                _Services.ExtractLIST.Add(_ItemExtrato);
+                _VlPagar += _Total;
+                //
+                var _Discount = _Item.SeasonDiscountValue;
+                if (_Discount != 0)
+                {
+                    _ItemExtrato = new Class_ServiceExtract()
+                    {
+                        ExtractTEXT = string.Format("( {0} % ) desc.", _Item.SeasonDiscountPercent),
+                        ExtractVALUE = _Discount.ToString("C2")
+                    };
+                    _Services.ExtractLIST.Add(_ItemExtrato);
+                    _VlPagar -= _Discount;
+                }
+                var _Advance = _Item.SeasonAdvance;
+                if (_Advance != 0)
+                {
+                    _ItemExtrato = new Class_ServiceExtract()
+                    {
+                        ExtractTEXT = "Adiant.",
+                        ExtractVALUE = _Advance.ToString("C2")
+                    };
+                    _Services.ExtractLIST.Add(_ItemExtrato);
+                    _VlPagar -= _Advance;
+                }
+            }
+            //
+            _ItemExtrato = new Class_ServiceExtract()
+            {
+                ExtractTEXT = "",
+                ExtractVALUE = ""
+            };
+            _Services.ExtractLIST.Add(_ItemExtrato);
+            //
+            _ItemExtrato = new Class_ServiceExtract()
+            {
+                ExtractTEXT = "",
+                ExtractVALUE = "=========="
+            };
+            _Services.ExtractLIST.Add(_ItemExtrato);
+            //
+            _ItemExtrato = new Class_ServiceExtract()
+            {
+                ExtractTEXT = "Valor A PAGAR ->",
+                ExtractVALUE = _VlPagar.ToString("C2")
+            };
+            _Services.ExtractLIST.Add(_ItemExtrato);
+            //
             return View(_Services);
         }
 

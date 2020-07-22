@@ -25,10 +25,7 @@ namespace RCA.Controllers
         public async Task<IActionResult> Index()
         {
             int _CompanyId;
-            try
-            {
-                _CompanyId = int.Parse(User.FindFirst("CompanyId").Value);
-            }
+            try { _CompanyId = int.Parse(User.FindFirst("CompanyId").Value); }
             catch (Exception) { return RedirectToAction(nameof(Error), new { _Message = "Login Necessário!" }); }
             //
             var _Channel = from s
@@ -64,10 +61,7 @@ namespace RCA.Controllers
         public IActionResult Create()
         {
             int _CompanyId;
-            try
-            {
-                _CompanyId = int.Parse(User.FindFirst("CompanyId").Value);
-            }
+            try { _CompanyId = int.Parse(User.FindFirst("CompanyId").Value); }
             catch (Exception) { return RedirectToAction(nameof(Error), new { _Message = "Login Necessário!" }); }
             //
             Class_Channel _Channel = new Class_Channel

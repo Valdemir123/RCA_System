@@ -286,6 +286,10 @@
             $("#Book_DateOut").mask('00/00/0000');
             $("#Book_DateOut").change(function () { CalculoDiaria(); });
 
+            $("#Book_PayDiscount").mask("00", { reverse: true });
+
+            $("#Book_PayCash").mask("#,##0.00", { reverse: true });
+
             $("#Guest_CPF").mask('000.000.000-00');
             $("#btFIND_CPF").click(function () {
                 $.ajax({

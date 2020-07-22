@@ -26,10 +26,7 @@ namespace RCA.Controllers
         public async Task<IActionResult> Index()
         {
             int _CompanyId;
-            try
-            {
-                _CompanyId = int.Parse(User.FindFirst("CompanyId").Value);
-            }
+            try { _CompanyId = int.Parse(User.FindFirst("CompanyId").Value); }
             catch (Exception) { return RedirectToAction(nameof(Error), new { _Message = "Login Necessário!" }); }
             //
             var _Season = from s
@@ -47,10 +44,7 @@ namespace RCA.Controllers
         public IActionResult PriceList(int _SeasonId)
         {
             int _CompanyId;
-            try
-            {
-                _CompanyId = int.Parse(User.FindFirst("CompanyId").Value);
-            }
+            try { _CompanyId = int.Parse(User.FindFirst("CompanyId").Value); }
             catch (Exception) { return RedirectToAction(nameof(Error), new { _Message = "Login Necessário!" }); }
             //
             var _SeasonREL = new List<Class_SeasonREL>();
@@ -214,10 +208,7 @@ namespace RCA.Controllers
         public IActionResult Create()
         {
             int _CompanyId;
-            try
-            {
-                _CompanyId = int.Parse(User.FindFirst("CompanyId").Value);
-            }
+            try { _CompanyId = int.Parse(User.FindFirst("CompanyId").Value); }
             catch (Exception) { return RedirectToAction(nameof(Error), new { _Message = "Login Necessário!" }); }
             //
             Class_Season _Season = new Class_Season
