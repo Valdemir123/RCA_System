@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.Extensions.Logging;
 using RCA.Data;
 using RCA.Models;
 using RCA.Models.ViewModels;
@@ -101,7 +102,7 @@ namespace RCA.Controllers
                         {
                             var _ItemTour = new Class_ReceptionENTRETENIMENT()
                             {
-                                DayTime = string.Format("", _Tour.DateConsume.ToString("dd"), _Tour.DateConsume.ToString("HH:mm")),
+                                DayTime = string.Format("d{0} {1}", _Tour.DateConsume.ToString("dd"), _Tour.DateConsume.ToString("HH:mm")),
                                 Name = _Tour.Name
                             };
                             _GLIi.Entreteniment_LIST.Add(_ItemTour);
@@ -273,10 +274,12 @@ namespace RCA.Controllers
                     SeasonDiscountPercent = _Checkin.Book_PayDiscount,
                     SeasonAdvance = _Checkin.Book_PayCash,
 
-                    OBS = string.Format("Parâmetros iniciais: Entrada ({0}), Saída ({1}), {2} dia(s), Vl.Pagar {3}",
+                    OBS = string.Format("Check-in ({0}-{1}) {2}d, {3}, {4}% desc.",
                     _Book.Book_DateIn.ToString("dd/MM"),
                     _Book.Book_DateOut.ToString("dd/MM"),
-                    _Checkin.Book_Days, _VlFinal.ToString("C2"))
+                    _Checkin.Book_Days,
+                    _VlTotal.ToString("C2"),
+                    _Checkin.Book_PayDiscount)
 
                 };
                 _context.Add(_BookItem);
@@ -306,13 +309,13 @@ namespace RCA.Controllers
         }
 
         //SERVICE
-        public IActionResult SERVICES(int _ReserveID, int _ExtratoID)
+        public IActionResult SERVICES(int _BookID, int _ExtratoID)
         {
             int _CompanyId;
             try { _CompanyId = int.Parse(User.FindFirst("CompanyId").Value); }
             catch (Exception) { return RedirectToAction(nameof(Error), new { _Message = "Login Necessário!" }); }
             // Find Reserve
-            var _Reserve = _context.Class_Book.FirstOrDefault(m => m.Id == _ReserveID);
+            var _Reserve = _context.Class_Book.FirstOrDefault(m => m.Id == _BookID);
             // Find HOSPEDE
             var _Guest = _context.Class_Guest.FirstOrDefault(m => m.CPF == _Reserve.GuestCPF);
             // Find TEMPORADA
@@ -323,8 +326,6 @@ namespace RCA.Controllers
 
             var _Services = new Class_Services()
             {
-                TabDefault = 0,
-
                 Reserve_ID = _Reserve.Id,
                 Reserve_BookName = string.Format("{0} - {1}", _GroupLevel.Name, _GroupLevelItem.Name),
                 Reserve_Date = string.Format("Entrada: {0}, Saída: {1}", _Reserve.Book_DateIn.ToString("dd/MM"), _Reserve.Book_DateOut.ToString("dd/MM")),
@@ -338,6 +339,8 @@ namespace RCA.Controllers
             // Find ExtractItem
             if (_ExtratoID == 0)
             {
+                _Services.TabDefault = 0;
+
                 //CONSUMO
                 _Services.Consumo_ExtractID = 0;
                 _Services.Consumo_StatusId = BookItemStatus.Consumido;
@@ -345,7 +348,7 @@ namespace RCA.Controllers
                 _Services.Consumo_GroupLevelID = 0;
                 _Services.Consumo_GroupLevelItemID = 0;
                 _Services.Consumo_NAME = "";
-                _Services.Consumo_QtUnit = 0;
+                _Services.Consumo_QtUnit = 1;
                 _Services.Consumo_VlUnit_VIEW = "R$ 0";
                 _Services.Consumo_VlUnit = 0;
                 _Services.Consumo_VlTotal_VIEW = "R$ 0";
@@ -367,11 +370,11 @@ namespace RCA.Controllers
                 _Services.Entretenimento_ExtractID = 0;
                 _Services.Entretenimento_StatusId = BookItemStatus.Reservado;
                 _Services.Entretenimento_Date = DateTime.Today.AddDays(1).ToString("dd/MM/yyyy");
-                _Services.Entretenimento_Time = "14:00";
+                _Services.Entretenimento_Time = "00:00";
                 _Services.Entretenimento_GroupLevelID = 0;
                 _Services.Entretenimento_GroupLevelItemID = 0;
                 _Services.Entretenimento_NAME = "";
-                _Services.Entretenimento_QtUnit = 0;
+                _Services.Entretenimento_QtUnit = 1;
                 _Services.Entretenimento_VlUnit_VIEW = "R$ 0";
                 _Services.Entretenimento_VlUnit = 0;
                 _Services.Entretenimento_VlTotal_VIEW = "R$ 0";
@@ -390,7 +393,7 @@ namespace RCA.Controllers
                 ViewBag.Entretenimento_GroupLevelItem_LIST = new List<Class_Service_LIST> { new Class_Service_LIST { ID = 0, Name = "Selecione GRUPO..." } };
 
                 //AJUSTE PERIODO
-                var _ReserveItem = _context.Class_BookItem.FirstOrDefault(m => m.BookId == _ReserveID && m.GroupLevelItemId == _Reserve.GroupLevelItemId);
+                var _ReserveItem = _context.Class_BookItem.FirstOrDefault(m => m.BookId == _BookID && m.GroupLevelItemId == _Reserve.GroupLevelItemId);
                 var _VlTotal = _ReserveItem.SeasonUnit * _ReserveItem.SeasonValue;
                 var _VlFinal = _VlTotal - _ReserveItem.SeasonDiscountValue - _ReserveItem.SeasonAdvance;
                 if (_ReserveItem != null)
@@ -410,11 +413,11 @@ namespace RCA.Controllers
                     _Services.Ajuste_VlDiscount_VIEW = _ReserveItem.SeasonDiscountValue.ToString("C2");
                     _Services.Ajuste_VlAdvance_VIEW = _ReserveItem.SeasonAdvance.ToString("C2");
                     _Services.Ajuste_VlFinal_VIEW = _VlFinal.ToString("C2");
+                    _Services.Ajuste_OBS_History = _ReserveItem.OBS;
                     _Services.Ajuste_OBS = "";
                 }
 
-                //CHECK-out
-                // hospedagem
+                //CHECK-out - hospedagem
                 var _Detail = new Class_Service_Detail()
                 {
                     DESC = "Vl.Total",
@@ -448,11 +451,11 @@ namespace RCA.Controllers
                     };
                     _Services.CheckOut_Hospedagem_LIST.Add(_Detail);
                 }
-                // consumo
+                //CHECK-out - consumo
                 var _Consumo = from s in _context.Class_BookItem
                                join s2 in _context.Class_GroupLevelItem on s.GroupLevelItemId equals s2.Id
                                join s3 in _context.Class_GroupLevel on s2.GroupLevelId equals s3.Id
-                               where s.BookId == _ReserveID && s3.GroupId == GroupType.CONSUMO
+                               where s.BookId == _BookID && s3.GroupId == GroupType.CONSUMO
                                group s by s.BookId into BookGroup
                                select new { SomaTotal = BookGroup.Sum(f => f.SeasonValue * f.SeasonUnit), SomaDesc = BookGroup.Sum(f => f.SeasonDiscountValue) };
                 foreach (var _loop in _Consumo)
@@ -483,11 +486,11 @@ namespace RCA.Controllers
                         _Services.CheckOut_Consumo_LIST.Add(_Detail);
                     }
                 }
-                // entretenimento
+                //CHECK-out - entretenimento
                 var _Entretenimento = from s in _context.Class_BookItem
                                       join s2 in _context.Class_GroupLevelItem on s.GroupLevelItemId equals s2.Id
                                       join s3 in _context.Class_GroupLevel on s2.GroupLevelId equals s3.Id
-                                      where s.BookId == _ReserveID && s3.GroupId == GroupType.ENTRETENIMENTO
+                                      where s.BookId == _BookID && s3.GroupId == GroupType.ENTRETENIMENTO
                                       group s by s.BookId into BookGroup
                                       select new { SomaTotal = BookGroup.Sum(f => f.SeasonValue * f.SeasonUnit), SomaDesc = BookGroup.Sum(f => f.SeasonDiscountValue) };
                 foreach (var _loop in _Consumo)
@@ -518,9 +521,8 @@ namespace RCA.Controllers
                         _Services.CheckOut_Entretenimento_LIST.Add(_Detail);
                     }
                 }
-                // Pay 
                 var _PayTotal = from s in _context.Class_BookItem
-                                where s.BookId == _ReserveID
+                                where s.BookId == _BookID
                                 group s by s.BookId into BookGroup
                                 select new { SomaTotal = BookGroup.Sum(f => f.SeasonValue * f.SeasonUnit), SomaDesc = BookGroup.Sum(f => f.SeasonDiscountValue), SomaAdiant = BookGroup.Sum(f => f.SeasonAdvance) };
                 foreach (var _loop in _PayTotal)
@@ -531,17 +533,17 @@ namespace RCA.Controllers
                 }
                 ViewBag.CheckOut_PayForm_LIST = new SelectList(Enum.GetValues(typeof(Services_Checkout_PayForm)).Cast<Services_Checkout_PayForm>().ToList());
             }
-            //Extrato
+            //EXTRATO
             var _Extrato = from s in _context.Class_BookItem
-                           where s.BookId == _ReserveID
+                           where s.BookId == _BookID
                            orderby s.DateConsume, s.GroupLevelItemId
                            select s;
             var _VlPagar = 0.0;
-            var _Date = _Reserve.Book_DateIn.AddDays(-1);
+            var _Date = "";
             var _ItemExtrato = new Class_ServiceExtract();
             foreach (var _Item in _Extrato)
             {
-                if (_Date != _Item.DateConsume)
+                if (_Date != _Item.DateConsume.ToString("dd/MM"))
                 {
                     _ItemExtrato = new Class_ServiceExtract()
                     {
@@ -557,7 +559,7 @@ namespace RCA.Controllers
                     };
                     _Services.ExtractLIST.Add(_ItemExtrato);
                     //
-                    _Date = _Item.DateConsume;
+                    _Date = _Item.DateConsume.ToString("dd/MM");
                 }
                 //
                 var _Total = _Item.SeasonValue * _Item.SeasonUnit;
@@ -566,6 +568,7 @@ namespace RCA.Controllers
                     ExtractTEXT = _Item.SeasonDesciption,
                     ExtractVALUE = _Total.ToString("C2")
                 };
+                if (_Item.StatusId == BookItemStatus.Reservado) { _ItemExtrato.ExtractTEXT = "(RESERVADO) " + _ItemExtrato.ExtractTEXT; }
                 _Services.ExtractLIST.Add(_ItemExtrato);
                 _VlPagar += _Total;
                 //
@@ -616,7 +619,108 @@ namespace RCA.Controllers
             //
             return View(_Services);
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult SERVICES(Class_Services _Services)
+        {
+            var _BookItem = new Class_BookItem();
+            if (_Services.Consumo_TabInput == 1)
+            {
+                var _BookItemDate = _Services.Consumo_Date.Split("/");
+                _BookItem = new Class_BookItem()
+                {
+                    StatusId = BookItemStatus.Consumido,
+                    BookId = _Services.Reserve_ID,
 
+                    Id = _Services.Consumo_ExtractID,
+                    DateConsume = DateTime.Parse(string.Format("{0}/{1}/{2} 00:01", _BookItemDate[1], _BookItemDate[0], _BookItemDate[2])),
+                    GroupLevelItemId = _Services.Consumo_GroupLevelItemID,
+                    SeasonUnit = _Services.Consumo_QtUnit,
+                    SeasonDesciption = _Services.Consumo_NAME,
+                    SeasonValue = _Services.Consumo_VlUnit,
+                    SeasonDiscountValue = _Services.Consumo_VlDiscount,
+                    SeasonDiscountPercent = _Services.Consumo_PercDiscount,
+                    SeasonAdvance = 0,
+                    OBS = _Services.Consumo_OBS
+                };
+            }
+            else if (_Services.Entretenimento_TabInput == 1)
+            {
+                var _BookItemDate = _Services.Entretenimento_Date.Split("/");
+                if (_Services.Entretenimento_Time == "") { _Services.Entretenimento_Time = "00:01"; }
+                _BookItem = new Class_BookItem()
+                {
+                    StatusId = BookItemStatus.Consumido,
+                    BookId = _Services.Reserve_ID,
+
+                    Id = _Services.Entretenimento_ExtractID,
+                    DateConsume = DateTime.Parse(string.Format("{0}/{1}/{2} {3}", _BookItemDate[1], _BookItemDate[0], _BookItemDate[2], _Services.Entretenimento_Time)),
+                    GroupLevelItemId = _Services.Entretenimento_GroupLevelItemID,
+                    SeasonUnit = _Services.Entretenimento_QtUnit,
+                    SeasonDesciption = _Services.Entretenimento_NAME,
+                    SeasonValue = _Services.Entretenimento_VlUnit,
+                    SeasonDiscountValue = _Services.Entretenimento_VlDiscount,
+                    SeasonDiscountPercent = _Services.Entretenimento_PercDiscount,
+                    SeasonAdvance = 0,
+                    OBS = _Services.Entretenimento_OBS
+                };
+                if (_BookItem.DateConsume >= DateTime.Today.ToLocalTime())
+                {
+                    _BookItem.StatusId = BookItemStatus.Reservado;
+                }
+            }
+            else if (_Services.Ajuste_TabInput == 1)
+            {
+                _BookItem = _context.Class_BookItem.FirstOrDefault(m => m.Id == _Services.Ajuste_ExtractID);
+
+                _BookItem.SeasonUnit = _Services.Ajuste_SeasonDays;
+                _BookItem.SeasonDiscountPercent = _Services.Ajuste_PercDiscount;
+
+                var _VlTotal = _BookItem.SeasonValue * _Services.Ajuste_SeasonDays;
+                var _VlDiscount = _VlTotal * ((double)_Services.Ajuste_PercDiscount / 100);
+                _BookItem.SeasonDiscountValue = _VlDiscount;
+
+                var _OBS = _BookItem.OBS + string.Format("{0}=={1}, {2}==", Environment.NewLine, DateTime.Today.ToString("dd/MM"), _Services.Ajuste_OBS);
+                while (_OBS.Length > 200)
+                {
+                    _OBS = _OBS.Substring(0, _OBS.IndexOf("==")) + _OBS.Substring(_OBS.IndexOf("==", 3) );
+                }
+                _BookItem.OBS = _OBS;
+            }
+            else if (_Services.Ajuste_TabInput == 4)
+            {
+
+            }
+            else
+            {
+                return RedirectToAction(nameof(Error), new { _Message = "Não houve mudança significativa!" });
+            }
+
+            if (_BookItem.Id == 0)
+            {
+                _context.Add(_BookItem);
+            }
+            else
+            {
+                _context.Update(_BookItem);
+            }
+            _context.SaveChanges();
+
+            //AJUSTE - Checkin
+            if (_Services.Ajuste_TabInput == 1)
+            {
+                var _BookItemDate = _Services.Ajuste_DateOut.Split("/");
+                var _Book = _context.Class_Book.FirstOrDefault(m => m.Id == _BookItem.BookId);
+
+                _Book.Book_DateOut = DateTime.Parse(string.Format("{0}/{1}/{2} 00:01", _BookItemDate[1], _BookItemDate[0], _BookItemDate[2]));
+
+                _context.Update(_BookItem);
+                _context.SaveChanges();
+            }
+
+            //return View(_Services);
+            return RedirectToAction("SERVICES", "Reception", new { _BookID = _Services.Reserve_ID, _ExtratoID = 0 });
+        }
 
 
         // POST: Error Message

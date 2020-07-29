@@ -19,8 +19,7 @@ namespace RCA.Models
     public class Class_Services
     {
         public int TabDefault { get; set; }
-        public string TabInput { get; set; }
-
+        
         public int Reserve_ID { get; set; }
         public string Reserve_BookName { get; set; }
         public string Reserve_Occupants { get; set; }
@@ -35,6 +34,7 @@ namespace RCA.Models
 
 
         //CONSUMO
+        public int Consumo_TabInput { get; set; }
         public int Consumo_ExtractID { get; set; }
         public BookItemStatus Consumo_StatusId { get; set; }
 
@@ -83,6 +83,7 @@ namespace RCA.Models
 
 
         //ENTRETENIMENTO
+        public int Entretenimento_TabInput { get; set; }
         public int Entretenimento_ExtractID { get; set; }
         public BookItemStatus Entretenimento_StatusId { get; set; }
 
@@ -134,11 +135,13 @@ namespace RCA.Models
 
 
         //Ajuste Hospedagem
+        public int Ajuste_TabInput { get; set; }
         public int Ajuste_ExtractID { get; set; }
         public int Ajuste_SeasonDays { get; set; }
         public double Ajuste_SeasonValue { get; set; }
         public double Ajuste_SeasonDiscountVALUE { get; set; }
         public double Ajuste_SeasonAdvance { get; set; }
+        
 
         [Display(Name = "Entrada")]
         public string Ajuste_DateIn { get; set; }
@@ -160,6 +163,8 @@ namespace RCA.Models
         [Display(Name = "Valor Final")]
         public string Ajuste_VlFinal_VIEW { get; set; }
 
+        [Display(Name = "Histórico")]
+        public string Ajuste_OBS_History { get; set; }
         [Required]
         [Display(Name = "Observação")]
         [StringLength(100)]
@@ -168,6 +173,8 @@ namespace RCA.Models
 
 
         //Check-out
+        public int CheckOut_TabInput { get; set; }
+
         [Display(Name = "HOSPEDAGEM")]
         public List<Class_Service_Detail> CheckOut_Hospedagem_LIST { get; set; } = new List<Class_Service_Detail>();
         [Display(Name = "CONSUMO")]

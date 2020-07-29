@@ -58,7 +58,7 @@
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
                                 <div hidden>
-                                    @Html.TextBoxFor(m => m.TabInput)
+                                    @Html.TextBoxFor(m => m.Consumo_TabInput)
 
                                     @Html.TextBoxFor(m => m.Reserve_ID)
                                     @Html.TextBoxFor(m => m.Reserve_BookName)
@@ -172,7 +172,7 @@
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
                                 <div hidden>
-                                    @Html.TextBoxFor(m => m.TabInput)
+                                    @Html.TextBoxFor(m => m.Entretenimento_TabInput)
 
                                     @Html.TextBoxFor(m => m.Reserve_ID)
                                     @Html.TextBoxFor(m => m.Reserve_BookName)
@@ -283,13 +283,13 @@
                 {
 
                     <div id="tabs-1">
-                        <section>
+                        <Section>
                             @using (Html.BeginForm(new { role = "form", @class = "form-horizontal" }))
                             {
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
                                 <div hidden>
-                                    @Html.TextBoxFor(m => m.TabInput)
+                                    @Html.TextBoxFor(m => m.Ajuste_TabInput)
 
                                     @Html.TextBoxFor(m => m.Reserve_ID)
                                     @Html.TextBoxFor(m => m.Reserve_BookName)
@@ -304,7 +304,7 @@
                                     @Html.TextBoxFor(m => m.Ajuste_SeasonDays)
                                     @Html.TextBoxFor(m => m.Ajuste_SeasonValue)
                                     @Html.TextBoxFor(m => m.Ajuste_SeasonDiscountVALUE)
-                                    @Html.TextBoxFor(m => m.Ajuste_SeasonAdvance)
+                                    @Html.TextBoxFor(m => m.Ajuste_SeasonAdvance)                                   
                                 </div>
 
                                 <div class="col-sm-12">
@@ -342,7 +342,8 @@
                                         <p class="control-label">@Html.LabelFor(m => m.Ajuste_VlAdvance_VIEW)</p>
                                         @Html.TextBoxFor(m => m.Ajuste_VlAdvance_VIEW, new { @class = "form-control", @disabled = "disabled", @style = "text-align:right" })
                                     </div>
-                                    <div class="col-md-3"></div>
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-2"></div>
                                     <div class="col-md-3">
                                         <p class="control-label">@Html.LabelFor(m => m.Ajuste_VlFinal_VIEW)</p>
                                         @Html.TextBoxFor(m => m.Ajuste_VlFinal_VIEW, new { @class = "form-control", @disabled = "disabled", @style = "text-align:right" })
@@ -350,10 +351,14 @@
                                 </div>
 
                                 <div class="col-md-12">
-                                    <div class="col-md-3">&nbsp;</div>
-                                    <div class="col-md-9">
+                                    <div class="col-md-6">
+                                        <p class="control-label">@Html.LabelFor(m => m.Ajuste_OBS_History)</p>
+                                        @Html.TextAreaFor(m => m.Ajuste_OBS_History, new { @class = "form-control multiline", @style = "width:500px; height:100px", @disabled = "disabled" })
+                                    </div>
+                                    <div class="col-md-6">
                                         <p class="control-label">@Html.LabelFor(m => m.Ajuste_OBS)</p>
                                         @Html.TextAreaFor(m => m.Ajuste_OBS, new { @class = "form-control multiline", @style = "width:500px; height:100px", @placeholder = "obs. justifique, a mudança!" })
+                                        <p><span asp-validation-for="Ajuste_OBS" class="text-danger"></span></p>
                                     </div>
                                 </div>
 
@@ -361,9 +366,8 @@
                                     <input type="submit" value="Gravar AJUSTE !" class="btn btn-success" />
                                 </div>
                             }
-                        </section>
+                        </Section>
                     </div>
-
                 }
 
                 @*//CHECK-out*@
@@ -376,7 +380,7 @@
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
                                 <div hidden>
-                                    @Html.TextBoxFor(m => m.TabInput)
+                                    @Html.TextBoxFor(m => m.CheckOut_TabInput)
 
                                     @Html.TextBoxFor(m => m.Reserve_ID)
                                     @Html.TextBoxFor(m => m.Reserve_BookName)
@@ -415,7 +419,7 @@
                                             </div>
                                         }
                                     </div>
-                                    <div class="col-md-4" style="font-size:10px">
+                                    <div class="col-md-3" style="font-size:10px">
                                         <p style="background-color:ButtonFace; font-size:12px"><strong>ENTRETENIMENTO</strong></p>
                                         @foreach (var @_Item in Model.CheckOut_Entretenimento_LIST)
                                         {
@@ -427,7 +431,7 @@
                                             </div>
                                         }
                                     </div>
-                                    <div class="col-md-2">
+                                    <div class="col-md-3">
                                         <p class="control-label">@Html.LabelFor(m => m.CheckOut_APagar_VIEW)</p>
                                         @Html.TextAreaFor(m => m.CheckOut_APagar_VIEW, new { @class = "form-control", @disabled = "disabled", @style = "text-align:right" })
                                     </div>
@@ -461,21 +465,21 @@
 
         <div class="col-md-3">
             <div class="col-md-12" id="ExtractLIST" style="border: dotted; border-radius: 8px; height: 420px; font-size: 14px; overflow-y: auto;">
-                <p class="form-control" style="font-size:16px; background-color:ButtonFace">EXTRATO da HOSPEDAGEM</p>
+                <p class="form-control" style="font-size:14px; background-color:ButtonFace">EXTRATO da HOSPEDAGEM</p>
                 @foreach (var @_Item in @Model.ExtractLIST)
                 {
                     @if (@_Item.ExtractVALUE == "")
                     {
-                        <div class="col-md-8" style="text-align: right; font-size: 15px;color: blue">
+                        <div class="col-md-8" style="text-align: right; font-size: 13px;color: blue">
                             <p>@_Item.ExtractTEXT</p>
                         </div>
                     }
                     else
                     {
-                        <div class="col-md-8" style="text-align:right">
+                        <div class="col-md-8" style="text-align:right; font-size: 11px">
                             @_Item.ExtractTEXT
                         </div>
-                        <div class="col-md-4" style="text-align:right">
+                        <div class="col-md-4" style="text-align:right; font-size: 11px">
                             @_Item.ExtractVALUE
                         </div>
                     }
@@ -500,28 +504,14 @@
                     });
                 });
                 //calculo dif datas
-                Date.prototype.addDias = function (dias) {
-                    this.setDate(this.getDate() + dias)
-                };
                 function DifBetweenDates(_Dt1, _Dt2) {
-                    var _Date = _Dt1.split("/");
-                    var _Date1 = new Date(_Date[2], _Date[1], _Date[0], 0, 0, 0, 0);
+                    var _DateA = _Dt1.split("/");
+                    var _Date1 = new Date(_DateA[2], _DateA[1]-1, _DateA[0], 0, 0, 0, 0);
 
-                    var _Date = _Dt2.split("/");
-                    var _Date2 = new Date(_Date[2], _Date[1], _Date[0], 0, 0, 0, 0);
+                    var _DateB = _Dt2.split("/");
+                    var _Date2 = new Date(_DateB[2], _DateB[1]-1, _DateB[0], 0, 0, 0, 0);
 
-                    var _count = 0;
-                    if (_Date1.getDate() < _Date2.getDate()) {
-                        while (_Date1.getDate() < _Date2.getDate()) {
-                            _count += 1;
-                            _Date1.addDias(1);
-                        }
-                    } else {
-                        while (_Date1.getDate() > _Date2.getDate()) {
-                            _count -= 1;
-                            _Date1.addDias(-1);
-                        }
-                    }
+                    var _count = (_Date2 - _Date1) / (1000 * 3600 * 24);
                     return parseInt(_count);
                 };
                 // Calculos
@@ -545,7 +535,7 @@
                     var _VlFinal_VIEW = _VlFinal.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
                     $('#Consumo_VlFinal_VIEW').val(_VlFinal_VIEW);
 
-                    $('#TabInput').val('CONSUMO');
+                    $('#Consumo_TabInput').val(1);
                 };
                 function Entretenimento_CalculoValor() {
                     // valor da diaria
@@ -567,7 +557,7 @@
                     var _VlFinal_VIEW = _VlFinal.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
                     $('#Entretenimento_VlFinal_VIEW').val(_VlFinal_VIEW);
 
-                    $('#TabInput').val('ENTRETENIMENTO');
+                    $('#Entretenimento_TabInput').val(1);
                 };
                 function Ajuste_CalculoValor() {
                     // valor da diaria
@@ -597,7 +587,7 @@
                         _Text = _VlFinal.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
                         $('#Ajuste_VlFinal_VIEW').val(_Text);
 
-                        $('#TabInput').val('AJUSTE');
+                        $('#Ajuste_TabInput').val(1);
                     }
                 };
 

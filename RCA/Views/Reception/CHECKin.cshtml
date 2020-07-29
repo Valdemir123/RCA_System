@@ -181,30 +181,14 @@
 
     <script type="text/javascript">
         //calculo dif datas
-        Date.prototype.addDias = function (dias) {
-            this.setDate(this.getDate() + dias)
-        };
         function DifBetweenDates(_Dt1, _Dt2) {
             var _Date = _Dt1.split("/");
-            var _Date1 = new Date(_Date[2], _Date[1], _Date[0], 0, 0, 0, 0);
+            var _Date1 = new Date(_Date[2], _Date[1]-1, _Date[0], 0, 0, 0, 0);
 
             var _Date = _Dt2.split("/");
-            var _Date2 = new Date(_Date[2], _Date[1], _Date[0], 0, 0, 0, 0);
+            var _Date2 = new Date(_Date[2], _Date[1]-1, _Date[0], 0, 0, 0, 0);
 
-            var _count = 0;
-            if (_Date1.getDate() < _Date2.getDate()) {
-                while (_Date1.getDate() < _Date2.getDate()) {
-                    _count += 1;
-
-                    _Date1.addDias(1);
-                }
-            } else {
-                while (_Date1.getDate() > _Date2.getDate()) {
-                    _count -= 1;
-
-                    _Date1.addDias(-1);
-                }
-            }
+            var _count = (_Date2 - _Date1) / (1000 * 3600 * 24);
             return parseInt(_count);
         };
         // Extrato

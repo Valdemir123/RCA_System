@@ -9,19 +9,19 @@
 @if (@Model.GroupId != 0)
 {
     <p>
-        || <a asp-action="Index" asp-route-_GroupId="@Model.GroupId" class="btn btn-info">Voltar para LISTAGEM</a>
+        || <a asp-action="Index" asp-route-_GroupId="@Model.GroupId" class="btn btn-info">OK!</a>
     </p>
 }
 else if (@Model.CompanyId != 0)
 {
     <p>
-        || <a asp-action="Index" asp-route-_CompanyId="@Model.CompanyId" class="btn btn-info">Voltar para LISTAGEM</a>
+        || <a asp-action="Index" asp-route-_CompanyId="@Model.CompanyId" class="btn btn-info">OK!</a>
     </p>
 }
 else
 {
     <p>
-        || <a asp-action="Index" class="btn btn-info">Voltar para LISTAGEM</a>
+        || <a asp-action="Index" class="btn btn-info">OK!</a>
     </p>
 }
 <hr />
