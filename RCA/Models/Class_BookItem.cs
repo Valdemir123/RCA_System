@@ -8,7 +8,8 @@ namespace RCA.Models
     public enum BookItemStatus : int
     {
         Reservado = 1,
-        Consumido = 2
+        Consumido = 2,
+        Finalizado = 3
     }
 
     [Table("BookItem")]

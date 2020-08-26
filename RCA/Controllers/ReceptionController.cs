@@ -118,6 +118,8 @@ namespace RCA.Controllers
             return View(await _Reception.ToAsyncEnumerable().ToList());
         }
 
+
+
         // CHECKin
         public IActionResult CHECKin(int _RoomID)
         {
@@ -308,6 +310,8 @@ namespace RCA.Controllers
             return View(_Checkin);
         }
 
+
+
         //SERVICE
         public IActionResult SERVICES(int _BookID, int _ExtratoID)
         {
@@ -337,7 +341,75 @@ namespace RCA.Controllers
             };
 
             // Find ExtractItem
-            if (_ExtratoID == 0)
+            if (_ExtratoID != 0)
+            {
+                var _Item = _context.Class_BookItem.FirstOrDefault(m => m.Id == _ExtratoID);
+                var _ConsumoGroupLevelItem = _context.Class_GroupLevelItem.FirstOrDefault(m => m.Id == _Item.GroupLevelItemId);
+                var _ConsumoGroupLevel = _context.Class_GroupLevel.FirstOrDefault(m => m.Id == _ConsumoGroupLevelItem.GroupLevelId);
+
+                var _Total = _Item.SeasonUnit * _Item.SeasonValue;
+                var _Final = _Total;
+                if(_Item.SeasonDiscountPercent !=0)
+                {
+                    _Final -= _Item.SeasonDiscountValue;
+                }
+
+                var _ViewBagGL = from s in _context.Class_GroupLevel
+                              where s.Id == _ConsumoGroupLevel.Id
+                              select new { s.Id, s.Name };
+                var _ViewBagGLI = from s in _context.Class_GroupLevelItem
+                               where s.Id == _ConsumoGroupLevelItem.Id
+                               select new { s.Id, s.Name };
+
+                if (_ConsumoGroupLevel.GroupId == GroupType.CONSUMO)
+                {
+                    //CONSUMO
+                    _Services.Consumo_ExtractID = _Item.Id;
+                    _Services.Consumo_StatusId = _Item.StatusId;
+                    _Services.Consumo_Date = _Item.DateConsume.ToString("dd/MM/yyyy");
+                    _Services.Consumo_GroupLevelID = _ConsumoGroupLevel.Id;
+                    _Services.Consumo_GroupLevelItemID = _ConsumoGroupLevelItem.Id;
+                    _Services.Consumo_NAME = _Item.SeasonDesciption;
+                    _Services.Consumo_QtUnit = _Item.SeasonUnit;
+                    _Services.Consumo_VlUnit_VIEW = _Item.SeasonValue.ToString("C2");
+                    _Services.Consumo_VlUnit = _Item.SeasonValue;
+                    _Services.Consumo_VlTotal_VIEW = _Total.ToString("C2");
+                    _Services.Consumo_VlTotal = _Total;
+                    _Services.Consumo_PercDiscount = _Item.SeasonDiscountPercent;
+                    _Services.Consumo_VlDiscount_VIEW = _Item.SeasonDiscountValue.ToString("C2");
+                    _Services.Consumo_VlDiscount = _Item.SeasonDiscountValue;
+                    _Services.Consumo_VlFinal_VIEW = _Final.ToString("C2");
+                    _Services.Consumo_OBS = _Item.OBS;
+                }
+                else
+                {
+                    //ENTRETENIMENTO
+                    _Services.Entretenimento_ExtractID = _Item.Id;
+                    _Services.Entretenimento_StatusId = _Item.StatusId;
+                    _Services.Entretenimento_Date = _Item.DateConsume.ToString("dd/MM/yyyy");
+                    _Services.Entretenimento_Time = _Item.DateConsume.ToString("hh:mm");
+                    _Services.Entretenimento_GroupLevelID = _ConsumoGroupLevel.Id;
+                    _Services.Entretenimento_GroupLevelItemID = _ConsumoGroupLevelItem.Id;
+                    _Services.Entretenimento_NAME = _Item.SeasonDesciption;
+                    _Services.Entretenimento_QtUnit = _Item.SeasonUnit;
+                    _Services.Entretenimento_VlUnit_VIEW = _Item.SeasonValue.ToString("C2");
+                    _Services.Entretenimento_VlUnit = _Item.SeasonValue;
+                    _Services.Entretenimento_VlTotal_VIEW = _Total.ToString("C2");
+                    _Services.Entretenimento_VlTotal = _Total;
+                    _Services.Entretenimento_PercDiscount = _Item.SeasonDiscountPercent;
+                    _Services.Entretenimento_VlDiscount_VIEW = _Item.SeasonDiscountValue.ToString("C2");
+                    _Services.Entretenimento_VlDiscount = _Item.SeasonDiscountValue;
+                    _Services.Entretenimento_VlFinal_VIEW = _Final.ToString("C2");
+                    _Services.Entretenimento_OBS = _Item.OBS;
+                }
+
+                ViewBag.Consumo_GroupLevel_LIST = new SelectList(_ViewBagGL, "Id", "Name");
+                ViewBag.Consumo_GroupLevelItem_LIST = new SelectList(_ViewBagGLI, "Id", "Name");
+
+                ViewBag.Entretenimento_GroupLevel_LIST = new SelectList(_ViewBagGL, "Id", "Name");
+                ViewBag.Entretenimento_GroupLevelItem_LIST = new SelectList(_ViewBagGLI, "Id", "Name");
+            }
+            else
             {
                 _Services.TabDefault = 0;
 
@@ -528,10 +600,12 @@ namespace RCA.Controllers
                 foreach (var _loop in _PayTotal)
                 {
                     var _final = _loop.SomaTotal - _loop.SomaDesc - _loop.SomaAdiant;
-                    _Services.CheckOut_APagar = _final;
                     _Services.CheckOut_APagar_VIEW = _final.ToString("C2");
+                    _Services.CheckOut_APagar = _final;
                 }
                 ViewBag.CheckOut_PayForm_LIST = new SelectList(Enum.GetValues(typeof(Services_Checkout_PayForm)).Cast<Services_Checkout_PayForm>().ToList());
+                _Services.CheckOut_PayForm = "";
+                _Services.CheckOut_OBS = "";
             }
             //EXTRATO
             var _Extrato = from s in _context.Class_BookItem
@@ -683,13 +757,36 @@ namespace RCA.Controllers
                 var _OBS = _BookItem.OBS + string.Format("{0}=={1}, {2}==", Environment.NewLine, DateTime.Today.ToString("dd/MM"), _Services.Ajuste_OBS);
                 while (_OBS.Length > 200)
                 {
-                    _OBS = _OBS.Substring(0, _OBS.IndexOf("==")) + _OBS.Substring(_OBS.IndexOf("==", 3) );
+                    try
+                    {
+                        _OBS = _OBS.Substring(0, _OBS.IndexOf("==")) + _OBS.Substring(_OBS.IndexOf("==", _OBS.IndexOf("==") + 2) + 3);
+                    }
+                    catch
+                    {
+                        _OBS = _OBS.Substring(0, 199);
+                    }
                 }
                 _BookItem.OBS = _OBS;
             }
-            else if (_Services.Ajuste_TabInput == 4)
+            else if (_Services.CheckOut_TabInput == 1)
             {
+                var _BookItemDate = DateTime.Today.ToString("dd/MM/yyyy").Split("/");
+                _BookItem = new Class_BookItem()
+                {
+                    StatusId = BookItemStatus.Consumido,
+                    BookId = _Services.Reserve_ID,
 
+                    Id = 0,
+                    DateConsume = DateTime.Parse(string.Format("{0}/{1}/{2} 00:01", _BookItemDate[1], _BookItemDate[0], _BookItemDate[2])),
+                    GroupLevelItemId = 0,
+                    SeasonUnit = 1,
+                    SeasonDesciption = string.Format("Check-Out, Forma de Pagto: {0}", _Services.CheckOut_PayForm),
+                    SeasonValue = _Services.CheckOut_APagar * -1,
+                    SeasonDiscountValue = 0,
+                    SeasonDiscountPercent = 0,
+                    SeasonAdvance = 0,
+                    OBS = _Services.CheckOut_OBS
+                };
             }
             else
             {
@@ -717,11 +814,44 @@ namespace RCA.Controllers
                 _context.Update(_BookItem);
                 _context.SaveChanges();
             }
+            else if (_Services.CheckOut_TabInput == 1)
+            {
+                //Ajusta Status Historico de CONSUMO
+                var _Consumo = from s in _context.Class_BookItem
+                               where s.BookId == _Services.Reserve_ID && s.StatusId == BookItemStatus.Reservado
+                               select s;
+                foreach (var _loop in _Consumo)
+                {
+                    _loop.StatusId = BookItemStatus.Consumido;
+                    _context.Update(_loop);
+                }
+                _context.SaveChanges();
+                // ajusta Status da Reserva
+                var _Book = _context.Class_Book.Where(m => m.Id == _Services.Reserve_ID).FirstOrDefault();
+                _Book.StatusId = BookStatus.Finalizado;
+                _context.Update(_Book);
+                _context.SaveChanges();
 
+                //return View(_Services);
+                return RedirectToAction("SERVICES", "Index", new { _BookID = _Services.Reserve_ID, _ExtratoID = 0 });
+            }
             //return View(_Services);
             return RedirectToAction("SERVICES", "Reception", new { _BookID = _Services.Reserve_ID, _ExtratoID = 0 });
         }
 
+        public IActionResult SERVICES_History(int _ReserveID, GroupType _GroupId)
+        {
+            var _Item = from s in _context.Class_BookItem
+                        join s2 in _context.Class_GroupLevelItem on s.GroupLevelItemId equals s2.Id
+                        join s3 in _context.Class_GroupLevel on s2.GroupLevelId equals s3.Id
+                        where s.BookId == _ReserveID && s3.GroupId == _GroupId
+                        orderby s.StatusId, s.DateConsume, s2.Name
+                        select s;
+
+            ViewBag.BookId = _ReserveID;
+            ViewBag.GroupTypeName = _GroupId.ToString();
+            return View(_Item);
+        }
 
         // POST: Error Message
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

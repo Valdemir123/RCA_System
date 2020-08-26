@@ -84,7 +84,7 @@
                                     }
                                     else
                                     {
-                                        <a class="btn btn-default" href="@Url.Action("SERVICES_History", "Reception" , new { _ReserveID=@Model.Reserve_ID, _GroupId=3 })">Buscar Histórico</a>
+                                        <a class="btn btn-default" href="@Url.Action("SERVICES_History", "Reception" , new { _ReserveID=@Model.Reserve_ID, _GroupId=GroupType.CONSUMO })">Buscar Histórico</a>
                                     }
                                 </div>
 
@@ -198,7 +198,7 @@
                                     }
                                     else
                                     {
-                                        <a class="btn btn-default" href="@Url.Action("SERVICES_History", "Reception" , new { _ReserveID=@Model.Reserve_ID, _GroupId=3 })">Buscar Histórico</a>
+                                        <a class="btn btn-default" href="@Url.Action("SERVICES_History", "Reception" , new { _ReserveID=@Model.Reserve_ID, _GroupId=GroupType.ENTRETENIMENTO })">Buscar Histórico</a>
                                     }
                                 </div>
 
@@ -269,6 +269,10 @@
                                     @if (@Model.Entretenimento_ExtractID != 0)
                                     {
                                         <a class="btn btn-warning" href="@Url.Action("SERVICES_ApagarItem", "Reception", new { _ExtractID = @Model.Entretenimento_ExtractID })">Apagar Item</a>
+                                    }
+                                    @if (@Model.Entretenimento_StatusId == BookItemStatus.Reservado)
+                                    {
+                                        <a class="btn btn-info" href="@Url.Action("SERVICES_EfetivarUso", "Reception", new { _ExtractID = @Model.Entretenimento_ExtractID })">Efetivar Uso</a>
                                     }
 
                                     <input type="submit" value="Gravar ENTRETENIMENTO !" class="btn btn-success" />
@@ -442,6 +446,7 @@
                                     <div class="col-md-3">
                                         <p class="control-label">@Html.LabelFor(m => m.CheckOut_PayForm)</p>
                                         @Html.DropDownListFor(m => m.CheckOut_PayForm, (SelectList)@ViewBag.CheckOut_PayForm_LIST, new { @class = "form-control" })
+                                        <p><span asp-validation-for="CheckOut_PayForm" class="text-danger"></span></p>
                                     </div>
                                     <div class="col-md-7">
                                         <p class="control-label">@Html.LabelFor(m => m.CheckOut_OBS)</p>
@@ -708,6 +713,15 @@
                     });
                     $('#Ajuste_PercDiscount').change(function () {
                         Ajuste_CalculoValor();
+                    });
+
+                    //CHECKOUT
+                    $("#CheckOut_PayForm").change(function () {
+                        $('#CheckOut_TabInput').val(1);
+                    });
+
+                    $("#CheckOut_OBS").change(function () {
+                        $('#CheckOut_TabInput').val(1);
                     });
                 });
     </script>
