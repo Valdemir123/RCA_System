@@ -80,7 +80,7 @@
                                 <div>
                                     @if (@Model.TabDefault != 0)
                                     {
-                                        <a class="btn btn-warning" href="@Url.Action("SERVICES", "Reception", new { _ReserveID = @Model.Reserve_ID, _ExtratoID = 0 })">Voltar</a>
+                                        <a class="btn btn-warning" href="@Url.Action("SERVICES", "Reception", new { _ReserveID = @Model.Reserve_ID, _ExtractID = 0 })">Voltar</a>
                                     }
                                     else
                                     {
@@ -194,7 +194,7 @@
                                 <div>
                                     @if (@Model.TabDefault != 0)
                                     {
-                                        <a class="btn btn-warning" href="@Url.Action("SERVICES", "Reception", new { _ReserveID = @Model.Reserve_ID, _ExtratoID = 0 })">Voltar</a>
+                                        <a class="btn btn-warning" href="@Url.Action("SERVICES", "Reception", new { _ReserveID = @Model.Reserve_ID, _ExtractID = 0 })">Voltar</a>
                                     }
                                     else
                                     {
@@ -270,7 +270,7 @@
                                     {
                                         <a class="btn btn-warning" href="@Url.Action("SERVICES_ApagarItem", "Reception", new { _ExtractID = @Model.Entretenimento_ExtractID })">Apagar Item</a>
                                     }
-                                    @if (@Model.Entretenimento_StatusId == BookItemStatus.Reservado)
+                                    @if (@Model.Entretenimento_ExtractID != 0 && @Model.Entretenimento_StatusId == BookItemStatus.Reservado)
                                     {
                                         <a class="btn btn-info" href="@Url.Action("SERVICES_EfetivarUso", "Reception", new { _ExtractID = @Model.Entretenimento_ExtractID })">Efetivar Uso</a>
                                     }
@@ -308,7 +308,7 @@
                                     @Html.TextBoxFor(m => m.Ajuste_SeasonDays)
                                     @Html.TextBoxFor(m => m.Ajuste_SeasonValue)
                                     @Html.TextBoxFor(m => m.Ajuste_SeasonDiscountVALUE)
-                                    @Html.TextBoxFor(m => m.Ajuste_SeasonAdvance)                                   
+                                    @Html.TextBoxFor(m => m.Ajuste_SeasonAdvance)
                                 </div>
 
                                 <div class="col-sm-12">

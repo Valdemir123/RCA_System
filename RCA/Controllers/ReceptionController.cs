@@ -313,7 +313,7 @@ namespace RCA.Controllers
 
 
         //SERVICE
-        public IActionResult SERVICES(int _BookID, int _ExtratoID)
+        public IActionResult SERVICES(int _BookID, int _ExtractID)
         {
             int _CompanyId;
             try { _CompanyId = int.Parse(User.FindFirst("CompanyId").Value); }
@@ -341,25 +341,23 @@ namespace RCA.Controllers
             };
 
             // Find ExtractItem
-            if (_ExtratoID != 0)
+            if (_ExtractID != 0)
             {
-                var _Item = _context.Class_BookItem.FirstOrDefault(m => m.Id == _ExtratoID);
+                var _Item = _context.Class_BookItem.FirstOrDefault(m => m.Id == _ExtractID);
                 var _ConsumoGroupLevelItem = _context.Class_GroupLevelItem.FirstOrDefault(m => m.Id == _Item.GroupLevelItemId);
                 var _ConsumoGroupLevel = _context.Class_GroupLevel.FirstOrDefault(m => m.Id == _ConsumoGroupLevelItem.GroupLevelId);
 
                 var _Total = _Item.SeasonUnit * _Item.SeasonValue;
                 var _Final = _Total;
-                if(_Item.SeasonDiscountPercent !=0)
+                if (_Item.SeasonDiscountPercent != 0)
                 {
                     _Final -= _Item.SeasonDiscountValue;
                 }
 
                 var _ViewBagGL = from s in _context.Class_GroupLevel
-                              where s.Id == _ConsumoGroupLevel.Id
-                              select new { s.Id, s.Name };
-                var _ViewBagGLI = from s in _context.Class_GroupLevelItem
-                               where s.Id == _ConsumoGroupLevelItem.Id
-                               select new { s.Id, s.Name };
+                                 where s.Id == _ConsumoGroupLevel.Id
+                                 select new { s.Id, s.Name };
+                var _ViewBagGLI = _context.Class_GroupLevelItem.FirstOrDefault(m => m.Id == _ConsumoGroupLevelItem.Id);
 
                 if (_ConsumoGroupLevel.GroupId == GroupType.CONSUMO)
                 {
@@ -404,10 +402,10 @@ namespace RCA.Controllers
                 }
 
                 ViewBag.Consumo_GroupLevel_LIST = new SelectList(_ViewBagGL, "Id", "Name");
-                ViewBag.Consumo_GroupLevelItem_LIST = new SelectList(_ViewBagGLI, "Id", "Name");
+                ViewBag.Consumo_GroupLevelItem_LIST = new List<Class_Service_LIST> { new Class_Service_LIST { ID = _ViewBagGLI.Id, Name = _ViewBagGLI.Name } };
 
                 ViewBag.Entretenimento_GroupLevel_LIST = new SelectList(_ViewBagGL, "Id", "Name");
-                ViewBag.Entretenimento_GroupLevelItem_LIST = new SelectList(_ViewBagGLI, "Id", "Name");
+                ViewBag.Entretenimento_GroupLevelItem_LIST = new List<Class_Service_LIST> { new Class_Service_LIST { ID = _ViewBagGLI.Id, Name = _ViewBagGLI.Name } };
             }
             else
             {
@@ -603,10 +601,10 @@ namespace RCA.Controllers
                     _Services.CheckOut_APagar_VIEW = _final.ToString("C2");
                     _Services.CheckOut_APagar = _final;
                 }
-                ViewBag.CheckOut_PayForm_LIST = new SelectList(Enum.GetValues(typeof(Services_Checkout_PayForm)).Cast<Services_Checkout_PayForm>().ToList());
-                _Services.CheckOut_PayForm = "";
-                _Services.CheckOut_OBS = "";
             }
+            ViewBag.CheckOut_PayForm_LIST = new SelectList(Enum.GetValues(typeof(Services_Checkout_PayForm)).Cast<Services_Checkout_PayForm>().ToList());
+            _Services.CheckOut_PayForm = "";
+            _Services.CheckOut_OBS = "";
             //EXTRATO
             var _Extrato = from s in _context.Class_BookItem
                            where s.BookId == _BookID
@@ -833,10 +831,10 @@ namespace RCA.Controllers
                 _context.SaveChanges();
 
                 //return View(_Services);
-                return RedirectToAction("SERVICES", "Index", new { _BookID = _Services.Reserve_ID, _ExtratoID = 0 });
+                return RedirectToAction("SERVICES", "Index", new { _BookID = _Services.Reserve_ID, _ExtractID = 0 });
             }
             //return View(_Services);
-            return RedirectToAction("SERVICES", "Reception", new { _BookID = _Services.Reserve_ID, _ExtratoID = 0 });
+            return RedirectToAction("SERVICES", "Reception", new { _BookID = _Services.Reserve_ID, _ExtractID = 0 });
         }
 
         public IActionResult SERVICES_History(int _ReserveID, GroupType _GroupId)
@@ -852,6 +850,32 @@ namespace RCA.Controllers
             ViewBag.GroupTypeName = _GroupId.ToString();
             return View(_Item);
         }
+
+        public ActionResult SERVICES_ApagarItem(int _ExtractID)
+        {
+            var _BookItem = _context.Class_BookItem.FirstOrDefault(m => m.Id == _ExtractID);
+            var _BookID = _BookItem.BookId;
+
+            _context.Remove(_BookItem);
+            _context.SaveChanges();
+
+            //return View(_Services);
+            return RedirectToAction("SERVICES", "Reception", new { _BookID = _BookID, _ExtractID = 0 });
+        }
+
+        public ActionResult SERVICES_EfetivarUso(int _ExtractID)
+        {
+            var _BookItem = _context.Class_BookItem.FirstOrDefault(m => m.Id == _ExtractID);
+            var _BookID = _BookItem.BookId;
+
+            _BookItem.StatusId = BookItemStatus.Consumido;
+            _context.Update(_BookItem);
+            _context.SaveChanges();
+
+            //return View(_Services);
+            return RedirectToAction("SERVICES", "Reception", new { _BookID = _BookID, _ExtractID = _ExtractID });
+        }
+
 
         // POST: Error Message
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

@@ -4,7 +4,7 @@
 }
 <div>
     <h2>@ViewData["Title"]</h2>
-    ||&nbsp;<a class="btn btn-default" href="@Url.Action("SERVICES", "Reception" , new { _BookID=@ViewBag.BookId, _ExtratoID=0 })">Voltar</a>
+    ||&nbsp;<a class="btn btn-default" href="@Url.Action("SERVICES", "Reception" , new { _BookID=@ViewBag.BookId, _ExtractID=0 })">Voltar</a>
 </div>
 <hr />
 <br />
@@ -50,7 +50,7 @@
                 | @Html.DisplayFor(m => _Item.SeasonUnit)
             </td>
             <td>
-                ||&nbsp;<a class="btn btn-default" href="@Url.Action("SERVICES", "Reception" , new { _BookID=_Item.BookId, _ExtratoID=_Item.Id })">Selecionar</a>
+                ||&nbsp;<a class="btn btn-default" href="@Url.Action("SERVICES", "Reception" , new { _BookID=_Item.BookId, _ExtractID=_Item.Id })">Selecionar</a>
             </td>
         </tr>
         }
